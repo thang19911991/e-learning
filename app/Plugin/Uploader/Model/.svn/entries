@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="129"
+   name=""
+   committed-date="2012-05-29T07:42:04.705846Z"
+   url="http://dev.ominext.com/repos/InternalProcess/trunk/app/Plugin/Uploader/Model"
+   last-author="dacht"
+   kind="dir"
+   uuid="a160fd64-d1a0-4942-bceb-cef65fe3e134"
+   repos="http://dev.ominext.com/repos"
+   revision="12795"/>
+<entry
+   name="Behavior"
+   kind="dir"/>
+</wc-entries>

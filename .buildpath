@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildpath>
+	<buildpathentry external="true" kind="lib" path="/home/ngovanthang/workspace-php/e-learning/lib/Cake"/>
+	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
+	<buildpathentry external="true" kind="lib" path="/var/www/e-learning/lib/Cake"/>
+	<buildpathentry kind="src" path="lib/Cake"/>
+</buildpath>

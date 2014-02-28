@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wc-entries
+   xmlns="svn:">
+<entry
+   committed-rev="129"
+   name=""
+   committed-date="2012-05-29T07:42:04.705846Z"
+   url="http://dev.ominext.com/repos/InternalProcess/trunk/app/Plugin/Uploader/Locale/eng/LC_MESSAGES"
+   last-author="dacht"
+   kind="dir"
+   uuid="a160fd64-d1a0-4942-bceb-cef65fe3e134"
+   repos="http://dev.ominext.com/repos"
+   revision="12795"/>
+<entry
+   committed-rev="129"
+   name="uploader.mo"
+   text-time="2013-06-17T03:13:41.992917Z"
+   committed-date="2012-05-29T07:42:04.705846Z"
+   checksum="e09046c0db11ecbdbb992cbadd9283d2"
+   last-author="dacht"
+   kind="file"
+   prop-time="2013-06-17T03:13:41.956915Z"/>
+<entry
+   committed-rev="129"
+   name="uploader.po"
+   text-time="2013-06-17T03:13:42.007918Z"
+   committed-date="2012-05-29T07:42:04.705846Z"
+   checksum="10f87572f0d78ad273bbf34dc9e2a108"
+   last-author="dacht"
+   kind="file"
+   prop-time="2013-06-17T03:13:41.973916Z"/>
+</wc-entries>
