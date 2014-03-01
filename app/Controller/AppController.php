@@ -35,17 +35,19 @@ class AppController extends Controller {
 	
 	public $components = array(
 		'Session',
-		'Auth' => array(
-			//'loginAction' => array('controller' => 'home', 'action' => 'index'),
-			//'loginRedirect' => array('controller' => 'home', 'action' => 'index'),
-			'logoutRedirect' => array('controller' => 'home', 'action' => 'index'),
-			'authError' => 'Bạn không có quyền truy cập trang này',
-			'authorize' => 'Controller',
-			'authenticate' => array(		
-				'Form' => array(
-					'fields' => array('username' => 'username', 'password' => 'password'),
-					'userModel' => 'User'))
-		)
+		'Auth'
+	
+//		'Auth' => array(
+	//'loginAction' => array('controller' => 'home', 'action' => 'index'),
+	//'loginRedirect' => array('controller' => 'home', 'action' => 'index'),
+//			'logoutRedirect' => array('controller' => 'home', 'action' => 'index'),
+//			'authError' => 'Bạn không có quyền truy cập trang này',
+//			'authorize' => 'Controller',
+//			'authenticate' => array(		
+//				'Form' => array(
+//					'fields' => array('username' => 'username', 'password' => 'password'),
+//					'userModel' => 'User'))
+//		)
 	);
     
     public function isAuthorized($user) {
@@ -60,7 +62,10 @@ class AppController extends Controller {
 	}
 	
     public function beforeFilter(){
-    	$this->Auth->allow();
-        $this->set('current_user', $this->Auth->user());
+    	//$this->Auth->allow();
+    
+    if($this->Auth->loggedIn()){
+			$this->set('current_user', $this->Auth->user());
+		}
     }
 }

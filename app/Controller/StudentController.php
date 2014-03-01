@@ -12,7 +12,8 @@ class StudentController extends AppController{
 	//public $layout = 'default';
 	function beforeFilter(){
 		// gọi đến phương thức beforefFilter() của AppController.php
-		//parent::beforeFilter();
+		parent::beforeFilter();
+		//$this->Auth->allow('index');
 	}
 	function std_register(){
 		$this->set('title_for_layout', '学生の登録ページ');
@@ -48,6 +49,10 @@ class StudentController extends AppController{
 	}
 	function std_index(){
 
+	}
+	
+	function index(){
+		
 	}
 }
 ?>
