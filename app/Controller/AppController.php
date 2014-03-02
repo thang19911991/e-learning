@@ -37,7 +37,7 @@ class AppController extends Controller {
 		'Session',
 		'Auth' => array(
 			//'loginAction' => array('controller' => 'home', 'action' => 'index'),
-			//'loginRedirect' => array('controller' => 'home', 'action' => 'index'),
+			//'loginRedirect' => array('controller' => 'teacher', 'action' => 'login'),
 			'logoutRedirect' => array('controller' => 'home', 'action' => 'index'),
 			'authError' => 'Bạn không có quyền truy cập trang này',
 			'authorize' => 'Controller',

@@ -4,7 +4,18 @@ App::uses('AuthComponent', 'Controller/Component');
 class User extends AppModel{
 	// tên của model
 	// nếu tên Model đặt tên khác thì cần phải ghi rõ tên bảng trong CSDL
-	public $name = "Users";
+	public $name = "User";
+	
+	public $hasOne = array(
+		'Teacher' => array(
+			'className' => 'Teacher',
+			'foreignKey' => 'user_id'
+		),
+		'Student' => array(
+			'className' => 'Student',
+			'foreignKey' => 'id'
+		)
+	);
 	
 	// kiểm tra tính hợp lệ của dữ liệu trong Form
 	// tức là trước khi ấn submit thì xem dữ liệu có empty không, có valid không	
@@ -191,6 +202,5 @@ class User extends AppModel{
             $this->data[$this->alias]['primary_password'] = AuthComponent::password($this->data[$this->alias]['primary_password']);
         }
         return true;    	        
-    }
-    
+    }    
 }

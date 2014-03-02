@@ -5,18 +5,20 @@
 <table>
 <tr>
 	<th>Id</th>
-	<th>Username</th>
-	<th>Full Name</th>
-	<th>Birthday</th>
-	<th>Address</th>	
+	<th>ユーザ名</th>
+	<th>名前</th>
+	<th>誕生日</th>
+	<th>アドレス</th>
+	<th>レベル</th>
 </tr>
 <?php foreach($users as $user): ?>
 	<tr>
-		<td><?php echo $user["Member"]["id"]; ?></td>
-		<td><?php echo $user["Member"]["username"]; ?></td>
-		<td><?php echo $user["Member"]["fullname"]; ?></td>
-		<td><?php echo $user["Member"]["birthday"]; ?></td>
-		<td><?php echo $user["Member"]["address"]; ?></td>
+		<td><?php echo $user["User"]["id"]; ?></td>
+		<td><?php echo $user["User"]["username"]; ?></td>
+		<td><?php echo $user["User"]["full_name"]; ?></td>
+		<td><?php echo $user["User"]["birthday"]; ?></td>
+		<td><?php echo $user["User"]["address"]; ?></td>
+		<td><?php echo $user["User"]["role"]; ?></td>
 	</tr>
 <?php endforeach; ?>
 </table>
@@ -25,11 +27,14 @@
 <div class="actions">
 	<ul>
 		<li>
-			<?php echo $this->Html->link( "Register",   array('controller' => 'members', 'action'=>'register')); ?>
+			<?php echo $this->Html->link( "View Course",   array('controller' => 'teacher', 'action'=>'view_course')); ?>
+		</li>
+		<li>
+			<?php echo $this->Html->link( "Add Course",   array('controller' => 'teacher', 'action'=>'add_course')); ?>
 		</li>
 		<li>
 		<?php if($current_user): ?>
-		<?php echo $this->Html->link( "Logout", array('controller' => 'members', 'action'=>'logout')); ?>
+		<?php echo $this->Html->link( "Logout", array('controller' => 'teacher', 'action'=>'logout')); ?>
 		<?php endif; ?>
 		</li>
 	</ul>

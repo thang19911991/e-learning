@@ -6,10 +6,10 @@
 	// login và trên trang login sẽ hiện thông báo là : You are not authorized to access that location.
 	//echo $this->Session->flash('auth');
 			
-	echo $this->Form->create("Member");
+	echo $this->Form->create("User");
 	echo $this->Form->input('username');
 	echo $this->Form->input('password');
-	echo $this->Form->end("Login",array('controller' => 'members', 'action' => 'login'));
+	echo $this->Form->end("Login",array('controller' => 'home', 'action' => 'index'));
 ?>
 </div>
 

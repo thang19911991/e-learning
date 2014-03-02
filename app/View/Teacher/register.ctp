@@ -1,7 +1,7 @@
 <div class="users form">
 <h2>Add a New User</h2>
-<?php 
-	echo $this->Form->create('Member',array('type' => 'post'));
+<?php
+	echo $this->Form->create('User',array('type' => 'post'));
 	
 	// NOTE : field username, password, birthday, fullname ... là các field trong bang member
 	// nếu mà không trùng tên thì sẽ không cho vào trong bảng member được, nếu muốn 
@@ -9,8 +9,8 @@
 	// do đó mà các input ở dưới cần khai báo trùng tên với tên filed trong bảng members
 	echo $this->Form->input('username',array('required'=>'false','label' => 'ユーザー名'));
 	echo $this->Form->input('password',array('required'=>'false','label' => 'パスワード'));
-	echo $this->Form->input('repassword',array('required'=>'false','label' => 'レーパスワード'));
-	echo $this->Form->input('fullname',array('required'=>'false','label' => '名前'));
+	echo $this->Form->input('repassword',array('required'=>'false','label' => 'レーパスワード','type' => 'password'));
+	echo $this->Form->input('full_name',array('required'=>'false','label' => '名前'));
 	echo $this->Form->input('address',array('required'=>'false','label' => 'メールアドレス'));
 	echo $this->Form->input('birthday', array(
 										'dateFormat' => 'DMY',
@@ -24,12 +24,12 @@
 	echo $this->Form->input('creditnumber',array('label' => 'Credit Card','required'=>'false'));
 	//echo $this->Form->input('information',array('label' => '自己PR','type' => 'textarea' ,'required'=>'false'));
 	echo $this->Form->input('checkbox',array('label' =>'ウェブサイトの規則を賛成しますか？', 'type' => 'checkbox'));
-	echo $this->Form->end('Register', array('controller' => 'members', 'action' => 'register'));
+	echo $this->Form->end('Register', array('controller' => 'teacher', 'action' => 'login'));
 ?>
 </div>
 
 <div class="actions">
 	<?php
-		echo $this->Html->link("Login",array('controller'=> 'members', 'action' => 'login'));
+		echo $this->Html->link("Login",array('controller'=> 'teacher', 'action' => 'login'));
 	?>
 </div>
