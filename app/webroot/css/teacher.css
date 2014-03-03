@@ -1,0 +1,19 @@
+@CHARSET "UTF-8";
+#tag_ul{
+	list-style: none;	
+}
+
+#tag_ul li{
+	padding: 2px;
+}
+
+#tag_ul li span#tag_name_span{
+	background: red;
+}
+
+
+#tag_ul li span#delete_tag_name{
+	margin-left: 10px;
+}
+
+

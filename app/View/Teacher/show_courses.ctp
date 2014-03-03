@@ -1,5 +1,5 @@
 <div class="index">
-<h2>コースを見る</h2>
+<h2>コースリストを見る</h2>
 <?php if(!$courses): ?>
 	<?php echo "khong ton tai id"; ?>
 <?php else: ?>
@@ -16,8 +16,8 @@
 			<td><?php echo $c['Course']['course_name']; ?></td>
 			<td><?php echo $teacher_name; ?></td>
 			<td>
-				<?php echo $this->Html->link("Edit",array('controller' => 'teacher','action' => 'edit_course', $c['Course']['id'])) ?>
-				<?php echo $this->Html->link("Delete",array('controller' => 'teacher','action' => 'delete_course', $c['Course']['id'])) ?>
+				<?php echo $this->Html->link("見る",array('controller' => 'teacher','action' => 'view_a_course', $c['Course']['id'])) ?>				
+				<?php echo $this->Html->link("削除",array('controller' => 'teacher','action' => 'delete_course', $c['Course']['id'])) ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>

@@ -16,6 +16,26 @@ class TeacherController extends AppController{
 		$this->set(compact("users"));
 	}
 
+	public function show_courses(){
+		$this->loadModel('Course');
+		if(!$this->Auth->loggedIn()){
+			return $this->redirect(array('controller' => 'teacher', 'action' => 'login'));
+		}
+		
+		$teacher_id = $this->Auth->user('Teacher');
+		$teacher_id = $teacher_id['id'];
+				
+		if($teacher_id){						
+			$courses = $this->Course->find('all',array('conditions' => array('Course.teacher_id' => $teacher_id)));
+			
+			$this->set(compact("courses"));
+			$this->set("teacher_id",$this->Auth->user('id'));
+			$this->set("teacher_name",$this->Auth->user('username'));
+		}else{
+			$this->Session->setFlash("username khong ton tai");
+		}
+	}
+	
 	public function edit_course($id = null){
 		$this->loadModel('Course');
 		$this->loadModel('CourseTag');				
@@ -53,23 +73,36 @@ class TeacherController extends AppController{
 		return $this->redirect(array('controller' => 'teacher', 'action' => 'view_course'));
 	}
 	
-	public function view_course(){
+	public function view_a_course($id = null){
 		$this->loadModel('Course');
-		if(!$this->Auth->loggedIn()){
-			return $this->redirect(array('controller' => 'teacher', 'action' => 'login'));
+		$this->loadModel('CourseTag');				
+		
+		$this->Course->recursive = 2;
+		$courses = $this->Course->find('all',array(
+			'conditions' => array(
+				'Course.id' => $id
+			)
+		));
+		
+		if(!$courses){
+			$this->Session->setFlash("id khong ton tai");
+			return $this->redirect(array('action' => 'view_course'));
 		}
 		
-		$teacher_id = $this->Auth->user('Teacher');
-		$teacher_id = $teacher_id['id'];
+		debug($courses);
 				
-		if($teacher_id){						
-			$courses = $this->Course->find('all',array('conditions' => array('Course.teacher_id' => $teacher_id)));
-			
-			$this->set(compact("courses"));
-			$this->set("teacher_id",$this->Auth->user('id'));
-			$this->set("teacher_name",$this->Auth->user('username'));
-		}else{
-			$this->Session->setFlash("username khong ton tai");
+		$this->set(compact("courses"));
+		
+		if($this->request->is('Post')){
+			$data = $this->request->data;
+			unset($data['tag']);
+			$this->Course->id = $id;
+			if($this->Course->save($data)){
+				$this->Session->setFlash("Update thanh cong");				
+			}else{
+				$this->Session->setFlash("Update khong thanh cong");
+			}
+			return $this->redirect(array('controller' => 'teacher', 'action' => 'view_course'));
 		}
 	}
 	

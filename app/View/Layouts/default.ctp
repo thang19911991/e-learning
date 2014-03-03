@@ -29,6 +29,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	<?php
 		echo $this->Html->meta('icon');
 		echo $this->Html->css('cake.generic');
+		echo $this->Html->css('teacher');
 		echo $this->Html->script("jquery-1.7.2-min");
 		
 		echo $this->fetch('meta');
