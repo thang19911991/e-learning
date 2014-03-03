@@ -13,6 +13,7 @@ class User extends AppModel {
               'message' => 'This Username has already been used.'
             )
         ),
+        'email' => 'email',
         'password' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
@@ -24,6 +25,20 @@ class User extends AppModel {
             ),
                         
         ),
+        'full_name' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'A full name is required'
+            )
+                        
+        ),
+        'birthday' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Birthday is required'
+            )
+                        
+        ),
         'role' => array(
             'valid' => array(
                 'rule' => array('inList', array('student', 'teacher','admin')),
@@ -32,11 +47,28 @@ class User extends AppModel {
             )
         )
     );
-//    public $hasOne = array( 
-//            'Teacher' => array(
-//            'className' => 'Lecturer',           
-//            )
-//        );
+    public $hasOne = array( 
+            'Teacher' => array(
+            'className' => 'Teacher',           
+            ),
+            
+            'Admin' => array(
+            'className' => 'Admin',           
+            ),
+            
+            'Student' => array(
+            'className' => 'Student',           
+            ),
+            
+            'Ip' => array(
+            'className' => 'Ip',
+            'foreignKey' => 'admin_id'          
+            )
+            
+        );
+        
+    
+        
 
     public function beforeSave($options = array()) {
         if (isset($this->data[$this->alias]['password'])) {

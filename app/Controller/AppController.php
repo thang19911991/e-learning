@@ -35,7 +35,8 @@ class AppController extends Controller {
 	
 	public $components = array(
 		'Session',
-		'Auth'
+		'Auth',
+		'RequestHandler'
 	
 //		'Auth' => array(
 	//'loginAction' => array('controller' => 'home', 'action' => 'index'),
@@ -63,6 +64,17 @@ class AppController extends Controller {
 	
     public function beforeFilter(){
     	//$this->Auth->allow();
+    	
+    if (isset($this->request->params['admins'])) {
+            // the user has accessed an admin function, so handle it accordingly.
+        
+        //$this->Auth->loginRedirect = array('controller'=>'users','action'=>'index');
+        $this->Auth->allow('login');
+    } else {
+            // the user has accessed a NON-admin function, so handle it accordingly.
+       // $this->Auth->allow();
+
+    }
     
     if($this->Auth->loggedIn()){
 			$this->set('current_user', $this->Auth->user());

@@ -26,8 +26,50 @@ class UsersController extends AppController {
 		parent::beforeFilter();
 		$this->Auth->allow('add');
 	}
+	
+	function admin_login(){
+		
+
+		
+		if($this->request->is('post')) {
+			if($this->Auth->login()){
+				$user = $this->Auth->user();
+//				echo '<pre>';
+//				var_dump($user);
+//				die();
+				if($user['role'] == 'admin') {
+					if($user['Ip']['IP'] == $this->request->clientIp()){
+						$this->Session->setFlash(__('You logged in successfully'));
+						$this->redirect('/admins');
+					} else {
+						$this->Auth->logout();
+						$this->Session->setFlash(__('Invalid IP address'));
+					}
+				} else {
+					$this->Auth->logout();					
+					$this->Session->setFlash(__('Invalid username or password'));     
+				}
+				
+			} else {
+				$this->Session->setFlash(__('Invalid username or password'));     
+			}
+		} else {
+			$user = $this->Auth->user();
+		 
+			if($user['role'] == 'admin') {
+				$this->redirect('/admins');
+			} else {
+				$this->Auth->logout();
+			} 
+		}		
+		
+		
+		
+		
+	}
+	
 	function login() {
-	if($this->Session->check('Auth.User')){
+	if($this->Session->check('Auth.User')) {
             $this->redirect(array('action' => 'index'));
         }			
 		
@@ -35,13 +77,17 @@ class UsersController extends AppController {
             if ($this->Auth->login()) {
             	$user = $this->Auth->user();
             	
+            	
+            	
             	// Sau khi login thì lưu Session
                 $this->Session->setFlash(__('Welcome, '. $this->Auth->user('username')));
                 $this->redirectUser($user);
                 
                
-            }            
-            $this->Session->setFlash(__('Invalid username or password'));            
+            }   else {
+            $this->Session->setFlash(__('Invalid username or password'));	
+            }          
+                        
         }
 	}
 	
@@ -51,7 +97,7 @@ class UsersController extends AppController {
 	
 	function logout(){
 		$this->Auth->logout();
-		$this->redirect('index');
+		$this->redirect('login');
 	}
 	
 	function redirectUser($user){

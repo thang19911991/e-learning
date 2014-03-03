@@ -1,0 +1,37 @@
+<div class="users index">
+<?php
+  echo $this->Form->create('Admin',  array('url'=>$this->Html->url(array('controller'=>'admins', 'action'=>'create_admin'))));
+  echo $this->Form->input('User.username');
+  echo $this->Form->input('User.password', array('type' => 'password'));
+  //echo $this->Form->input('User.full_name', array('label' => 'Full Name'));
+  echo $this->Form->input('User.full_name', array('label' => 'Full Name'));
+  echo $this->Form->input('Admin.verify_code_id', array('label' => 'Verify code id', 'type' => 'text'));
+  echo $this->Form->input('User.email', array('label' => 'Email', 'type' => 'text'));
+  
+  echo $this->Form->input('User.birthday', array( 'label' => 'Date of birth'
+  							, 'type' => 'date'
+                            , 'dateFormat' => 'DMY'
+                            , 'minYear' => date('Y') - 120
+                            , 'maxYear' => date('Y')));  	
+  
+  echo $this->Form->input('Ip.IP', array('label' => 'IP Address', 'type' => 'text'));
+  //echo $this->Form->input('credit_number',array('label' => 'Credit Number'));
+  //echo $this->Form->input('email',array('label' => 'Email'));
+  //echo $this->Form->input('primary_password',array('label' => 'Primary Password'));
+  //echo $this->Form->input('birthday',array('label' => 'Birthday','type' => 'date'));
+  
+  //echo $this->Form->input('IP');  
+  //echo $form->submit();
+  echo $this->Form->end('create', array('controller' => 'admins','action'=>'create_admin'));
+?>
+</div>
+
+<div class="actions">
+<ul>
+<li><h3>Teacher Manager</h3></li>
+<li><?php echo $this->Html->link( "Student Manager",   array('controller' => 'admins', 'action'=>'student_manager')); ?></li>
+<li><?php echo $this->Html->link( "Teacher Manager",   array('controller' => 'admins', 'action'=>'teacher_manager')); ?></li>
+<li><?php echo $this->Html->link( "Add a new Admin",   array('controller' => 'admins', 'action'=>'create_admin')); ?></li>
+<li><?php echo $this->Html->link( "Logout", array('action'=>'logout', 'controller' => 'users')); ?></li>
+</ul>
+</div>
