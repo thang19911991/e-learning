@@ -16,6 +16,16 @@ class Course extends  AppModel{
 			'className' => 'CourseTag',
 			'foreignKey' => 'course_id',
 			'dependent' => true
+		),
+		'Document' => array(
+			'className' => 'Document',
+			'foreignKey' => 'course_id',
+			'dependent' => true
+		),
+		'Test' => array(
+			'className' => 'Test',
+			'foreignKey' => 'course_id',
+			'dependent' => true
 		)
 	);
 	
@@ -24,6 +34,8 @@ class Course extends  AppModel{
 			'className' => 'Tag',
 		)
 	);
+	
+	
 	
 	public $validate = array(
 		'course_name' => array(
