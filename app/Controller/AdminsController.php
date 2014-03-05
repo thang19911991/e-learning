@@ -106,6 +106,10 @@ class AdminsController extends  AppController {
 		$this->redirect(array("controller" => "admins", "action" => "user_profile", "id" => $this->params['named']['id']));
 	}
 	
+	public function edit_user_profile(){
+		
+	}
+	
 	
 	
 	
