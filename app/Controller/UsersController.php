@@ -39,6 +39,8 @@ class UsersController extends AppController {
 //				die();
 				if($user['role'] == 'admin') {
 					if($user['Ip']['IP'] == $this->request->clientIp()){
+						$this->User->id = $user['id'];
+            			$this->User->saveField('login_status','on');
 						$this->Session->setFlash(__('You logged in successfully'));
 						$this->redirect('/admins');
 					} else {
@@ -76,8 +78,8 @@ class UsersController extends AppController {
 		if ($this->request->is('post')) {
             if ($this->Auth->login()) {
             	$user = $this->Auth->user();
-            	
-            	
+            	$this->User->id = $user['id'];
+            	$this->User->saveField('login_status','off');
             	
             	// Sau khi login thì lưu Session
                 $this->Session->setFlash(__('Welcome, '. $this->Auth->user('username')));
@@ -96,6 +98,9 @@ class UsersController extends AppController {
 	}
 	
 	function logout(){
+		$this->User->id = $this->Auth->user('id');
+		$this->User->saveField('login_status', 'off');
+		
 		$this->Auth->logout();
 		$this->redirect('login');
 	}

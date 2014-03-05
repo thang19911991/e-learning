@@ -14,6 +14,7 @@ class User extends AppModel {
             )
         ),
         'email' => 'email',
+        
         'password' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
@@ -29,13 +30,53 @@ class User extends AppModel {
             'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'A full name is required'
-            )
+            ),
+            'length' => array(
+                'rule'    => array('minLength', '3'),
+                'message' => 'Minimum 3 characters long'
+            ),
                         
         ),
         'birthday' => array(
             'required' => array(
                 'rule' => array('notEmpty'),
                 'message' => 'Birthday is required'
+            )
+                        
+        ),
+        
+        'address' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Address is required'
+            )
+                        
+        ),
+        
+        'phone' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Phone number is required'
+            ),
+            'number' => array(
+		   	    'rule' => 'numeric',       
+		       	'message' => 'Please enter valid phone number'
+    		),
+    		'min_length' => array(
+                'rule'    => array('maxLength', '12'),
+                'message' => 'Please enter valid phone number'
+            ),
+            'max_length' => array(
+                'rule'    => array('minLength', '10'),
+                'message' => 'Please enter valid phone number'
+            ),           
+                        
+        ),
+        
+        'credit_number' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Credit number is required'
             )
                         
         ),
@@ -49,20 +90,24 @@ class User extends AppModel {
     );
     public $hasOne = array( 
             'Teacher' => array(
-            'className' => 'Teacher',           
+            'className' => 'Teacher',   
+    		'dependent' => true        
             ),
             
             'Admin' => array(
-            'className' => 'Admin',           
+            'className' => 'Admin',    
+            'dependent' => true       
             ),
             
             'Student' => array(
-            'className' => 'Student',           
+            'className' => 'Student',  
+            'dependent' => true         
             ),
             
             'Ip' => array(
             'className' => 'Ip',
-            'foreignKey' => 'admin_id'          
+            'foreignKey' => 'admin_id',    
+            'dependent' => true      
             )
             
         );

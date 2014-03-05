@@ -2,7 +2,7 @@
 class Student extends  AppModel{
 	// tên của model
 	// nếu tên Model đặt tên khác thì cần phải ghi rõ tên bảng trong CSDL
-	public $name = "Student";
+	public $name = "students";
 	
 	public $validate = array(
 			'username' => array(
@@ -18,6 +18,13 @@ class Student extends  AppModel{
 			'repassword' => array('rule' => 'nullCheck'),
 			'verifycode_answer' => array('rule' => 'nullCheck')
 	);
+	
+	var $belongsTo = array(
+        'User' => array(
+            'className' => 'User',
+            'foreignKey' => 'user_id'
+        )
+    );
 	
 	
 	
