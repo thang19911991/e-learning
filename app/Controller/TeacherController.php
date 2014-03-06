@@ -1,10 +1,23 @@
 <?php
+
 class TeacherController extends AppController{
 	public $components = array('Session');
 	
 	public function beforeFilter(){
 		parent::beforeFilter();
 		//$this->Auth->allow("register");
+	}
+	
+	public function test(){
+		$this->loadModel('User');
+		if($this->request->is('post')){
+			
+			$this->User->set($this->request->data);
+			if($this->User->validates()){
+				$data = $this->request->data;
+				//var_dump($data);
+			}
+		}
 	}
 	
 	public function index(){
@@ -14,6 +27,17 @@ class TeacherController extends AppController{
 			)
 		);
 		$this->set(compact("users"));
+	}
+	
+	// Su dung cho autocomplete de suggest tag
+	public function key(){		
+	    $this->autoRender = false;
+	    $this->loadModel("Tag");
+	    
+	    $keyword = $this->params['url']['term'];
+	    
+	    $codes = $this->Tag->find('all', array('conditions' => array('tag_name LIKE' => "%".$keyword."%")));	    
+	    return new CakeResponse(array('body' => json_encode($codes)));
 	}
 
 	public function show_courses(){
@@ -40,6 +64,8 @@ class TeacherController extends AppController{
 		$this->loadModel('Course');
 		$this->loadModel('CourseTag');				
 		
+		$this->set("id", $id);
+		
 		$this->Course->recursive = 2;
 		$courses = $this->Course->find('all',array(
 			'conditions' => array(
@@ -56,6 +82,10 @@ class TeacherController extends AppController{
 		
 		if($this->request->is('Post')){
 			$data = $this->request->data;
+			
+			var_dump($data);
+			
+			/*
 			unset($data['tag']);
 			$this->Course->id = $id;
 			if($this->Course->save($data)){
@@ -64,13 +94,14 @@ class TeacherController extends AppController{
 				$this->Session->setFlash("Update khong thanh cong");
 			}
 			return $this->redirect(array('controller' => 'teacher', 'action' => 'view_course'));
+			*/
 		}
 	}
 	
 	public function delete_course($id = null){
 		$this->loadModel('Course');
 		$this->Course->delete($id, true);
-		return $this->redirect(array('controller' => 'teacher', 'action' => 'view_course'));
+		return $this->redirect(array('controller' => 'teacher', 'action' => 'show_courses'));
 	}
 	
 	public function view_a_course($id = null){
@@ -89,8 +120,7 @@ class TeacherController extends AppController{
 			return $this->redirect(array('action' => 'view_course'));
 		}
 		
-		debug($courses);
-				
+		$this->set("id", $id);
 		$this->set(compact("courses"));
 		
 		if($this->request->is('Post')){
@@ -109,41 +139,78 @@ class TeacherController extends AppController{
 	public function register(){
 		$this->loadModel('VerifyCode');
 		$this->loadModel('User');
-		$allCode=$this->VerifyCode->find('list',array('fields' => array('question')));
+		$this->loadModel('Teacher');
+		$allCode=$this->VerifyCode->find('list',array('fields' => array('id','question')));
 		$this->set(compact('allCode'));
 		
+		$validator = $this->User->validator();
+		unset($validator['creditnumber']['format_of_student']);
+		
 		if($this->request->is('post')){
-			// This method resets the model state for saving new information
-			$this->User->create();
 			
-			// dữ liệu gửi từ Form lên
-			$data  = $this->request->data;
+			// khi set mảng $data vào trong model User để có thể thực hiện được validate
+			$this->User->set($this->data);
 			
-			// xoá phần từ repassword đi khỏi mảng để insert không bị lỗi
-			unset($data['User']['repassword']);
-			
-			// convert định dạng của birthday
-			$birthday = $data['User']['birthday'];
-			unset($data['User']['birthday']);
-			$data['User']['birthday'] = $birthday['year']."-".$birthday['month']."-".$birthday['day'];
-			
-			$data["User"]["status"] = 0;
-			$data["User"]["active"] = 0;
-			$data["User"]["primary_password"] = $data["User"]["password"];
-			
-			// luu du lieu trong Form register vao trong bang Member
-			$user = $this->User->save($data);
-			if(!empty($user)){
-				// hàm setFlash giúp gửi thông báo đến tất cả các action biết
-				$this->Session->setFlash(__("Register successful"));
-				$this->redirect(array('controller' => 'teacher', 'action' => 'login'));
-			}else{
-				$this->Session->setFlash(__("Unable to register"));
+			if($this->User->validates()){
+				// This method resets the model state for saving new information
+				$this->User->create();
+				
+				// dữ liệu gửi từ Form lên
+				$data  = $this->request->data;
+				
+				if(!empty($data['User']['profile_img'])){
+					$tmp_name_file_image = $data['User']['profile_img']['tmp_name'];
+					$filename = $data['User']['username']."-".$this->data['User']['profile_img']['name'];
+				}
+				
+				// xoá phần từ repassword đi khỏi mảng để insert không bị lỗi
+				unset($data['User']['re_password']);
+				unset($data['User']['checkbox']);
+				
+				// convert định dạng của birthday
+				$birthday = $data['User']['birthday'];
+				unset($data['User']['birthday']);
+				$data['User']['birthday'] = $birthday['year']."-".$birthday['month']."-".$birthday['day'];
+				
+				$data["User"]["role"] = 'teacher';
+				$data["User"]["active_status"] = 0;
+				$data["User"]["login_status"] = 0;
+				$data["User"]["primary_password"] = $data["User"]["password"];
+				$data["User"]["last_action_time"] = date('Y-m-d H:i:s');
+										
+				if(!empty($filename)){
+					$data['User']['profile_img'] = "/files/Avatar/". $filename;
+					
+					$path = WWW_ROOT.'files'.DS.'Avatar'.DS.$filename;
+					if(!move_uploaded_file($tmp_name_file_image, $path)){
+						$this->Session->setFlash("ファイルをアップロードできない");
+						return FALSE;
+					}
+				}
+				
+				// luu du lieu trong Form register vao trong bang User
+				$user = $this->User->save($data);
+				if(!empty($user)){
+					// The ID of the newly created user has been set as $this->User->id.
+					$this->request->data['Teacher']['user_id'] = $this->User->id;
+					
+					// add them 1 so thong tin vao trong mang Teacher trong data array
+					$this->request->data['Teacher']['verify_code_id'] = $this->request->data['User']['verify_code_id'];
+					$this->request->data['Teacher']['verify_code_answer'] = $this->request->data['User']['verify_code_answer'];
+					$this->request->data['Teacher']['primary_verify_code_answer'] = $this->request->data['User']['verify_code_answer'];
+					$this->request->data['Teacher']['additional_info'] = $this->request->data['User']['information'];
+					
+					$this->User->Teacher->save($this->request->data);
+					$this->Session->setFlash(__("Register successful"));
+					$this->redirect(array('controller' => 'teacher', 'action' => 'login'));
+				}else{
+					$this->Session->setFlash(__("Unable to register"));
+				}
 			}
 		}
 	}
 	
-	public function login(){		
+	public function login(){
 		if(!$this->Session->check("fail_login_count")){
 			echo "Session : chua khoi tao";
 		}else{

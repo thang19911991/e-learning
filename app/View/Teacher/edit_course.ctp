@@ -5,7 +5,7 @@
 	<?php  $tags[] = $t['tag_name']; ?>
 <?php endforeach;?>
 
-<?php echo $this->Form->create('Course'); ?>
+<?php echo $this->Form->create(null, array('url' => array('controller' => 'teacher', 'action' => 'edit_course', $id))); ?>
 <table>
 <tr>	
 	<td><h3><label for="course_name">授業名</label></h3></td>
@@ -15,30 +15,21 @@
 </tr>
 <tr>
 	<td><h3><label for="tag">タグ</label></h3></td>
-	<td>
-		<?php //echo $this->Form->input('tag',array('label' => false, 'type' => 'select', 'options' => $tags)); ?>
-		
-		<ul id="tag_ul">
+	<td>		
+		<div class="text_tag">
 			<?php foreach ($tags as $tag): ?>
-			<li>
-				<span id="tag_name_span"><?php echo $tag; ?></span>
-				<?php echo $this->Form->button("Delete", array(
-					'class' => 'testMoreFile',
-					'type' => 'button',
-					'id' => 'delete_tag_name',
-					'onclick' => 'deleteTag();'
-				));?>
-			</li>
+				<div class="tags"><?php echo $tag; ?><a class="delete"></a></div>
 			<?php endforeach; ?>
-		</ul>
-		
-		<?php echo $this->Form->input("tag_name", array('label' => false,'id' => 'tag_name')); ?>
+			<input type="text" placeholder="Type & Enter" id="tag_list"/>
+			<select name="data[Teacher][tags]" id="TeacherTags">
+			<?php foreach ($tags as $tag): ?>				
+				<option value="<?php echo $tag; ?>"><?php echo $tag; ?></option>
+			<?php endforeach; ?>
+			</select>
 			
-		<?php echo $this->Form->button("Add tag", array(
-				'class' => 'moreTag',
-				'type' => 'button',
-				'id' => 'mTag'				
-			)); ?>
+			
+		</div>
+		<?php echo $this->Form->select('select', $tags, array('value' => 1)); ?>
 	</td>
 </tr>
 <tr>
@@ -50,7 +41,8 @@
 <tr>
 	<td></td>
 	<td>
-		<?php echo $this->Form->end('Submit',array('controller' => 'teacher', 'action' => 'edit_course')); ?>		
+		<?php echo $this->Form->submit('Submit',array('label' => false, 'id' => 'btn_submit')); ?>
+		<?php echo $this->Form->end(); ?>
 	</td>
 </tr>
 </table>
@@ -58,21 +50,28 @@
 
 <script type="text/javascript">	
 	$(function(){
-		$("#mTag").click(function(){
-			var tag_name = $("#tag_name").val();
-			$("#tag_ul").append("<li><span id=\"tag_name_span\">" + tag_name + "</span><button class=\"testMoreFile\" type=\"button\" id=\"delete_tag_name\" onclick=\"deleteTag();\">Delete</button></li>");						
-		});
-		
-		//$("#delete_tag_name").click(function(){
-			//var parent  = $(this).closest("li");
-			//parent.remove();
-		//});
+		$("#tag_list").autocomplete({
+			source : function(req, res){
+				$.ajax({
+					url : "<?php echo $this->base.'/teacher/key'?>",
+					dataType : 'json',
+					data : {term : req.term},
+					success : function(data){
+						if(data.length>0){
+							// sau khi data la 1 mang cac object,thi ta phai
+							// su dung ham $.map de chuyen no thanh dang array of items
+							res($.map(data, function(item){
+								return{
+									label : item.Tag.tag_name,
+									value : item.Tag.tag_name
+								};
+							}));
+						}
+					}
+				});
+			}			
+		}); // end autocomplete
 	});
-
-	function deleteTag(){
-		var doc = $(this).parent();
-		alert(doc);
-	}
 </script>
 <div class="actions">
 	<ul>

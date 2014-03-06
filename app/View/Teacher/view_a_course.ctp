@@ -3,7 +3,7 @@
 <?php $tags = array(); ?>
 <?php foreach($courses[0]['Tag'] as $t): ?>
 	<?php  $tags[] = $t['tag_name']; ?>
-<?php endforeach;?>
+<?php endforeach; ?>
 
 <table>
 <tr>
@@ -33,32 +33,32 @@
 <tr>
 	<td><h3><label for="chapter">チャプター</label></h3></td>
 	<td>
-		<?php echo $this->Form->input('description',array('required' => 'false', 'readonly' => "readonly", 'label' => false, 'value' => $courses[0]['Course']['description'])); ?>		
+		<?php
+			$documents = $courses[0]['Document'];
+			foreach ($documents as $document):
+		?>
+		<div><?php echo $this->Html->link($document['document_name'], array('controller' =>'teacher', 'action' => 'update_link_document', $document['id']));; ?></div>
+		<?php endforeach; ?>
+	</td>
+</tr>
+<tr>
+	<td><h3><label for="test">テスト</label></h3></td>
+	<td>
+		<?php
+			$tests = $courses[0]['Test'];
+			foreach ($tests as $test):
+		?>
+		<div><?php echo $this->Html->link($test['test_name'], array('controller' =>'teacher', 'action' => 'update_link_document', $test['id']));; ?></div>
+		<?php endforeach; ?>
 	</td>
 </tr>
 </table>
 </div>
-
-<script type="text/javascript">	
-	$(function(){
-		$("#mTag").click(function(){
-			var tag_name = $("#tag_name").val();
-			$("#tag_ul").append("<li><span id=\"tag_name_span\">" + tag_name + "</span><button class=\"testMoreFile\" type=\"button\" id=\"delete_tag_name\" onclick=\"deleteTag();\">Delete</button></li>");						
-		});
-		
-		//$("#delete_tag_name").click(function(){
-			//var parent  = $(this).closest("li");
-			//parent.remove();
-		//});
-	});
-
-	function deleteTag(){
-		var doc = $(this).parent();
-		alert(doc);
-	}
-</script>
 <div class="actions">
 	<ul>
+		<li>
+			<?php echo $this->Html->link( "コース編集",   array('controller' => 'teacher', 'action'=>'edit_course',$id)); ?>
+		</li>
 		<li>
 			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teacher', 'action'=>'show_courses')); ?>
 		</li>

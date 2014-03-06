@@ -9,192 +9,180 @@ class User extends AppModel{
 	public $hasOne = array(
 		'Teacher' => array(
 			'className' => 'Teacher',
-			'foreignKey' => 'user_id'
+			'foreignKey' => 'user_id',
+			'dependent' => true
 		),
 		'Student' => array(
 			'className' => 'Student',
-			'foreignKey' => 'id'
+			'foreignKey' => 'user_id',
+			'dependent' => true
 		)
 	);
 	
-	// kiểm tra tính hợp lệ của dữ liệu trong Form
-	// tức là trước khi ấn submit thì xem dữ liệu có empty không, có valid không	
 	public $validate = array(
         'username' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
-				'message' => 'Bạn phải nhập trường [Tên tài khoản]',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-				),
-					'unique' => array(
-						'rule' => array('isUnique'),
-						'message' => 'Tài khoản này đã được đăng kí',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		),
-		),
-
-		'email' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
-				'message' => 'Bạn phải nhập trường [email]',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		),
+			'notEmpty' => array(
+				'rule' => 'notEmpty',
+				'message' => 'ユーザ名をご入力してください',
+			),
 			'unique' => array(
-				'rule' => array('isUnique'),
-				'message' => 'email này đã được đăng kí',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		),
-			'email' => array(
-				'rule' => '/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9\._-]+)+\.([a-zA-Z])+$/',
-				'message' => 'Bạn hãy nhập email đúng định dạng',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		),
-			'min' => array(
-				'rule' => array('minLength', 6),
-				'message' => 'Trường [Email] phải nhiều hơn hoặc bằng 6 kí tự ',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		),
-			'max' => array(
-				'rule' => array('maxLength', 256),
-				'message' => 'Trường [Email] phải ít hơn 256 kí tự',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		)
-		),
+					'rule' => 'isUnique',
+					'message' => 'そのユーザ名が存在しました。他のユーザ名をご入力してください',
+			)
+		),		
 		'password' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
-				'message' => 'Bạn phải nhập trường [Password]',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		),
-			'min' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
+				'message' => 'パスワードをご入力してください',
+			),
+			'min_length' => array(
 				'rule' => array('minLength', 6),
-				'message' => 'Trường [Password] phải nhiều hơn hoặc bằng 6 kí tự ',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		),
-			'max' => array(
+				'message' => 'パスワードの最小長が６文字です。',
+			),
+			'max_length' => array(
 				'rule' => array('maxLength', 256),
-				'message' => 'Trường [Password] phải ít hơn 256 kí tự',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		)
+				'message' => 'パスワードの最大長が256文字です。',
+			)
 		),
 		're_password' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
-				'message' => 'Bạn phải nhập trường [Password]',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		),
-			'min' => array(
+			'notEmpty' => array(
+				'rule' => array('notEmpty'),
+				'message' => '確認パスワードをご入力してください',
+			),
+			'min_length' => array(
 				'rule' => array('minLength', 6),
-				'message' => 'Trường [Password] phải nhiều hơn hoặc bằng 6 kí tự ',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'message' => '確認パスワードの最小長が6文字です。',
+			),
+			'max_length' => array(
+				'rule' => array('maxLength', 256),
+				'message' => '確認パスワードの最大長が256文字です。',
+			),
+			'match_password' => array(
+				'rule' => 'matchPassword',
+				'message' => 'パスワードと確認パスワードが合っていない'
+			)
 		),
-			'max' => array(
-				'rule' => array('maxLength', 32),
-				'message' => 'Trường [Password] phải ít hơn 32 kí tự',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		)
+		'full_name' => array(
+			'notEmpty' => array(
+				'rule' => 'notEmpty',
+				'message' => '名前をご入力してください',
+			)			
 		),
-		'new_password' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
-				'message' => 'Bạn phải nhập trường [Password]',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		),
-			'min' => array(
+		'email' => array(
+			'notEmpty' => array(
+				'rule' => 'notEmpty',
+				'message' => 'メールをご入力してください',
+			),
+			'unique' => array(
+				'rule' => array('isUnique'),
+				'message' => 'そのメールが存在しました。他のメールをご入力してください',
+			),
+			'email_format' => array(
+				'rule' => 'email',
+				'message' => 'そのメールアドレスが正しくない。',
+			),
+			'min_length' => array(
 				'rule' => array('minLength', 6),
-				'message' => 'Trường [Password] phải nhiều hơn hoặc bằng 6 kí tự',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'message' => 'メールの最小長が６文字です。',
+			),
+			'max_length' => array(
+				'rule' => array('maxLength', 256),
+				'message' => 'メールの最大長が256文字です。',
+			)
 		),
-			'max' => array(
-				'rule' => array('maxLength', 32),
-				'message' => 'Trường [Password] phải ít hơn 32 kí tự',
-		//'allowEmpty' => false,
-		//'required' => false,
-		//'last' => false, // Stop validation after this rule
-		//'on' => 'create', // Limit validation to 'create' or 'update' operations
-		)
+		'address' => array(
+			'notEmpty' => array(
+				'rule' => 'notEmpty',
+				'message' => 'アドレスをご入力してください',
+			)			
 		),
-		'role' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
-				'message' => 'Bạn phải nhập trường [Role]',
-		)
+		'phone' => array(
+			'notEmpty' => array(
+				'rule' => 'notEmpty',
+				'message' => '電話番号をご入力してください',
+			),
+			'format_phone' => array(
+				'rule' => array('phone', '/[0-9]+/', 'vn'),
+				'message' => 'その電話番号が正しくないです'
+			)
+		),
+		'verify_code_answer' => array(
+			'notEmpty' => array(
+				'rule' => 'notEmpty',
+				'message' => 'セキュリティー答えをご入力してください'
+			),
+		),
+		'creditnumber' => array(
+			'notEmpty' => array(
+				'rule' => 'notEmpty',
+				'message' => 'クレジットカードをご入力してください'
+			),
+			'format_of_teacher' => array(
+				'rule' => '/^[0-9]{8}-[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/',
+				'message' => 'クレジットカードが正しくないです(正しいフォーマット：12345678-1111-2222-3333-4444)'
+			),
+			'format_of_student' => array(
+				'rule' => '/^[0-9]{4}-[0-9]{3}-[0-9]{1}-[0-9]{7}$/',
+				'message' => 'クレジットカードが正しくないです(正しいフォーマット：1111-222-3-4444444)'
+			)
+		),
+		'profile_img' => array(
+			'check_type' => array(
+				'rule' => 'checkTypeFileUploaded',
+				'message' => 'アップロードしたファイルのフォーマットが[*.jpg|*.gif|*.jpeg|*.png]です'
+			),
+			'check_size' => array(
+				'rule' => 'checkSizeFileUploaded',
+				'message' => 'ファイルの最大サイズが25MBです。他のファイルをアップロードしてください'
+			)
+		),
+		'information' => array(
+			'notEmpty' => array(
+				'rule' => 'notEmpty',
+				'message' => '自己PRをご入力してください'
+			),
 		)
     );
     
-
-    /**
-     * 
-     * Kiem tra tinh duy nhat cua username
-     * @param array $check
-     */
-    public function isUniqueUsername($check){
-    	$username = $this->find(
-            'first',
-            array(
-                'fields' => array(
-                    'Member.id',
-                    'Member.username'
-                ),
-                'conditions' => array(
-                    'Member.username' => $check['username']
-                )
-            )
-        );
-        if(!empty($username)){
-            return false;
-        }else{
-            return true; 
-        }
+    // kiem tra file avatar co phai la file image hay khong
+    public function checkTypeFileUploaded($data){
+    	$type = $data['profile_img']['type'];
+    	if(!empty($type)){
+    		switch($type){
+    			case "image/gif":
+    			case "image/jpg":
+    			case "image/jpeg":
+    			case "image/png":
+    				return true;
+    			default :
+    				return false;
+    		}
+    	}else{
+    		return false;
+    	}
     }
     
-	// Trước khi lưu record vào trong table members thì phải thực hiện 
-    	// hàm này trước
+    // kiem tra dung luong cua file avatar co qua 25MB hay khong
+    public function checkSizeFileUploaded($data){
+    	var_dump($data);
+    	$size_file = $data['profile_img']['size'];
+    	$size_file = $size_file/(1024*1024);
+    	if($size_file<=25){
+    		return true;
+    	}
+    	return false;
+    }
+    
+    // kiem tra password va password_confirmation co match voi nhau khong
+    public function matchPassword($data){
+    	if($data['re_password'] == $this->data['User']['password']){
+    		return true;
+    	}
+    	$this->invalidate('password', 'パスワードと確認パスワードが合っていない');
+    	return false;
+    }
+    
+	// Trước khi lưu record vào trong table members thì phải thực hiện hàm này trước
     function beforeSave($option = array()){
     	// hash password
         if (isset($this->data[$this->alias]['password'])) {
@@ -202,5 +190,5 @@ class User extends AppModel{
             $this->data[$this->alias]['primary_password'] = AuthComponent::password($this->data[$this->alias]['primary_password']);
         }
         return true;    	        
-    }    
+    }
 }
