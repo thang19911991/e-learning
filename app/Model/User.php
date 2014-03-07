@@ -5,6 +5,19 @@ class User extends AppModel{
 	// tên của model
 	// nếu tên Model đặt tên khác thì cần phải ghi rõ tên bảng trong CSDL
 	public $name = "User";
+		
+	const TEACHER = "teacher";
+	const STUDENT = "student";
+	const ADMIN = "admin";
+	
+	const ACTIVED = "actived";
+	const BANNED = "banned";
+	const INACTIVE = "inactive";
+
+	const ON_LOGIN_STATUS = "on";
+	const OFF_LOGIN_STATUS = "off";
+	const LOCK_LOGIN_STATUS = "lock";
+	
 	
 	public $hasOne = array(
 		'Teacher' => array(
@@ -72,11 +85,7 @@ class User extends AppModel{
 			'notEmpty' => array(
 				'rule' => 'notEmpty',
 				'message' => 'メールをご入力してください',
-			),
-			'unique' => array(
-				'rule' => array('isUnique'),
-				'message' => 'そのメールが存在しました。他のメールをご入力してください',
-			),
+			),			
 			'email_format' => array(
 				'rule' => 'email',
 				'message' => 'そのメールアドレスが正しくない。',
@@ -106,13 +115,28 @@ class User extends AppModel{
 				'message' => 'その電話番号が正しくないです'
 			)
 		),
+		'verify_code' => array(
+			'notEmpty' => array(
+				'rule' => 'notEmpty',
+				'message' => 'セキュリティー質問をご入力してください'
+			),
+			'max_length' => array(
+				'rule' => array('maxLength', 256),
+				'message' => 'セキュリティー質問の最大長が256文字です。',
+			)
+			
+		),
 		'verify_code_answer' => array(
 			'notEmpty' => array(
 				'rule' => 'notEmpty',
 				'message' => 'セキュリティー答えをご入力してください'
 			),
+			'max_length' => array(
+				'rule' => array('maxLength', 256),
+				'message' => 'セキュリティー質問の最大長が256文字です。',
+			)
 		),
-		'creditnumber' => array(
+		'credit_number' => array(
 			'notEmpty' => array(
 				'rule' => 'notEmpty',
 				'message' => 'クレジットカードをご入力してください'
@@ -128,11 +152,11 @@ class User extends AppModel{
 		),
 		'profile_img' => array(
 			'check_type' => array(
-				'rule' => 'checkTypeFileUploaded',
+				'rule' => array('extension', array('gif', 'jpeg', 'png', 'jpg')),
 				'message' => 'アップロードしたファイルのフォーマットが[*.jpg|*.gif|*.jpeg|*.png]です'
 			),
 			'check_size' => array(
-				'rule' => 'checkSizeFileUploaded',
+				'rule' => array('fileSize', '<=', '25MB'),
 				'message' => 'ファイルの最大サイズが25MBです。他のファイルをアップロードしてください'
 			)
 		),
@@ -144,35 +168,6 @@ class User extends AppModel{
 		)
     );
     
-    // kiem tra file avatar co phai la file image hay khong
-    public function checkTypeFileUploaded($data){
-    	$type = $data['profile_img']['type'];
-    	if(!empty($type)){
-    		switch($type){
-    			case "image/gif":
-    			case "image/jpg":
-    			case "image/jpeg":
-    			case "image/png":
-    				return true;
-    			default :
-    				return false;
-    		}
-    	}else{
-    		return false;
-    	}
-    }
-    
-    // kiem tra dung luong cua file avatar co qua 25MB hay khong
-    public function checkSizeFileUploaded($data){
-    	var_dump($data);
-    	$size_file = $data['profile_img']['size'];
-    	$size_file = $size_file/(1024*1024);
-    	if($size_file<=25){
-    		return true;
-    	}
-    	return false;
-    }
-    
     // kiem tra password va password_confirmation co match voi nhau khong
     public function matchPassword($data){
     	if($data['re_password'] == $this->data['User']['password']){
@@ -182,6 +177,7 @@ class User extends AppModel{
     	return false;
     }
     
+    /*
 	// Trước khi lưu record vào trong table members thì phải thực hiện hàm này trước
     function beforeSave($option = array()){
     	// hash password
@@ -190,5 +186,5 @@ class User extends AppModel{
             $this->data[$this->alias]['primary_password'] = AuthComponent::password($this->data[$this->alias]['primary_password']);
         }
         return true;    	        
-    }
+    }*/
 }
