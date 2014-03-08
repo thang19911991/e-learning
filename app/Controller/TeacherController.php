@@ -1,5 +1,5 @@
 <?php
-
+App::import('Model','Teacher');
 class TeacherController extends AppController{
 	public $components = array('Session');
 	
@@ -9,13 +9,38 @@ class TeacherController extends AppController{
 	}
 	
 	public function test(){
-		$this->loadModel('User');
-		if($this->request->is('post')){
-			
-			$this->User->set($this->request->data);
-			if($this->User->validates()){
+		echo time();
+	}
+	
+	public function confirm_verify_code($teacher_id){
+		if($this->Session->check('TempLock')){
+			$this->Teacher->unbindModel(array('hasMany' => array('Course')));
+			$teacher = $this->Teacher->find('first', array(
+					'conditions' => array(
+					'Teacher.id' => $teacher_id
+				)
+			));
+		
+			$this->set(compact("teacher"));
+		
+			if($this->request->is('post')){
 				$data = $this->request->data;
-				//var_dump($data);
+				$this->Teacher->set($data);
+				
+				if($this->Teacher->validates()){
+					$teacher = $this->Teacher->find('first', array(
+						'fields' => array('Teacher.*'),
+						'conditions' => array(
+							'Teacher.verify_code_answer' => $data['Teacher']['verify_code_answer'],
+							'Teacher.verify_code' => $data['Teacher']['verify_code']
+						)
+					));
+					if(!empty($teacher)){
+						echo "thanh cong";
+					}else{
+						echo "khong thanh cong";
+					}
+				}
 			}
 		}
 	}
@@ -41,6 +66,7 @@ class TeacherController extends AppController{
 	}
 
 	public function show_courses(){
+		$this->set('title_for_layout', 'コースリストを表す');
 		$this->loadModel('Course');
 		if(!$this->Auth->loggedIn()){
 			return $this->redirect(array('controller' => 'teacher', 'action' => 'login'));
@@ -61,6 +87,7 @@ class TeacherController extends AppController{
 	}
 	
 	public function edit_course($id = null){
+		$this->set('title_for_layout', 'コース編集');
 		$this->loadModel('Course');
 		$this->loadModel('CourseTag');				
 		
@@ -105,6 +132,7 @@ class TeacherController extends AppController{
 	}
 	
 	public function view_a_course($id = null){
+		$this->set('title_for_layout', 'コースを見る');
 		$this->loadModel('Course');
 		$this->loadModel('CourseTag');				
 		
@@ -137,19 +165,16 @@ class TeacherController extends AppController{
 	}
 	
 	public function register(){
-		$this->loadModel('VerifyCode');
+		$this->set('title_for_layout', '先生の登録');
 		$this->loadModel('User');
 		$this->loadModel('Teacher');
-		$allCode=$this->VerifyCode->find('list',array('fields' => array('id','question')));
-		$this->set(compact('allCode'));
 		
 		$validator = $this->User->validator();
-		unset($validator['creditnumber']['format_of_student']);
+		unset($validator['credit_number']['format_of_student']);
 		
 		if($this->request->is('post')){
-			
 			// khi set mảng $data vào trong model User để có thể thực hiện được validate
-			$this->User->set($this->data);
+			$this->User->set($this->request->data);
 			
 			if($this->User->validates()){
 				// This method resets the model state for saving new information
@@ -157,6 +182,9 @@ class TeacherController extends AppController{
 				
 				// dữ liệu gửi từ Form lên
 				$data  = $this->request->data;
+				
+				// mã hóa password theo định dạng : username + password + t01
+				$data['User']['password'] = AuthComponent::password($data['User']['username']."+".$data['User']['password']."+t01");				
 				
 				if(!empty($data['User']['profile_img'])){
 					$tmp_name_file_image = $data['User']['profile_img']['tmp_name'];
@@ -173,15 +201,15 @@ class TeacherController extends AppController{
 				$data['User']['birthday'] = $birthday['year']."-".$birthday['month']."-".$birthday['day'];
 				
 				$data["User"]["role"] = 'teacher';
-				$data["User"]["active_status"] = 0;
-				$data["User"]["login_status"] = 0;
+				$data["User"]["active_status"] = User::INACTIVE;
+				$data["User"]["login_status"] = User::OFF_LOGIN_STATUS;
 				$data["User"]["primary_password"] = $data["User"]["password"];
 				$data["User"]["last_action_time"] = date('Y-m-d H:i:s');
 										
-				if(!empty($filename)){
-					$data['User']['profile_img'] = "/files/Avatar/". $filename;
+				if($filename!=""){
+					$data['User']['profile_img'] = "/img/Avatar/". $filename;
 					
-					$path = WWW_ROOT.'files'.DS.'Avatar'.DS.$filename;
+					$path = WWW_ROOT.'img'.DS.'Avatar'.DS.$filename;
 					if(!move_uploaded_file($tmp_name_file_image, $path)){
 						$this->Session->setFlash("ファイルをアップロードできない");
 						return FALSE;
@@ -195,10 +223,12 @@ class TeacherController extends AppController{
 					$this->request->data['Teacher']['user_id'] = $this->User->id;
 					
 					// add them 1 so thong tin vao trong mang Teacher trong data array
-					$this->request->data['Teacher']['verify_code_id'] = $this->request->data['User']['verify_code_id'];
+					$this->request->data['Teacher']['verify_code'] = $this->request->data['User']['verify_code'];
 					$this->request->data['Teacher']['verify_code_answer'] = $this->request->data['User']['verify_code_answer'];
 					$this->request->data['Teacher']['primary_verify_code_answer'] = $this->request->data['User']['verify_code_answer'];
 					$this->request->data['Teacher']['additional_info'] = $this->request->data['User']['information'];
+					$this->request->data['Teacher']['additional_info'] = $this->request->data['User']['information'];
+					$this->request->data['Teacher']['last_session_ip'] = $this->request->clientIp();					
 					
 					$this->User->Teacher->save($this->request->data);
 					$this->Session->setFlash(__("Register successful"));
@@ -211,6 +241,8 @@ class TeacherController extends AppController{
 	}
 	
 	public function login(){
+		$this->loadModel('User');
+		$this->set('title_for_layout', 'ログイン');
 		if(!$this->Session->check("fail_login_count")){
 			echo "Session : chua khoi tao";
 		}else{
@@ -225,16 +257,26 @@ class TeacherController extends AppController{
 		// Nếu mà chưa login thì cần login và lưu Session
 		if ($this->request->is('post')) {
 			$data = $this->request->data;
-	        if($data){
-	        	$data['User']['password'] = AuthComponent::password($data['User']['password']);
+	        if($data){	        	
+	        	$data['User']['password'] = AuthComponent::password($data['User']['username']."+".$data['User']['password']."+t01");
+	        		        	
 	        	// thực hiện kiểm tra username và password(đã mã hóa) trong CSDL, nếu mà ok thì
 	        	// sẽ tự động lưu thông tin của user vào trong Session
 	        	// hàm này mặc định là sẽ tìm trong bảng Users với 2 trường username, password
 	        	// do đó mà ta cần phải cấu hình lại cái $components, cấu hình được đặt trong AppController
-		        if ($this->Auth->login()) {
+	        	
+	        	$teacher = $this->User->find('first', array(
+	        		'conditions' => array(
+	        			'username' => $data['User']['username'],
+	        			'password' => $data['User']['password'],
+	        		)
+	        	));
+	        	
+		        if (!empty($teacher)) {
+		        	$this->Auth->login($teacher['User']);
 		        	$this->Session->write("fail_login_count","login thanh cong");
 	                $this->Session->setFlash("Login thanh cong");
-	               	//return $this->redirect(array('controller' => 'home', 'action' => 'index'));
+	               	return $this->redirect(array('controller' => 'home', 'action' => 'index'));
 	            }else{
 	            	$this->Session->write("fail_login_count","login khong thanh cong");
 	            	$this->Session->setFlash(__('Invalid username or password'));
