@@ -2,7 +2,7 @@
 class Tag extends AppModel{
 	// tên của model
 	// nếu tên Model đặt tên khác thì cần phải ghi rõ tên bảng trong CSDL
-	public $name = "tags";
+	public $name = "Tag";
 	// We specify the join table here because Cake would expect the table to be called courses_tags from this side
 	
 	public $hasAndBelongsToMany = array(
