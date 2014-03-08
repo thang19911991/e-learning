@@ -28,14 +28,14 @@
 	echo $this->Form->input('re_password',array('required'=>'false','label' => '確認パスワード','type' => 'password'));
 	echo $this->Form->input('full_name',array('required'=>'false','label' => '名前'));
 	echo $this->Form->input('email',array('required'=>'false','label' => 'メール'));
-	echo $this->Form->input('address',array('required'=>'false','label' => 'メールアドレス'));
+	echo $this->Form->input('address',array('required'=>'false','label' => 'アドレス'));
 	echo $this->Form->input('birthday', array(
 										'dateFormat' => 'DMY',
 										'timeFormat' => null,
 										'minYear' => date('Y') - 70,
 										'maxYear' => date('Y') - 0,'label' => '誕生日'));
 	echo $this->Form->input('phone',array('label' => '電話番号','required' => 'false'));
-	echo $this->Form->input('verify_code_id',array('label' => 'セキュリティー質問', 'options' => $allCode));
+	echo $this->Form->input('verify_code',array('label' => 'セキュリティー質問','required' => 'false'));
 	echo $this->Form->input('verify_code_answer',array('label' => 'セキュリティー答え','required' => 'false'));
 	echo $this->Form->input('profile_img',array('required'=>'false','type' => 'file','label' => 'アバター'));
 	echo $this->Form->input('credit_number',array('label' => 'Credit Card','required'=>'false', 'maxlength' => '28', 'style' => 'width:392px'));
