@@ -40,7 +40,7 @@ class User extends AppModel{
 			),
 			'unique' => array(
 					'rule' => 'isUnique',
-					'message' => 'そのユーザ名が存在しました。他のユーザ名をご入力してください',
+					'message' => 'そのユーザ名が既存しました。他のユーザ名をご入力してください',
 			)
 		),		
 		'password' => array(
