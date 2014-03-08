@@ -37,7 +37,7 @@
 			$documents = $courses[0]['Document'];
 			foreach ($documents as $document):
 		?>
-		<div><?php echo $this->Html->link($document['document_name'], array('controller' =>'teacher', 'action' => 'update_link_document', $document['id']));; ?></div>
+		<div><?php echo $this->Html->link($document['document_name'], array('controller' =>'teachers', 'action' => 'update_link_document', $document['id']));; ?></div>
 		<?php endforeach; ?>
 	</td>
 </tr>
@@ -48,7 +48,7 @@
 			$tests = $courses[0]['Test'];
 			foreach ($tests as $test):
 		?>
-		<div><?php echo $this->Html->link($test['test_name'], array('controller' =>'teacher', 'action' => 'update_link_document', $test['id']));; ?></div>
+		<div><?php echo $this->Html->link($test['test_name'], array('controller' =>'teachers', 'action' => 'update_link_document', $test['id']));; ?></div>
 		<?php endforeach; ?>
 	</td>
 </tr>
@@ -57,17 +57,17 @@
 <div class="actions">
 	<ul>
 		<li>
-			<?php echo $this->Html->link( "コース編集",   array('controller' => 'teacher', 'action'=>'edit_course',$id)); ?>
+			<?php echo $this->Html->link( "コース編集",   array('controller' => 'teachers', 'action'=>'edit_course',$id)); ?>
 		</li>
 		<li>
-			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teacher', 'action'=>'show_courses')); ?>
+			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teachers', 'action'=>'show_courses')); ?>
 		</li>
 		<li>
-			<?php echo $this->Html->link( "コース作成",   array('controller' => 'teacher', 'action'=>'add_course')); ?>
+			<?php echo $this->Html->link( "コース作成",   array('controller' => 'teachers', 'action'=>'add_course')); ?>
 		</li>
 		<li>
 		<?php if($current_user): ?>
-		<?php echo $this->Html->link( "ログアウト", array('controller' => 'teacher', 'action'=>'logout')); ?>
+		<?php echo $this->Html->link( "ログアウト", array('controller' => 'teachers', 'action'=>'logout')); ?>
 		<?php endif; ?>
 		</li>
 	</ul>

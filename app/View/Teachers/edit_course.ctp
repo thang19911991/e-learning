@@ -5,7 +5,7 @@
 	<?php  $tags[] = $t['tag_name']; ?>
 <?php endforeach;?>
 
-<?php echo $this->Form->create(null, array('url' => array('controller' => 'teacher', 'action' => 'edit_course', $id))); ?>
+<?php echo $this->Form->create(null, array('url' => array('controller' => 'teachers', 'action' => 'edit_course', $id))); ?>
 <table>
 <tr>	
 	<td><h3><label for="course_name">授業名</label></h3></td>
@@ -53,7 +53,7 @@
 		$("#tag_list").autocomplete({
 			source : function(req, res){
 				$.ajax({
-					url : "<?php echo $this->base.'/teacher/key'?>",
+					url : "<?php echo $this->base.'/teachers/key'?>",
 					dataType : 'json',
 					data : {term : req.term},
 					success : function(data){
@@ -76,14 +76,14 @@
 <div class="actions">
 	<ul>
 		<li>
-			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teacher', 'action'=>'show_courses')); ?>
+			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teachers', 'action'=>'show_courses')); ?>
 		</li>
 		<li>
-			<?php echo $this->Html->link( "コース作成",   array('controller' => 'teacher', 'action'=>'add_course')); ?>
+			<?php echo $this->Html->link( "コース作成",   array('controller' => 'teachers', 'action'=>'add_course')); ?>
 		</li>
 		<li>
 		<?php if($current_user): ?>
-		<?php echo $this->Html->link( "ログアウト", array('controller' => 'teacher', 'action'=>'logout')); ?>
+		<?php echo $this->Html->link( "ログアウト", array('controller' => 'teachers', 'action'=>'logout')); ?>
 		<?php endif; ?>
 		</li>
 	</ul>

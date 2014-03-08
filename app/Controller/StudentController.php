@@ -47,7 +47,7 @@ class StudentController extends AppController{
 
 	}
 	function std_index(){
-
+		echo "day la trang index cua student";
 	}
 }
 ?>

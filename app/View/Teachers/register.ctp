@@ -22,7 +22,7 @@
 <div class="users form">
 <h2>先生の登録</h2>
 <?php
-	echo $this->Form->create('User',array('url' => array('controller' => 'teacher', 'action' => 'register'), 'type' => 'file'));
+	echo $this->Form->create('User',array('url' => array('controller' => 'teachers', 'action' => 'register'), 'type' => 'file'));
 	echo $this->Form->input('username',array('required'=>'false','label' => 'ユーザー名'));
 	echo $this->Form->input('password',array('required'=>'false','label' => 'パスワード'));
 	echo $this->Form->input('re_password',array('required'=>'false','label' => '確認パスワード','type' => 'password'));
@@ -47,6 +47,6 @@
 </div>
 <div class="actions">
 	<?php
-		echo $this->Html->link("ログイン",array('controller'=> 'teacher', 'action' => 'login'));
+		echo $this->Html->link("ログイン",array('controller'=> 'teachers', 'action' => 'login'));
 	?>
 </div>

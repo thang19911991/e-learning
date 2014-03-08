@@ -40,9 +40,17 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	?>
 </head>
 <body>
-<?php 
-		$allows = array('login', 'register', 'confirm_verify_code');
-		if(empty($current_user) && !in_array($this->action, $allows)):
+
+<?php
+	if($this->Session->check("User.username")){
+		echo "username :". $this->Session->read("User.username");		
+	}else{
+		echo "chua dang nhap";
+	}
+?>
+<?php
+		$allows = array('login', 'register', 'confirm_verify_code', 'home');
+		if(!$this->Session->check('User') && !in_array($this->action, $allows)):
 ?>
 		<script type="text/javascript">
 			window.location = "<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'login')); ?>"

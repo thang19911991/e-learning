@@ -31,6 +31,12 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+	const TempLock_time 			= "TempLock.time"; // dùng để lưu thời gian lock tạm thơi
+	const Login_wrong				= "Login.wrong";	// lưu số lần login sai
+	const TempLock					= "TempLock";		// dùng để lưu thời gian lock tạm thơi
+	const Login						= "Login";			// lưu số lần login sai
+	const USER_TEMP_NAME			= "UserTemp.username";	// username tam thời
+	
 	public $layout = 'default';
 	
 	public $components = array(
@@ -57,6 +63,40 @@ class AppController extends Controller {
 	
 	    // Default deny
 	    return false; */
+	}
+	
+	// tra ve thong so trong bang system_params
+	function getSystemParams(){
+		$this->loadModel('SystemParam');
+		$paramNames = array(
+			SystemParam::TEMP_LOCK_TIME,
+			SystemParam::MAX_TIME_WRONG_PASSWORD,
+			SystemParam::KOMA_COST,
+			SystemParam::KOMA_TIMEOUT,
+			SystemParam::MAX_AVATAR_SIZE,
+			SystemParam::MAX_COURSE_FILE_SIZE,
+			SystemParam::MAX_LENGTH_INPUT,
+			SystemParam::MIN_LENGTH_PASSWORD,
+			SystemParam::SESSION_TIMEOUT,
+			SystemParam::TEACHER_PAY
+		);
+		
+		$systemParams = $this->SystemParam->find("all", array(
+			'fields'		=>	array('name', 'value'),
+			'conditions'	=>	array(				
+				'name'		=>	$paramNames
+			)
+		));
+		
+		if(!empty($systemParams)){
+			$params = array();
+			foreach ($systemParams as $data) {				
+				$params[$data['SystemParam']['name']] = $data['SystemParam']['value'];
+			}
+			return $params;
+		}else{
+			return FALSE;
+		}
 	}
 	
     public function beforeFilter(){
