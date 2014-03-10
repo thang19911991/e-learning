@@ -69,10 +69,11 @@ class AppController extends Controller {
 	    			'std_view_document',
 	    			'std_view_test',
 	    			'view_list_course',
-	    			'std_logout'	    			
+	    			'std_logout'
 	    		))){
 	    			return true;
 	    		}
+	    		$this->redirect(array('controller' => 'student', 'action' => 'std_index'));
 	    		return false;
 	    	}else if($user['role']=="teacher"){
 	    		if(in_array($this->action, array(
@@ -94,6 +95,7 @@ class AppController extends Controller {
 	    		))){
 	    			return true;
 	    		}
+	    		$this->redirect(array('controller' => 'teachers', 'action' => 'index'));
 	    		return false;
 	    	}else if($user['role']=="admin"){
 	    		if(in_array($this->action, array(
@@ -125,6 +127,7 @@ class AppController extends Controller {
 	    		))){
 	    			return true;
 	    		}
+	    		$this->redirect(array('controller' => 'admins', 'action' => 'index'));
 	    		return false;
 	    	}
 	    }else{ // 普通のユーザ
@@ -132,6 +135,7 @@ class AppController extends Controller {
 	    	if(in_array($this->action, $allows)){
 	    		return true;
 	    	}
+	    	$this->redirect(array('controller' => 'homes', 'action' => 'index'));
 	    	return false;
 	    }
 	    return true;
