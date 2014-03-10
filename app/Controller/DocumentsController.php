@@ -352,6 +352,22 @@ class DocumentsController extends AppController{
 					
 					return new CakeResponse(array('body' => "ok"));
 				}catch (Exception $e){
+					$this->writeLog(array(
+						'id' => 'LOG_021',
+						'time' => time(),
+						'actor' => '先生'.$this->Auth->user('id'),
+						'action' => 'ドキュメント削除',
+						'content' => 'DocumentID（'.$document_id.')'.' が削除した',
+						'type' => 'オペレーション'
+					));
+					$this->writeLog(array(
+						'id' => 'LOG_022',
+						'time' => time(),
+						'actor' => 'システム',
+						'action' => 'ドキュメント削除',
+						'content' => 'データベースでDocumentID（'.$document_id.')'.' が削除した',
+						'type' => 'イベント'
+					));
 					return new CakeResponse(array('body' => "not_ok"));
 				}
 			}

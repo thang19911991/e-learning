@@ -1,6 +1,17 @@
 <?php
 class TagsController extends AppController{
 	
+	// 	tagをsuggestするために、autocompleteを使用
+	public function key(){
+	    $this->autoRender = false;
+	    $this->loadModel("Tag");
+	    
+	    $keyword = $this->params['url']['term'];
+	    
+	    $codes = $this->Tag->find('all', array('conditions' => array('tag_name LIKE' => "%".$keyword."%")));	    
+	    return new CakeResponse(array('body' => json_encode($codes)));
+	}
+	
 	// タグを編集
 	public function edit_tag(){
 		$this->autoRender = false;
@@ -27,6 +38,7 @@ class TagsController extends AppController{
 	public function delete_tag(){
 		$this->autoRender = false;
 		$tag_id = $_POST['tag_id'];
+		$course_id = $_POST['course_id'];
 		
 		if($tag_id){
 			$this->loadModel('Tag');
@@ -34,10 +46,10 @@ class TagsController extends AppController{
 			
 			try{
 				// テストを削除
-				$this->Tag->delete($tag_id);
+				//$this->Tag->delete($tag_id);
 				
 				// courses_tagのテーブルの中に削除
-				$sql = "DELETE FROM courses_tags WHERE tag_id=".$tag_id;
+				$sql = "DELETE FROM courses_tags WHERE tag_id=".$tag_id. " AND course_id=".$course_id;
 				$this->CourseTag->query($sql);
 				return new CakeResponse(array('body' => "ok"));
 			}catch (Exception $e){

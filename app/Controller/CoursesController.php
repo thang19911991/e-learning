@@ -37,10 +37,9 @@ class CoursesController extends AppController{
 
 					if(!empty($tag)){
 						try{
-							$dataSource->begin();
 							$tag_id = $tag['Tag']['id'];
-							$sql = "DELETE FROM tags WHERE id=".$tag_id;
-							$this->Tag->query($sql);
+							//$sql = "DELETE FROM tags WHERE id=".$tag_id;
+							//$this->Tag->query($sql);
 	
 							// courses_tagのテーブルにそのタグを削除
 							$sql = "DELETE FROM courses_tags WHERE courses_tags.tag_id=".$tag_id;
@@ -79,15 +78,12 @@ class CoursesController extends AppController{
 					}else{ // tagsの配列の中にtag_name が既存の場合
 						$data2 = null;
 
-						echo "tag_id = ".$_tag['Tag']['id'];
 						$count = $this->CourseTag->find('count', array(
 							'conditions' => array(
 								'CourseTag.course_id' => $course_id,
 								'CourseTag.tag_id' => $_tag['Tag']['id']
 						)
 						));
-
-						echo "count :".$count;
 
 						if($count==0){
 							$this->CourseTag->create();
@@ -120,8 +116,8 @@ class CoursesController extends AppController{
 							
 						if(!empty($_tag)){
 							$tag_id = $_tag['Tag']['id'];
-							$sql = "DELETE FROM tags WHERE id=".$tag_id;
-							$this->Tag->query($sql);
+							//$sql = "DELETE FROM tags WHERE id=".$tag_id;
+							//$this->Tag->query($sql);
 								
 							// courses_tagのテーブルにそのタグを削除
 							$sql = "DELETE FROM courses_tags WHERE courses_tags.tag_id=".$tag_id;

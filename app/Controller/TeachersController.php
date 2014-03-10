@@ -63,7 +63,7 @@ class TeachersController extends AppController{
 		return $this->redirect(array('controller' => 'teacher2', 'action' => 'course_manage',$course_id));
 	}
 
-	// コースを禁止する
+	// コースの学生を禁止する
 	public function course_ban() {
 		$this->autoRender = false;
 		$this->loadModel ( "StudentCourseLearn" );
@@ -72,11 +72,40 @@ class TeachersController extends AppController{
 		$course_id = $_POST['course_id'];
 		$content = $_POST['content'];
 		$learn_id=$_POST['learn_id'];
-		$sql="INSERT INTO `e_learning`.`students_courses_ban` (`student_id`, `course_id`, `reason`) VALUES ('".$student_id."', '".$course_id."', '".$content."')";
-		$this->StudentCourseBan->query($sql);
-		$sql="UPDATE `e_learning`.`students_courses_learn` SET `status`='cancel' WHERE `id`='".$learn_id."'";
-		$this->StudentCourseLearn->query($sql);
+		
+		try{
+			$sql="INSERT INTO `e_learning`.`students_courses_ban` (`student_id`, `course_id`, `reason`) VALUES ('".$student_id."', '".$course_id."', '".$content."')";
+			$this->StudentCourseBan->query($sql);		
 			
+			$sql="UPDATE `e_learning`.`students_courses_learn` SET `status`='cancel' WHERE `id`='".$learn_id."'";
+			$this->StudentCourseLearn->query($sql);
+			
+			$this->writeLog(array(
+				'id' => 'LOG_039',
+				'time' => time(),
+				'actor' => '先生'.$this->Auth->user('id'),
+				'action' => '学生Uncacel',
+				'content' => 'コースID('.$course_id.')で先生 '.$this->Auth->user('username').' を禁止した',
+				'type' => 'オペレーション'
+			));
+			$this->writeLog(array(
+				'id' => 'LOG_040',
+				'time' => time(),
+				'actor' => '先生'.$this->Auth->user('id'),
+				'action' => '学生Uncacel',
+				'content' => 'データベースで コースID('.$course_id.') を追加した',
+				'type' => 'イベント'
+			));
+		}catch(Exception $e){
+			$this->writeLog(array(
+				'id' => 'LOG_041',
+				'time' => time(),
+				'actor' => '先生'.$this->Auth->user('id'),
+				'action' => '学生Uncacel',
+				'content' => 'データベースで コースID('.$course_id.') を追加できない',
+				'type' => 'エラー'
+			));
+		}
 		return new CakeResponse(array('body' => $student_id.":".$course_id.":".$content));
 	}
 	
@@ -449,7 +478,7 @@ class TeachersController extends AppController{
 			$this->redirect ( array (
 					'controller' => 'users',
 					'action' => 'login' 
-					) );
+					));
 		}
 		$this->loadModel('User');
 		$this->loadModel('Course');
@@ -524,21 +553,19 @@ class TeachersController extends AppController{
 					
 					if(!empty($teacher)){
 						$usersController = new UsersController;
-						// thay đổi trạng thái login_status thành ON
+						// ONにlogin_statusを変化
 						$usersController->changeLoginStatusToOn($teacher);
 						
-						// update lại địa chỉ IP
+						// IPアドレスを変更
 						$this->Teacher->id = $teacher['Teacher']['id'];
 						$this->Teacher->saveField('last_session_ip', $this->request->clientIp());					
 						
-						// xoa Session TEMPLOCK đi
 						$this->Session->delete(parent::TempLock);
 						
-						// lưu $teacher vào trong Auth
+						// Authに先生情報を保存
 						unset($teacher['Teacher']);
 						$this->Auth->login($teacher['User']);
 						
-						// lưu Session User
 						$this->Session->write("User.username",$teacher['User']['username']);
 						$this->Session->write("User.id",$teacher['User']['id']);
 						$this->Session->write("User.role",$teacher['User']['role']);
@@ -551,51 +578,7 @@ class TeachersController extends AppController{
 		}
 	}
 	
-	// Su dung cho autocomplete de suggest tag
-	public function key(){
-	    $this->autoRender = false;
-	    $this->loadModel("Tag");
-	    
-	    $keyword = $this->params['url']['term'];
-	    
-	    $codes = $this->Tag->find('all', array('conditions' => array('tag_name LIKE' => "%".$keyword."%")));	    
-	    return new CakeResponse(array('body' => json_encode($codes)));
-	}
-
-	// show tất cả các course của giáo viên
-	public function show_courses(){
-		$this->set('title_for_layout', 'コースリストを表す');
-		$this->loadModel('Course');
-		$this->loadModel('User');
-		if(!$this->Auth->loggedIn()){
-			return $this->redirect(array('controller' => 'teachers', 'action' => 'login'));
-		}
-		
-		$user_id = $this->Auth->user('id');
-		
-		$teacher = $this->User->find('first', array(
-			'fields' => 'Teacher.id',
-			'conditions' => array(
-				'User.id' => $user_id
-			)
-		));
-		
-		$teacher_id = $teacher['Teacher']['id'];
-		if($teacher_id){
-			$courses = $this->Course->find('all',array('conditions' => array('Course.teacher_id' => $teacher_id)));
-			if(!empty($courses)){
-				$this->set(compact("courses"));
-				$this->set("teacher_id",$this->Auth->user('id'));
-				$this->set("teacher_name",$this->Auth->user('username'));
-			}else{
-				$this->Session->setFlash("そのコースが既存しない");
-			}
-		}else{
-			$this->Session->setFlash("そのユーザ名が既存しない");
-		}
-	}
-	
-	// sửa thông tin của course
+	// コース情報を編集
 	public function edit_course($id = null){
 		$this->set('title_for_layout', 'コース編集');
 		$this->loadModel('Course');
@@ -626,10 +609,22 @@ class TeachersController extends AppController{
 				if($this->Course->validates()){
 					unset($data['tag']);
 					$this->Course->id = $id;
-					if($this->Course->save($data)){
-						$this->Session->setFlash("成功なコース情報変更");
-					}else{
-						$this->Session->setFlash("失敗なコース情報変更");
+					try{
+						if($this->Course->save($data)){
+							$this->writeLog(array(
+									'id' => 'LOG_033',
+								    'time' => time(),
+								    'actor' => '先生'.$this->Auth->user('id'),
+								    'action' => 'コース情報変化',
+								    'content' => 'データベースでコースID（'.$id.')が は変更した',
+								    'type' => 'オペレーション'
+							));
+							$this->Session->setFlash("成功なコース情報変更");
+						}else{
+							$this->Session->setFlash("失敗なコース情報変更");
+						}
+					}catch(Exception $e){
+						
 					}
 					return $this->redirect(array('controller' => 'teachers', 'action' => 'view_a_course', $id));
 				}
@@ -637,7 +632,7 @@ class TeachersController extends AppController{
 		}
 	}
 	
-/*
+	/*
 	 *授業削除
 	 */
 	public function delete_course($courseId){
@@ -650,7 +645,6 @@ class TeachersController extends AppController{
 		
 		$this->loadModel("Course");
 		$this->autoRender = false;
-//		echo $courseId;
 		//ログ
 		$this->writeLog(array(
 			'id' => 'LOG_018',
@@ -664,7 +658,7 @@ class TeachersController extends AppController{
 		try{
 			$dataSource->begin();
 			//クェリー
-			if(!$this->Course->delete($courseId,true)){
+			if(!$this->Course->delete($courseId)){
 				throw new Exception();
 			}
 			$dataSource->commit();
@@ -1212,11 +1206,38 @@ class TeachersController extends AppController{
 				}
 				
 				// 先生としてユーザを登録するのを実施
-				$user = $this->User->save($data);
+				try{
+					$user = $this->User->save($data);
+					$this->writeLog(array(
+						'id' => 'LOG_003',
+			            'time' => time(),
+						'actor' => '先生　'.$user['id'],
+						'action' => '登録',
+						'content' => '先生 '.$user['id'].' が作成できた',
+						'type' => 'オペレーション'
+					));
+					$this->writeLog(array(
+						'id' => 'LOG_004',
+			            'time' => time(),
+						'actor' => '先生　'.$user['id'],
+						'action' => '登録',
+						'content' => 'usersデータベースに先生 '.$user['username'].' を追加した',
+						'type' => 'イベント'
+					));
+				}catch(Exception $e){
+					$this->writeLog(array(
+						'id' => 'LOG_005',
+			            'time' => time(),
+						'actor' => '先生　'.$data['User']['username'],
+						'action' => '登録',
+						'content' => '先生 '.$data['User']['username'].' が登録できない',
+						'type' => 'エラー'
+					));
+				}
 				if(!empty($user)){
 					$this->request->data['Teacher']['user_id'] = $this->User->id;
 					
-					// add them 1 so thong tin vao trong mang Teacher trong data array
+					// teachersテーブルにデータを保存
 					$this->request->data['Teacher']['verify_code'] = $this->request->data['User']['verify_code'];
 					$this->request->data['Teacher']['verify_code_answer'] = $this->request->data['User']['verify_code_answer'];
 					$this->request->data['Teacher']['primary_verify_code_answer'] = $this->request->data['User']['verify_code_answer'];
@@ -1225,10 +1246,11 @@ class TeachersController extends AppController{
 					$this->request->data['Teacher']['last_session_ip'] = $this->request->clientIp();					
 					
 					$this->User->Teacher->save($this->request->data);
-					$this->Session->setFlash(__("Register successful"));
+					
+					$this->Session->setFlash(__("成功な先生の登録"));
 					$this->redirect(array('controller' => 'users', 'action' => 'login'));
 				}else{
-					$this->Session->setFlash(__("Unable to register"));
+					$this->Session->setFlash(__("先生登録をできません"));
 				}
 			}
 		}

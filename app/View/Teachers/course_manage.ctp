@@ -62,7 +62,7 @@ $(function(){
 		}else{
 			$.ajax({				
 				type : "POST",
-				url : '<?php echo $this->base. "/teacher2/course_ban" ?>',
+				url : '<?php echo $this->base. "/teachers/course_ban" ?>',
 				data : {student_id:student_id, course_id:course_id, content:data,learn_id:learn_id},
 				success : function(data){					
 				}

@@ -1,16 +1,14 @@
-<div>
-<h1>
-作成した授業リスト
-</h1>
+<div class="index">
+<h2>作成した授業リスト</h2>
 <br>
 <table width="100%">
 <tr>
 	<th width="40%"><h3>授業名</h3></th>
-	<th width="40%"><h3>作成日</h3></th>
-	<th></th>
+	<th width="20%"><h3>作成日</h3></th>
+	<th width="30%"><h3>作成者</h3></th>
+	<th width="10%"><h3>操作</h3></th>
 </tr>
-<?php 
-//	debug($data);
+<?php
 	$count = 0;
 	foreach ( $data as $course ) {
 		?>
@@ -28,13 +26,18 @@
 	</td>
 	<td>
 	<?php 
+		echo $course['User']['username'];
+	?>
+	</td>
+	<td>
+	<?php 
 		echo $this->Html->link( "編集", array (
-				'controller' => 'Teachers',
+				'controller' => 'teachers',
 				'action' => 'edit_course',$course['Course']['id'] ));
 	?>
 	<?php 
 		echo $this->Html->link( "削除", array (
-				'controller' => 'Teachers',
+				'controller' => 'teachers',
 				'action' => 'delete_course',$course['Course']['id'] ));
 	?>
 	</td>
@@ -44,17 +47,3 @@
 ?>
 </table>
 </div>
-
-<script type="text/javascript">
-	function deleteCourse(){
-		var data;
-		$.ajax({
-			url : '<?php echo $this->base.'/teachers/index'?>',
-			type : 'POST',
-			data : {data : data},
-			success : function(data){
-				
-			}
-		});
-	}
-</script>

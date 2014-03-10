@@ -86,11 +86,17 @@ class AppController extends Controller {
 	    			'course_manage',
 	    			'create_new_course',
 	    			'edit_course',
+	    			'delete_course',
 	    			'view_a_course',
 	    			'view_ban_list',
 	    			'view_list_course',
 	    			'view_profile',
 	    			'view_test_result',
+	    			'delete_tag',
+	    			'update_tag_course',
+	    			'edit_tag',
+	    			'key',
+	    			'update_tag_course',
 	    			'logout'
 	    		))){
 	    			return true;

@@ -163,13 +163,14 @@
 		});
 
 		$(".tag_name_delete").click(function(){
+			var course_id = '<?php echo $courses['Course']['id']; ?>';
 			var id = $(this).attr("id");
 			var check = confirm("そのタグが削除したいですか？");
 			if(check==true){
 				$.ajax({
 					type : 'POST',
 					url  : "<?php echo $this->base.'/tags/delete_tag'; ?>",
-					data : {tag_id:id},
+					data : {tag_id:id, course_id:course_id},
 					success : function(res){
 						if(res=="ok"){
 							window.location = "<?php echo $this->Html->url(array('controller' => 'teachers', 'action' => 'view_a_course', $course_id)); ?>"

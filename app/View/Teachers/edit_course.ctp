@@ -111,7 +111,7 @@
 		$("#tag_list").autocomplete({
 			source : function(req, res){
 				$.ajax({
-					url : "<?php echo $this->base.'/teachers/key'?>",
+					url : "<?php echo $this->base.'/tags/key'?>",
 					dataType : 'json',
 					data : {term : req.term},
 					success : function(data){
