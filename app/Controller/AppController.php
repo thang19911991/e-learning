@@ -46,26 +46,102 @@ class AppController extends Controller {
 			//'loginRedirect' => array('controller' => 'teacher', 'action' => 'login'),
 			'logoutRedirect' => array('controller' => 'home', 'action' => 'index'),
 			'authError' => 'Bạn không có quyền truy cập trang này',
-			'authorize' => 'Controller',
-			'authenticate' => array(		
-				'Form' => array(
-					'fields' => array('username' => 'username', 'password' => 'password'),
-					'userModel' => 'User'))
+			'authorize' => 'Controller'
 		)
 	);
     
     public function isAuthorized($user) {
-		return true;
-	    // Admin can access every action
-	    /*if (isset($user['role']) && $user['role'] === 'admin') {
-	        return true;
+	    $user = $this->Auth->user();
+	    
+	    if(isset($user) || !empty($user)){
+	    	if($user['role']=="student"){
+	    		if(in_array($this->action, array(
+	    			'std_change_pass',
+	    			'std_deactive',
+	    			'std_detail_course',
+	    			'std_edit',
+	    			'std_index',
+	    			'std_list_course',
+	    			'std_profile',
+	    			'std_search',
+	    			'std_test_result',
+	    			'std_try_course',
+	    			'std_view_document',
+	    			'std_view_test',
+	    			'view_list_course',
+	    			'std_logout'	    			
+	    		))){
+	    			return true;
+	    		}
+	    		return false;
+	    	}else if($user['role']=="teacher"){
+	    		if(in_array($this->action, array(
+	    			'ban_student',
+	    			'change_password',
+	    			'change_profile',
+	    			'change_secret_question',
+	    			'confirm_verify_code',
+	    			'convert',
+	    			'course_manage',
+	    			'create_new_course',
+	    			'edit_course',
+	    			'view_a_course',
+	    			'view_ban_list',
+	    			'view_list_course',
+	    			'view_profile',
+	    			'view_test_result',
+	    			'logout'
+	    		))){
+	    			return true;
+	    		}
+	    		return false;
+	    	}else if($user['role']=="admin"){
+	    		if(in_array($this->action, array(
+	    			'change_ip.ctp',
+	    			'change_password.ctp',
+	    			'course_detail.ctp',
+	    			'course_manager.ctp',
+	    			'create_admin.ctp',
+	    			'document_detail.ctp',
+	    			'edit_profile.ctp',
+	    			'edit_user_profile.ctp',
+	    			'index.ctp',
+	    			'restrict_area.ctp',
+	    			'student_manager.ctp',
+	    			'teacher_manager.ctp',
+	    			'user_profile.ctp',
+	    			'view_profile.ctp',
+	    			'create_payment.ctp',
+	    			'download_payment_file.ctp',
+	    			'monthly_payment_student.ctp',
+	    			'monthly_payment_system.ctp',
+	    			'monthly_payment_teacher.ctp',
+	    			'view_payment_file_list.ctp',
+	    			'list_report_of_course.ctp',
+	    			'list_report.ctp',
+	    			'view_a_report.ctp',
+	    			'list_report_of_document.ctp',
+	    			'logout'
+	    		))){
+	    			return true;
+	    		}
+	    		return false;
+	    	}
+	    }else{ // 普通のユーザ
+	    	$allows = array('login', 'register', 'logout', 'std_register');
+	    	if(in_array($this->action, $allows)){
+	    		return true;
+	    	}
+	    	return false;
 	    }
-	
-	    // Default deny
-	    return false; */
+	    return true;
 	}
 	
-	// tra ve thong so trong bang system_params
+	public function beforeFilter(){
+        $this->set('current_user', $this->Auth->user());
+    }
+	
+	// system_paramsテーブルの値を返却する
 	function getSystemParams(){
 		$this->loadModel('SystemParam');
 		$paramNames = array(
@@ -99,8 +175,49 @@ class AppController extends Controller {
 		}
 	}
 	
-    public function beforeFilter(){
-    	$this->Auth->allow();
-        $this->set('current_user', $this->Auth->user());
+	/**
+	 * 
+	 * ファイルにログを書く
+	 * 
+	 * $this->writeLog(array(
+     *       'id' => 'LOG_001',
+     *       'time' => time(),
+     *       'actor' => $this->Auth->user('id'),
+     *       'action' => 'Cancel student',
+     *       'content' => 'Teacher '.$this->Auth->user('id').' cancel student '.$studentId,
+     *       'type' => 'operation'
+     *   ));
+	 */
+    public function writeLog($mess){
+    	//年と月と日をとって
+    	$year_folder = date("Y");
+    	$month_folder = date("m");
+    	$day_file = "log_".$year_folder."_".$month_folder."_".date("d").".csv";
+    	$base = "files/logs/";
+    	
+    		//チェックフォルダーとファイルが存在するか
+    	if(!file_exists($base.$year_folder)){
+    		mkdir($base.$year_folder,0777);
+    	}
+    	if(!file_exists($base.$year_folder.'/'.$month_folder)){
+    		mkdir($base.$year_folder.'/'.$month_folder,0777);
+    	}
+    	
+    	if(!file_exists($base.$year_folder.'/'.$month_folder.'/'.$day_file)){
+    		//新しいログファイル作成
+    		$handle = fopen($base.$year_folder.'/'.$month_folder.'/'.$day_file, "w+");
+    		chmod($base.$year_folder.'/'.$month_folder.'/'.$day_file, 0777);
+    		$line1 = '"id","time","actor","action","content","type"';
+    		fwrite($handle, $line1);
+    	} else {
+    		//存在ファイルopen
+    		$handle = fopen($base.$year_folder.'/'.$month_folder.'/'.$day_file, "a+");
+    	}
+    		//ログを書く
+    	fwrite($handle,"\n");
+    	$str = '"'.$mess['id'].'","'.$mess['time'].'","'.$mess['actor'].'","'.$mess['action'].'","'.$mess['content'].'","'.$mess['type'].'"';
+    	fwrite($handle,$str);
+    		//ファイルを占める
+    	fclose($handle);
     }
 }

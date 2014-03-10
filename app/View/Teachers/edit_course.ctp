@@ -1,43 +1,37 @@
 <div class="index">
 <h2>コース情報変化</h2>
+<?php if(!empty($courses)): ?>
 <?php $tags = array(); ?>
-<?php foreach($courses[0]['Tag'] as $t): ?>
+<?php foreach($courses['Tag'] as $t): ?>
 	<?php  $tags[] = $t['tag_name']; ?>
 <?php endforeach;?>
 
-<?php echo $this->Form->create(null, array('url' => array('controller' => 'teachers', 'action' => 'edit_course', $id))); ?>
+<?php echo $this->Form->create("Course", array('url' => array('controller' => 'teachers', 'action' => 'edit_course', $id))); ?>
 <table>
-<tr>	
-	<td><h3><label for="course_name">授業名</label></h3></td>
+<tr>
+	<th>コース名</th>
 	<td>
-		<?php echo $this->Form->input('course_name',array('required' => 'false', 'label' => false,'value' => $courses[0]['Course']['course_name'])); ?>		
+		<?php echo $this->Form->input("course_name", array('label' => false,'value' => $courses['Course']['course_name'], 'required' => 'true')); ?>
 	</td>
 </tr>
 <tr>
-	<td><h3><label for="tag">タグ</label></h3></td>
-	<td>		
+	<th>概要</th>
+	<td>
+		<?php echo $this->Form->input("description", array('label' => false,'type' => 'textarea', 'value' => $courses['Course']['description'])); ?>
+	</td>
+</tr>
+<tr>
+	<th>タグ</th>
+	<td>
 		<div class="text_tag">
 			<?php foreach ($tags as $tag): ?>
 				<div class="tags"><?php echo $tag; ?><a class="delete"></a></div>
 			<?php endforeach; ?>
-			<input type="text" placeholder="Type & Enter" id="tag_list"/>
-			<select name="data[Teacher][tags]" id="TeacherTags">
-			<?php foreach ($tags as $tag): ?>				
-				<option value="<?php echo $tag; ?>"><?php echo $tag; ?></option>
-			<?php endforeach; ?>
-			</select>
-			
-			
+			<input name="username" placeholder="type and enter" id="tag_list">
 		</div>
-		<?php echo $this->Form->select('select', $tags, array('value' => 1)); ?>
 	</td>
 </tr>
-<tr>
-	<td><h3><label for="description">概要</label></h3></td>
-	<td>
-		<?php echo $this->Form->input('description',array('required' => 'false', 'label' => false, 'value' => $courses[0]['Course']['description'])); ?>		
-	</td>
-</tr>
+
 <tr>
 	<td></td>
 	<td>
@@ -47,9 +41,73 @@
 </tr>
 </table>
 </div>
-
 <script type="text/javascript">	
 	$(function(){
+		var added_tags = [];
+		var deleted_tags = [];
+		
+		$("#btn_submit").click(function(){
+			var tags = [];
+			$(".tags").each(function(){
+				var text = $(this).text();
+				// space white を削除
+				text = $.trim(text);
+				
+				if(text.length>0){
+					tags.push(text);
+				}
+			});
+			if(added_tags.length>0 || deleted_tags.length>0){
+				$.ajax({
+					type : "POST",
+					url : '<?php echo $this->base. "/courses/update_tag_course"; ?>',
+					data : {tags:tags, deleted_tags:deleted_tags, course_id:<?php echo $id; ?>},
+					success : function(res){
+						if(res.message=="ok"){
+							window.location = "<?php echo $this->Html->url(array('controller' => 'teachers', 'action' => 'view_a_course', $id)); ?>"
+						}
+					}
+				});
+			}
+			return true;
+		});
+		
+		/* enterボタンをdisableする */
+		$(window).keydown(function(event){
+		    if(event.keyCode == 13) {
+		      event.preventDefault();
+		      return false;
+		    }
+		  });
+		
+		/* タグを追加*/
+		$(document).on("keydown",'#tag_list', function(e){
+			if(e.keyCode==13){
+				var text = $(this).val();
+				text = $.trim(text);
+				if(text.length>0){
+					var tagObj = $('<div class="tags">' + text + '<a class="delete"></a></div>');
+					tagObj.insertBefore($("#tag_list"));
+					$("#tag_list").val('');
+					added_tags.push(text);
+				}
+			}
+		});
+
+		/* 作成したタグを削除 */
+		$(document).on('click','.delete', function(){
+			var text = $(this).parent().text();
+			$('#TeacherTags > option[value=' + text + ']').remove();
+			deleted_tags.push(text);
+			$(this).parent().remove();
+		});
+		$(document).on('click','.tags', function(){
+			var text = $(this).text();
+			deleted_tags.push(text);
+			$(this).remove();
+			$('#TeacherTags > option[value=' + text + ']').remove();			
+		});
+		
 		$("#tag_list").autocomplete({
 			source : function(req, res){
 				$.ajax({
@@ -73,13 +131,23 @@
 		}); // end autocomplete
 	});
 </script>
+
+<?php else: ?>
+
+<?php echo "コースIDが既存しない"; ?>
+
+<?php endif; ?>
+
 <div class="actions">
 	<ul>
 		<li>
-			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teachers', 'action'=>'show_courses')); ?>
+			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teachers', 'action'=>'view_list_course')); ?>
 		</li>
 		<li>
-			<?php echo $this->Html->link( "コース作成",   array('controller' => 'teachers', 'action'=>'add_course')); ?>
+			<?php echo $this->Html->link( "コース作成",   array('controller' => 'teachers', 'action'=>'create_new_course')); ?>
+		</li>
+		<li>
+			<?php echo $this->Html->link( "コース管理",   array('controller' => 'teachers', 'action'=>'course_manage', $id)); ?>
 		</li>
 		<li>
 		<?php if($current_user): ?>

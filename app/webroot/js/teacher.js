@@ -1,4 +1,7 @@
 $(function(){
+	var deletes = [];
+	var adds = [];
+	
 	/* dùng để disable việc ấn nút enter */
 	$(window).keydown(function(event){
 	    if(event.keyCode == 13) {
@@ -9,7 +12,7 @@ $(function(){
 	/* dùng để disable việc ấn nút enter */
 	
 	
-	/* dung cho phan them tag*/
+	/* タグを追加*/
 	$(document).on("keydown",'#tag_list', function(e){
 		if(e.keyCode==13){
 			var text = $(this).val();
@@ -18,29 +21,18 @@ $(function(){
 				tagObj.insertBefore($("#tag_list"));
 				$("#tag_list").val('');
 				
-				$("#TeacherTags").append("<option value=\"" + text + "\">" + text + "</option>");
+				adds.push(text);
+				/*$("#TeacherTags").append("<option value=\"" + text + "\">" + text + "</option>"); */
 			}
 		}
 	});
 
+	/* 作成したタグを削除 */
 	$(document).on('click','.delete', function(){
 		var text = $(this).parent().text();
 		$('#TeacherTags > option[value=' + text + ']').remove();
 		
 		$(this).parent().remove();
+		deletes.push(text);
 	});
-
-	$(document).on('click','#submit', function(){
-		var text = $(".text").text();
-		alert(text);
-	});
-
-	function createTag(text) {
-	    if (text != '') {
-	        var tag = $('<div class="tags">' + text + '<a class="delete"></a></div>');
-	        tag.insertBefore($('#tag_list'), $('#tag_list'));
-	        $('#tag_list').val('');
-	    }
-	}
-	/* dung cho phan them tag*/
 });

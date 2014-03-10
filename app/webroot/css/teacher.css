@@ -1,5 +1,8 @@
 @CHARSET "UTF-8";
 
+#tag_list{
+	height: 20px;	
+}	
 .tags {
 	float: left;
 	margin-right: 2px;

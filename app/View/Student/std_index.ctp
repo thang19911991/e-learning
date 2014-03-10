@@ -1,5 +1,7 @@
-<div class="actions">
 <?php 
-	echo $this->Html->link("ログアウト",array('controller' => 'users', 'action' => 'logout'));
 ?>
-</div>
+
+	<?php 
+		echo 'こにちは, <b>'.$user['User']['full_name'].'</b>さん';
+		?>
+

@@ -3,9 +3,10 @@ App::import('Model','User');
 App::import('Model','Teacher');
 App::import('Controller', 'Teachers');
 class UsersController extends AppController{
+	
 	public function beforeFilter(){
 		parent::beforeFilter();
-		//$this->Auth->allow("register");
+		$this->Auth->allow('logout', 'login');
 	}
 	
 	function index(){
@@ -13,25 +14,26 @@ class UsersController extends AppController{
 		var_dump($this->Session->read("User"));
 	}
 	
+	// ユーザのログイン
 	public function login(){
 		$params = $this->getSystemParams();
 		
 		if($params!=FALSE){
-			// kiem tra xem co thoi gian lock hay khong
+			// ロック時間があるかどうかチェック
 			if($this->Session->check(parent::TempLock_time)){
 				$locked_time = $params[SystemParam::TEMP_LOCK_TIME] - (time()-$this->readSessionLockTime());
 				if($locked_time>0){
 					$this->renderLockTime($locked_time);
 				}else{
-					// xoa Session Wrong Password
+					// Session Wrong Passwordを削除
 					$this->deleteSessionWrongPasswordTime();
-					// sau khi mà user đã bị lock 60s thì lúc này sẽ yêu cầu nhập câu hỏi bí mật
-					// nếu như user này đã tồn tại trong hệ thống, nếu ko tồn tại thì sẽ login lại
+					// ユーザに60秒ロックする後、Verify codeを入力要求(ユーザが既存の場合）
+					// ユーザが既存しない場合、ログインをもう一度する
 					$this->processActiveStatus();
 				}
 			}
 			
-			// kiem tra post form
+			// form postをチェック
 			if($this->request->is('post')){
 				$username = $this->request->data['User']['username'];
 				$password = $this->request->data['User']['password'];
@@ -43,33 +45,40 @@ class UsersController extends AppController{
 					)
 				));
 				
-				// khi đăng nhập thành công
+				// 成功なログイン
 				if(!empty($user)){
-					// xóa SESSION WRONG PASSWORD
+					// SESSION WRONG PASSWORDを削除
 					$this->deleteSessionWrongPasswordTime();
 					
-					// chưa xóa Session locktime được vì còn kiểm tra xem
-					// user là teacher hay student để còn yêu cầu verify_code
+					// Session locktimeを削除できない。理由はユーザが先生の場合、verify codeを入力要求
 					$user = $user[0];					
 					
-					// cần kiểm tra xem user này đã actived hay chưa
+					// ユーザの状態が　actived　か？
 					switch($user['User']['active_status']){
 						case User::ACTIVED:
 							$this->Session->write("User.username",$user['User']['username']);
 							$this->Session->write("User.id",$user['User']['id']);
 							$this->Session->write("User.role",$user['User']['role']);
 										
-							// cần kiểm tra xem user là loại nào
+							// ユーザに何のレベルをチェック
 							if($user['User']['role']==User::TEACHER){
-								// lúc này sẽ kiểm tra xem user này có bị khóa hay không
+								// ユーザがロックしているかどうかチェック
 								if($user['User']['login_status']==User::LOCK_LOGIN_STATUS){ // tài khoản bị khóa
-									// vì nó đã bị khóa rôi nên phải yêu cầu nhập câu hỏi bí mật
+									// ユーザがロックから、Verify codeを入力要求
 									$this->redirect(array('controller' => 'teachers', 'action' => 'confirm_verify_code', $user['Teacher']['id']));
 								}else{
-									// kiểm tra xem địa chỉ IP có trùng với địa chỉ ban đầu hay không								
+									// 前回とは違うIPアドレスをチェック								
 									if($user['Teacher']['last_session_ip']==$this->request->clientIp()){
 										unset($user['Student']);
-										$this->Auth->login($user);
+										$this->Auth->login($user['User']);
+										$this->writeLog(array(
+											'id' => 'LOG_001',
+								            'time' => time(),
+								            'actor' => '先生'.$this->Auth->user('id'),
+								            'action' => 'ログイン',
+								            'content' => '先生 '.$this->Auth->user('username').' はログインできた',
+								            'type' => 'オペレーション'
+										));
 										$this->redirect(array('controller' => 'teachers', 'action' => 'index'));
 									}else{
 										$this->Session->setFlash('前回とは違う別のIPアドレスです。Verifycodeを入力してください');
@@ -77,9 +86,17 @@ class UsersController extends AppController{
 									}
 								}
 							}else if($user['User']['role'] == User::STUDENT){
-								//TODO lúc này sẽ redirect đến trang home
+								//TODO ホームページに移動する
 								unset($user['Teacher']);
-								$this->Auth->login($user);
+								$this->Auth->login($user['User']);
+								$this->writeLog(array(
+											'id' => 'LOG_001',
+								            'time' => time(),
+								            'actor' => '学生'.$this->Auth->user('id'),
+								            'action' => 'ログイン',
+								            'content' => '学生 '.$this->Auth->user('username').' はログインできた',
+								            'type' => 'オペレーション'
+								));
 								$this->redirect(array('controller' => 'student', 'action' => 'std_index'));
 							}
 							break;
@@ -99,14 +116,14 @@ class UsersController extends AppController{
 							
 							$this->writeSessionWrongPasswordTime($wrong_password_time+1);
 							$wrong_password_time = $this->readSessionWrongPasswordTime();
-							echo "wrong pass time : ". ($wrong_password_time);
+							echo "間違えたユーザ名、パスワード : ". $wrong_password_time. "回/5";
 						}else{
 							$this->writeSessionLockTime(time());
 							$this->deleteSessionWrongPasswordTime();
 							$this->renderLockTime($params[SystemParam::TEMP_LOCK_TIME]);
 						}
 					}else{
-						echo "wrong pass time : 1";
+						echo "間違えたユーザ名、パスワード : 1回/5";
 						$this->writeSessionWrongPasswordTime(1);
 					}
 				}
@@ -114,19 +131,19 @@ class UsersController extends AppController{
 		}
 	}
 	
-	// thay đổi login_status thành on
+	// ONにlogin_statusを変化する
 	function changeLoginStatusToOn($teacher){
 		$this->User->id = $teacher['User']['id'];
 		$this->User->saveField('login_status', User::ON_LOGIN_STATUS);
 	}
 	
-	// thay đổi login_status thành lock
+	// LOCKにlogin_statusを変化する
 	function changeLoginStatusToLOCK($teacher){
 		$this->User->id = $teacher['User']['id'];
 		$this->User->saveField('login_status', User::LOCK_LOGIN_STATUS);
 	}
 	
-	// kiểm tra trạng thái active_status của người dùng
+	// ユーザのactive_statusをチェック
 	protected function processActiveStatus(){
 		$username = $this->Session->read(parent::USER_TEMP_NAME);
 		$user = $this->User->find('first', array(
@@ -135,33 +152,32 @@ class UsersController extends AppController{
 			)
 		));
 		
-		if(!empty($user)){ // nếu username đó tồn tại thì cần xem active_status
+		if(!empty($user)){ // ユーザが既存の場合、active_statusをチェックしなきゃ
 			switch($user['User']['active_status']){
 				case User::BANNED:
-					// TODO cần báo cáo đến người dùng biết là tài khoan đang bị ban
-					echo "dang bi baned";
+					// TODO ユーザに「アカウントの状態が禁止している」メッセージを表す
+					$this->Session->setFlash("ユーザのアカウントが禁止している");
 					$this->redirect(array('controller' => 'home', 'action' => 'index'));
 					$this->logout();
 					break;
 				case User::INACTIVE:
-					//TODO cần báo cáo đến người dùng biết là tài khoan chưa active
-					echo "dang bi inactive";
+					//TODO ユーザに「アカウントの状態がinactive」メッセージを表す
 					$this->logout();
 					$this->redirect(array('controller' => 'home', 'action' => 'index'));
 					break;
 				case User::ACTIVED:
-					//TODO cần yêu cầu câu hỏi bí mật để có thể login vào được
-					echo "da actived";
+					//TODO Verifycodeを入力要求
 					$this->processRequireVerifycode($user);
 					break;
 			}
-		}else{ // nếu mà username đó không tồn tại trong CSSL thì cần login lại
+		}else{ // データベースの中にユーザ名が既存しない場あい、ログインをもう一度する
 			$this->deleteSessionLockTime();
 			$this->deleteSessionWrongPasswordTime();
 			$this->redirect(array('controller' => 'users', 'action' => 'login'));
 		}
 	}
 	
+	// verify codeの入力要求
 	protected function processRequireVerifycode($user){
 		switch($user['User']['role']){
 			case User::TEACHER:
@@ -169,45 +185,32 @@ class UsersController extends AppController{
 				$this->redirect(array('controller' => 'teachers', 'action' => 'confirm_verify_code',$user['Teacher']['id']));
 				break;
 			case User::STUDENT:
-				//TODO cần yêu cầu login lại do học sinh không yêu cầu câu hỏi bí mật
+				//TODO ユーザが学生の場合、ログインをもう一度する（学生がverify codeがない）
 				$this->logout();
 				$this->redirect(array('controller' => 'users', 'action' => 'login'));
 				break;
 		}
 	}
 	
-	protected function processRequireVerifycodeWithoutPassword($user){
-		switch($user['User']['role']){
-			case User::TEACHER:				
-				//TODO xác nhận câu hỏi bảo mật
-				
-				break;
-			case User::STUDENT:
-				// cần yêu cầu login lại do học sinh không yêu cầu câu hỏi bí mật
-				$this->redirect(array('controller' => 'users', 'action' => 'login'));
-				break;
-		}
-	}
-	
-	// render đến trang mà người dùng chưa active tài khoản
+	// アカウントがactiveしないページに移動する
 	protected function renderUserInactive(){
 		//$this->logout();
 		$this->render("/Users/user_inactive");
 	}
 	
-	// render đến trang mà tài khoản bị ban
+	// アカウントが禁止したページに移動する
 	protected function renderUserBaned(){
 		//$this->logout();
 		$this->render("/Users/user_inactive");
 	}
 	
-	// reder đến trang lock tài khoản tạm thời
+	// アカウントが仮想ロックページに移動する
 	protected function renderLockTime($lock_time){
 		$this->set("temp_lock_time", $lock_time);
 		$this->render('/Users/temp_lock_user');
 	}
 	
-	// logout tài khoản
+	// ログアウト
 	function logout(){
 		$this->Session->delete('User');
 		$this->Session->delete(parent::TempLock);

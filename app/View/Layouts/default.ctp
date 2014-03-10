@@ -32,7 +32,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		echo $this->Html->css('jquery-ui');
 		echo $this->Html->script("jquery-1.10.2");
 		echo $this->Html->script("jquery-ui");
-		echo $this->Html->script("teacher");
+		//echo $this->Html->script("teacher");
 		
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -40,7 +40,6 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	?>
 </head>
 <body>
-
 <?php
 	if($this->Session->check("User.username")){
 		echo "username :". $this->Session->read("User.username");		
@@ -49,13 +48,13 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	}
 ?>
 <?php
-		$allows = array('login', 'register', 'confirm_verify_code', 'home');
-		if(!$this->Session->check('User') && !in_array($this->action, $allows)):
+		//$allows = array('login', 'register', 'confirm_verify_code', 'home');
+		//if(!$this->Session->check('User') && !in_array($this->action, $allows)):
 ?>
-		<script type="text/javascript">
-			window.location = "<?php echo $this->Html->url(array('controller' => 'users', 'action' => 'login')); ?>"
-		</script>
-<?php endif; ?>		
+		<!-- <script type="text/javascript">
+			window.location = "<?php //echo $this->Html->url(array('controller' => 'users', 'action' => 'login')); ?>"
+		</script> -->
+<?php //endif; ?>		
 	<div id="container">
 		<div id="header">
 			<h1><?php //echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1>

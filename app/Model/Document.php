@@ -7,7 +7,7 @@ class Document extends AppModel{
 	public $belongsTo = array(
 		'Course' => array(
 			'className' => 'Course',
-			'foreignKey' => 'course_id'
-		)
+			'foreignKey' => 'course_id',
+		)		
 	);
 }

@@ -30,6 +30,16 @@ App::uses('Model', 'Model');
  * @package       app.Model
  */
 class AppModel extends Model {
-	
+	//after insert all, get all id just be inserted
+	var $inserted_ids = array();
+
+	public function afterSave($created, $option = array())
+	{
+		if($created)
+		{
+			$this->inserted_ids[] = $this->getInsertID();
+		}
+		return true;
+	}
 	
 }

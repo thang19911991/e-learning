@@ -1,6 +1,6 @@
 <div class="members index">
 <h2>メンバ一覧</h2>
-<?php echo "ユーザ名 : ".$current_user['User']['username']; ?>
+<?php echo "ユーザ名 : ".$current_user['username']; ?>
 <table>
 <tr>
 	<th>Id</th>
@@ -26,10 +26,10 @@
 <div class="actions">
 	<ul>
 		<li>
-			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teachers', 'action'=>'show_courses')); ?>
+			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teachers', 'action'=>'view_list_course')); ?>
 		</li>
 		<li>
-			<?php echo $this->Html->link( "コース作成",   array('controller' => 'teachers', 'action'=>'add_course')); ?>
+			<?php echo $this->Html->link( "コース作成",   array('controller' => 'teachers', 'action'=>'create_new_course')); ?>
 		</li>
 		<li>
 		<?php if($current_user): ?>
