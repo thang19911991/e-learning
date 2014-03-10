@@ -21,6 +21,8 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 <!DOCTYPE html>
 <html>
 <head>
+	<meta http-equiv="refresh" content="3600;url=http://ngothang/e-learning/users/logout" />
+
 	<?php echo $this->Html->charset(); ?>
 	<title>
 		<?php echo $title_for_layout; ?>

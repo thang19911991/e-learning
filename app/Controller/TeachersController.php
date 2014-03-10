@@ -27,7 +27,7 @@ class TeachersController extends AppController{
 
 	public function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('register','login');
+		$this->Auth->allow('register','login','index');
 	}
 	
 	public function index(){
@@ -799,7 +799,6 @@ class TeachersController extends AppController{
 				$dataSource->rollback();
 			}
 		}
-		
 	}
 
 	/*
@@ -1107,7 +1106,6 @@ class TeachersController extends AppController{
 				));
 			}
 		}
-//		debug($doTest);
 		$this->set("data", $doTest);
 	}
 	
@@ -1120,7 +1118,7 @@ class TeachersController extends AppController{
 		$this->loadModel('Like');
 		$this->loadModel('CourseTag');				
 		
-		// query du lieu cua bang Course de lay thong tin
+		// Courseテーブルからデータのquery
 		$this->Course->recursive = 2;
 		$courses = $this->Course->find('all',array(
 			'conditions' => array(
@@ -1139,7 +1137,7 @@ class TeachersController extends AppController{
 		$this->set("id", $id);
 		$this->set(compact("courses"));
 		
-		// tinh so like course
+		// like course_countをとる
 		$course_like_count = $this->Like->find('count', array(
 			'conditions' => array(
 				'Like.course_id' => $id
@@ -1152,9 +1150,9 @@ class TeachersController extends AppController{
 			unset($data['tag']);
 			$this->Course->id = $id;
 			if($this->Course->save($data)){
-				$this->Session->setFlash("Update thanh cong");				
+				$this->Session->setFlash("成功な変更");				
 			}else{
-				$this->Session->setFlash("Update khong thanh cong");
+				$this->Session->setFlash("失敗な変更");
 			}
 			return $this->redirect(array('controller' => 'teachers', 'action' => 'view_course'));
 		}
@@ -1170,17 +1168,16 @@ class TeachersController extends AppController{
 		unset($validator['credit_number']['format_of_student']);
 		
 		if($this->request->is('post')){
-			// khi set mảng $data vào trong model User để có thể thực hiện được validate
 			$this->User->set($this->request->data);
 			
 			if($this->User->validates()){
 				// This method resets the model state for saving new information
 				$this->User->create();
 				
-				// dữ liệu gửi từ Form lên
+				// Formから送信したデータ
 				$data  = $this->request->data;
 				
-				// mã hóa password theo định dạng : username + password + t01
+				// パスワード暗号化のフォーマット : username + password + t01
 				$data['User']['password'] = AuthComponent::password($data['User']['username']."+".$data['User']['password']."+t01");				
 				
 				if(!empty($data['User']['profile_img'])){
@@ -1188,11 +1185,11 @@ class TeachersController extends AppController{
 					$filename = $data['User']['username']."-".$this->data['User']['profile_img']['name'];
 				}
 				
-				// xoá phần từ repassword đi khỏi mảng để insert không bị lỗi
+				// data配列からre_password、checkboxを削除
 				unset($data['User']['re_password']);
 				unset($data['User']['checkbox']);
 				
-				// convert định dạng của birthday
+				// YYYY-mm-ddに誕生日を変化
 				$birthday = $data['User']['birthday'];
 				unset($data['User']['birthday']);
 				$data['User']['birthday'] = $birthday['year']."-".$birthday['month']."-".$birthday['day'];
@@ -1202,7 +1199,8 @@ class TeachersController extends AppController{
 				$data["User"]["login_status"] = User::OFF_LOGIN_STATUS;
 				$data["User"]["primary_password"] = $data["User"]["password"];
 				$data["User"]["last_active_time"] = date('Y-m-d H:i:s');
-										
+
+				// /img/Avatarのフォールダにプロファイルimgを保存
 				if($filename!=""){
 					$data['User']['profile_img'] = "/img/Avatar/". $filename;
 					
@@ -1213,10 +1211,9 @@ class TeachersController extends AppController{
 					}
 				}
 				
-				// luu du lieu trong Form register vao trong bang User
+				// 先生としてユーザを登録するのを実施
 				$user = $this->User->save($data);
 				if(!empty($user)){
-					// The ID of the newly created user has been set as $this->User->id.
 					$this->request->data['Teacher']['user_id'] = $this->User->id;
 					
 					// add them 1 so thong tin vao trong mang Teacher trong data array
@@ -1229,7 +1226,7 @@ class TeachersController extends AppController{
 					
 					$this->User->Teacher->save($this->request->data);
 					$this->Session->setFlash(__("Register successful"));
-					$this->redirect(array('controller' => 'teachers', 'action' => 'login'));
+					$this->redirect(array('controller' => 'users', 'action' => 'login'));
 				}else{
 					$this->Session->setFlash(__("Unable to register"));
 				}
@@ -1237,6 +1234,7 @@ class TeachersController extends AppController{
 		}
 	}
 	
+	/*
 	// 先生のログイン
 	public function login(){
 		$this->loadModel('User');
@@ -1279,7 +1277,7 @@ class TeachersController extends AppController{
 	            }
 	        }
         }
-	}
+	}*/
 	
 	// ログアウト
 	public function logout(){

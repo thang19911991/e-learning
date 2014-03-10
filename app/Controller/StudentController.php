@@ -14,7 +14,7 @@ class StudentController extends AppController {
 	
 	function beforeFilter() {
 		parent::beforeFilter();
-		$this->Auth->allow('std_register','login');
+		$this->Auth->allow('std_register','login', 'index');
 	}
 	
 	function std_register() {
