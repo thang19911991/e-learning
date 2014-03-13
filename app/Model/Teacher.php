@@ -4,15 +4,13 @@ class Teacher extends AppModel{
 	// nếu tên Model đặt tên khác thì cần phải ghi rõ tên bảng trong CSDL
 	public $name = "Teacher";		
 	
-
-	var $belongsTo = array(
-        'User' => array(
-            'className' => 'User',
-            'foreignKey' => 'user_id'
-        )
-    );
-	
-
+	public $hasMany = array(
+		'Course' => array(
+			'className' => 'Course',
+			'foreignKey' => 'teacher_id',
+			'dependent' => true
+		)
+	);
 	
 	public $belongsTo = array(
 		'User' => array(

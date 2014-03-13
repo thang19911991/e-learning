@@ -1,6 +1,5 @@
 <div class="index">
 <h1>授業作成</h1>
-
 <div class="error">
 	<?php 
 		echo $this->Session->Flash();
@@ -258,7 +257,6 @@ echo $this->Form->create('Course',array(
 		return true;
 	} 
 </script>
-
 </div>
 
 <div class="actions">

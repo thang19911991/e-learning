@@ -70,4 +70,3 @@
 <?php else: ?>
 <?php echo "その先生がコースが何かありません"; ?>
 <?php endif; ?>
-

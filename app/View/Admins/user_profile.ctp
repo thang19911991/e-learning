@@ -82,7 +82,14 @@ table,th,td
 		<th><?php echo $user['User']['birthday']?></th>		
 	</tr>
 	<tr>
-
+		<th>Address</th>
+		<th><?php echo $user['User']['address']?></th>		
+	</tr>
+	<tr>
+		<th>Phone Number</th>
+		<th><?php echo $user['User']['phone']?></th>		
+	</tr>
+	<tr>
 		<th>Credit Number</th>
 		<th><?php echo $user['User']['credit_number']?></th>		
 	</tr>
@@ -91,9 +98,20 @@ table,th,td
 		<th>Additional Infor</th>
 		<th><?php echo $user['Student']['additional_info']?></th>		
 	</tr>
-
-	<?php } else {?>
-
+	<?php } else if($user['User']['role'] == 'teacher') {?>
+	
+	<tr>
+		<th>Course(s)</th>
+		<th>
+			<?php
+			
+			foreach ($teacher['Course'] as $course){
+				echo $this->Html->link("- ".$course['course_name'], array('controller' => 'admins', 'action' => 'course_detail', 'id' => $course['id']));
+			}
+			?>
+		</th>		
+	</tr>
+	
 	<tr>
 		<th>Additional Infor</th>
 		<th><?php echo $user['Teacher']['additional_info']?></th>		
@@ -102,19 +120,15 @@ table,th,td
 	<tr>
 		<td colspan= "2" >
 			<ul class = 'action'>
-				<li><a href = '#'>Edit</a></li>
+				<li><?php echo $this->Html->link('Edit', array('action' => 'edit_user_profile', 'controller' => 'admins', 'id' => $user['User']['id']))?></li>
 				<?php if($user['User']['active_status'] == 'inactive') 
 				echo "<li>". $this->Html->link( "Active", array('action'=>'active_user', 'controller' => 'admins','id' => $user['User']['id']),array(),"Are you sure to active this user")."</li>" ?>
-				<li><?php echo $this->Html->link( "Delete", array('action'=>'delete_user', 'controller' => 'admins','id' => $user['User']['id']),array(),"Are you sure to delete this user"); ?></li>
-				
+				<li><?php echo $this->Html->link( "Delete", array('action'=>'delete_user', 'controller' => 'admins','id' => $user['User']['id']),array(),"Are you sure to delete this user"); ?></li>				
 			</ul>
-		</td>
-		
+		</td>		
 	</tr>
 	
 	
-	
-
 </table>
 </div>
 <?php } else {
@@ -123,18 +137,5 @@ table,th,td
 }?>
 
 
-
-
-<div class="actions">
-<ul>
-<li><h3>Hello, Admin <?php echo $current_user['username']?></h3></li>
-<li><?php echo $this->Html->link( "Student Manager",   array('controller' => 'admins', 'action'=>'student_manager')); ?></li>
-<li><?php echo $this->Html->link( "Teacher Manager",   array('controller' => 'admins', 'action'=>'teacher_manager')); ?></li>
-<li><?php echo $this->Html->link( "Add a new Admin",   array('controller' => 'admins', 'action'=>'create_admin')); ?></li>
-<li><?php echo $this->Html->link( "Admin Profile",   array('controller' => 'admins', 'action'=>'view_profile')); ?></li>
-<li><?php echo $this->Html->link( "Logout", array('action'=>'logout', 'controller' => 'users')); ?></li>
-<li></li>
-</ul>
-</div>
 
 

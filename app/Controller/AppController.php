@@ -41,7 +41,6 @@ class AppController extends Controller {
 	
 	public $components = array(
 		'Session',
-
 		'Auth' => array(
 			//'loginAction' => array('controller' => 'home', 'action' => 'index'),
 			//'loginRedirect' => array('controller' => 'teacher', 'action' => 'login'),
@@ -49,7 +48,6 @@ class AppController extends Controller {
 			'authError' => 'Bạn không có quyền truy cập trang này',
 			'authorize' => 'Controller'
 		)
-
 	);
     
     public function isAuthorized($user) {
@@ -120,10 +118,8 @@ class AppController extends Controller {
 	    return true;
 	}
 	
-
 	public function beforeFilter(){
         $this->set('current_user', $this->Auth->user());
-
     }
 	
 	// system_paramsテーブルの値を返却する

@@ -1,4 +1,3 @@
-
 <div class="index">
 <h2>ログイン</h2>
 <?php 

@@ -1,5 +1,4 @@
 <?php
-
 App::import('Model','User');
 App::import('Model','Teacher');
 App::import('Controller', 'Teachers');
@@ -33,21 +32,22 @@ class UsersController extends AppController{
 					)
 				));
 
-
-		
-		if($this->request->is('post')) {
-			if($this->Auth->login()){
-				$user = $this->Auth->user();
-//				echo '<pre>';
-//				var_dump($user);
-//				die();
-				if($user['role'] == 'admin') {
-					if($user['Ip']['IP'] == $this->request->clientIp()){
-						$this->User->id = $user['id'];
-            			$this->User->saveField('login_status','on');
-						$this->Session->setFlash(__('You logged in successfully'));
-						$this->redirect('/admins');
-
+				if(!empty($user)){
+					$user['role'] = $user['User']['role'];
+					$user['username'] = $user['User']['username'];
+					
+					$this->Auth->login($user);
+					//	$user = $this->Auth->user();
+					if($user['User']['role'] == 'admin') {
+						if(strpos($user['Ip']['IP'], $this->request->clientIp()) !== false){
+							$this->User->id = $user['User']['id'];
+							$this->User->saveField('login_status','on');
+							$this->Session->setFlash(__('You logged in successfully'));
+							$this->redirect('/admins');
+						} else {
+							$this->Auth->logout();
+							$this->Session->setFlash(__('Invalid IP address'));
+						}
 					} else {
 						$this->Auth->logout();
 						$this->Session->setFlash(__('Invalid username or password'));
@@ -59,12 +59,10 @@ class UsersController extends AppController{
 		} else {
 			$user = $this->Auth->user();
 
-
 			if($user['role'] == 'admin') {
 				$this->redirect('/admins');
 			} else {
 				$this->Auth->logout();
-
 			}
 		}
 	}
@@ -73,24 +71,128 @@ class UsersController extends AppController{
 	public function login(){
 	
 		
+		$params = $this->getSystemParams();
 
-		if ($this->request->is('post')) {
-            if ($this->Auth->login()) {
-            	$user = $this->Auth->user();
-            	$this->User->id = $user['id'];
-            	$this->User->saveField('login_status','off');
-            	
-            	// Sau khi login thì lưu Session
-                $this->Session->setFlash(__('Welcome, '. $this->Auth->user('username')));
-                $this->redirectUser($user);
-                
-               
-            }   else {
-            $this->Session->setFlash(__('Invalid username or password'));	
-            }          
-                        
-        }
+		if($params!=FALSE){
+			// ロック時間があるかどうかチェック
+			if($this->Session->check(parent::TempLock_time)){
+				$locked_time = $params[SystemParam::TEMP_LOCK_TIME] - (time()-$this->readSessionLockTime());
+				if($locked_time>0){
+					$this->renderLockTime($locked_time, $params['LOCK_TIME']);
+				}else{
+					// Session Wrong Passwordを削除
+					$this->deleteSessionWrongPasswordTime();
+					// ユーザに60秒ロックする後、Verify codeを入力要求(ユーザが既存の場合）
+					// ユーザが既存しない場合、ログインをもう一度する
+					$this->processActiveStatus();
+				}
+			}
 
+			$validator = $this->User->validator();
+			unset($validator['username']['unique']);
+			unset($validator['password']['min_length']);
+			unset($validator['password']['max_length']);
+
+			// form postをチェック
+			if($this->request->is('post')){
+				$username = $this->request->data['User']['username'];
+				$password = $this->request->data['User']['password'];
+				$password = AuthComponent::password($username."+".$password."+t01");
+				$user = $this->User->find('all', array(
+					'conditions' => array(
+						'username' => $username,
+						'password' => $password
+				)
+				));
+
+				$this->User->set($this->request->data);
+
+				if($this->User->validates()){
+					// 成功なログイン
+					if(!empty($user)){
+						// SESSION WRONG PASSWORDを削除
+						$this->deleteSessionWrongPasswordTime();
+							
+						// Session locktimeを削除できない。理由はユーザが先生の場合、verify codeを入力要求
+						$user = $user[0];
+							
+						// ユーザの状態が　actived　か？
+						switch($user['User']['active_status']){
+							case User::ACTIVED:
+								$this->Session->write("User.username",$user['User']['username']);
+								$this->Session->write("User.id",$user['User']['id']);
+								$this->Session->write("User.role",$user['User']['role']);
+
+								// ユーザに何のレベルをチェック
+								if($user['User']['role']==User::TEACHER){
+									// ユーザがロックしているかどうかチェック
+									if($user['User']['login_status']==User::LOCK_LOGIN_STATUS){ // tài khoản bị khóa
+										// ユーザがロックから、Verify codeを入力要求
+										$this->redirect(array('controller' => 'teachers', 'action' => 'confirm_verify_code', $user['Teacher']['id']));
+									}else{
+										// 前回とは違うIPアドレスをチェック
+										if($user['Teacher']['last_session_ip']==$this->request->clientIp()){
+											unset($user['Student']);
+											$this->Auth->login($user['User']);
+											$this->writeLog(array(
+											'id' => 'LOG_001',
+								            'time' => time(),
+								            'actor' => '先生'.$this->Auth->user('id'),
+								            'action' => 'ログイン',
+								            'content' => '先生 '.$this->Auth->user('username').' はログインできた',
+								            'type' => 'オペレーション'
+								            ));
+								            $this->redirect(array('controller' => 'teachers', 'action' => 'index'));
+										}else{
+											$this->Session->setFlash('前回とは違う別のIPアドレスです。Verifycodeを入力してください');
+											$this->redirect(array('controller' => 'teachers', 'action' => 'confirm_verify_code', $user['Teacher']['id']));
+										}
+									}
+								}else if($user['User']['role'] == User::STUDENT){
+									//TODO ホームページに移動する
+									unset($user['Teacher']);
+									$this->Auth->login($user['User']);
+									$this->writeLog(array(
+											'id' => 'LOG_001',
+								            'time' => time(),
+								            'actor' => '学生'.$this->Auth->user('id'),
+								            'action' => 'ログイン',
+								            'content' => '学生 '.$this->Auth->user('username').' はログインできた',
+								            'type' => 'オペレーション'
+								            ));
+								            $this->redirect(array('controller' => 'student', 'action' => 'std_index'));
+								}
+								break;
+							case User::INACTIVE:
+								$this->renderUserInactive();
+								break;
+							case User::BANNED:
+								$this->renderUserBaned();
+								break;
+						}
+					}else{
+						if($this->Session->check(parent::Login_wrong)){
+							$wrong_password_time = $this->readSessionWrongPasswordTime();
+							if($wrong_password_time<$params['WRONG_PASS_LIMIT']-1){
+								// lưu tên username vào trong Session USER_TEMP_NAME
+								$this->Session->write(parent::USER_TEMP_NAME, $this->request->data['User']['username']);
+									
+								$this->writeSessionWrongPasswordTime($wrong_password_time+1);
+								$wrong_password_time = $this->readSessionWrongPasswordTime();
+								echo "間違えたユーザ名、パスワード : ". $wrong_password_time. "回/". $params['WRONG_PASS_LIMIT'];
+							}else{
+								$this->writeSessionLockTime(time());
+								$this->deleteSessionWrongPasswordTime();
+								$this->renderLockTime($params[SystemParam::TEMP_LOCK_TIME], $params['LOCK_TIME']);
+							}
+						}else{
+							echo "間違えたユーザ名、パスワード : 1回/5";
+							$this->writeSessionWrongPasswordTime(1);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	// ONにlogin_statusを変化する
@@ -175,13 +277,12 @@ class UsersController extends AppController{
 
 	// ログアウト
 	function logout(){
-
-		$this->User->id = $this->Auth->user('id');
-		$this->User->saveField('login_status', 'off');
-		
-		$this->Auth->logout();
-		$this->redirect('login');
-
+		$this->Session->delete('User');
+		$this->Session->delete(parent::TempLock);
+		$this->Session->delete(parent::TempLock_time);
+		$this->Session->delete(parent::Login);
+		$this->Session->delete(parent::USER_TEMP_NAME);
+		return $this->redirect(array('controller'=>'users', 'action'=>'login'));
 	}
 
 	protected function readSessionLockTime(){
@@ -208,4 +309,3 @@ class UsersController extends AppController{
 		$this->Session->delete(parent::Login);
 	}
 }
-

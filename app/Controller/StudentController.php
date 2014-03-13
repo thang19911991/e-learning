@@ -37,7 +37,6 @@ class StudentController extends AppController {
 					move_uploaded_file ( $files ['tmp_name'], WWW_ROOT . 'img' . DS . 'Avatar' . DS . $imageName );
 				} else {
 					$data ['User'] ['profile_img'] = 'Avatar.jpg';
-
 				}
 				$data ['User'] ['active_status'] = 'inactive';
 				$data ['User'] ['role'] = 'student';
@@ -717,10 +716,6 @@ class StudentController extends AppController {
 				'controller' => 'student',
 				'action' => 'std_login'
 		));
-	}
-	
-	function index(){
-		
 	}
 }
 ?>

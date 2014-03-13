@@ -3,15 +3,12 @@
   echo $this->Form->create('Admin',  array('url'=>$this->Html->url(array('controller'=>'admins', 'action'=>'create_admin'))));
   echo $this->Form->input('User.username');
   echo $this->Form->input('User.password', array('type' => 'password'));
-
-
   echo $this->Form->input('User.full_name', array('label' => 'Full Name'));
  // echo $this->Form->input('Admin.verify_code_id', array('label' => 'Verify code id', 'type' => 'text'));
   echo $this->Form->input('User.email', array('label' => 'Email', 'type' => 'text'));
   echo $this->Form->input('User.address', array('label' => 'Address', 'type' => 'text'));
   echo $this->Form->input('User.credit_number', array('label' => 'Credit Number', 'type' => 'text'));
   echo $this->Form->input('User.phone', array('label' => 'Phone Number', 'type' => 'text'));
-
   echo $this->Form->input('User.birthday', array( 'label' => 'Date of birth'
   							, 'type' => 'date'
                             , 'dateFormat' => 'DMY'
@@ -28,16 +25,5 @@
   //echo $form->submit();
   echo $this->Form->end('create', array('controller' => 'admins','action'=>'create_admin'));
 ?>
-</div>
-
-
-<div class="actions">
-<ul>
-<li><h3>New Admin Account</h3></li>
-<li><?php echo $this->Html->link( "Student Manager",   array('controller' => 'admins', 'action'=>'student_manager')); ?></li>
-<li><?php echo $this->Html->link( "Teacher Manager",   array('controller' => 'admins', 'action'=>'teacher_manager')); ?></li>
-<li><?php echo $this->Html->link( "Add a new Admin",   array('controller' => 'admins', 'action'=>'create_admin')); ?></li>
-<li><?php echo $this->Html->link( "Logout", array('action'=>'logout', 'controller' => 'users')); ?></li>
-</ul>
 </div>
 

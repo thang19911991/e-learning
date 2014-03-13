@@ -1,5 +1,4 @@
-
-
+<?php if(!empty($ad)) : ?>
 <div class="users index">
 	<h2>Admin profile</h2>
 	<table>
@@ -38,24 +37,10 @@
 //				var_dump($ad);
 				echo $this->Html->link("Edit Profile",array('controller' => 'admins','action' => 'edit_profile'));
 				echo "\t" . $this->Html->link('Change Password', array('action'=>'change_password'));
-
-				echo "\t" . $this->Html->link('Change IP list', array('action'=>'change_ip'));
-
+				echo "\t" . $this->Html->link('Change IP list', array('action'=>'change_ip', $ad['User']['id']));
 			 ?>
 			 </p>
 		</tr>
 	</table>
 </div>
-
-<div class="actions">
-<ul>
-<li><h3>Hello, Admin <?php echo $current_user['username']?></h3></li>
-<li><?php echo $this->Html->link( "Student Manager",   array('controller' => 'admins', 'action'=>'student_manager')); ?></li>
-<li><?php echo $this->Html->link( "Teacher Manager",   array('controller' => 'admins', 'action'=>'teacher_manager')); ?></li>
-<li><?php echo $this->Html->link( "Add a new Admin",   array('controller' => 'admins', 'action'=>'create_admin')); ?></li>
-<li><?php echo $this->Html->link( "Admin Profile",   array('controller' => 'admins', 'action'=>'view_profile')); ?></li>
-<li><?php echo $this->Html->link( "Logout", array('action'=>'logout', 'controller' => 'users')); ?></li>
-<li></li>
-</ul>
-</div>
-
+<?php endif; ?>

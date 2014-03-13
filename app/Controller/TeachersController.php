@@ -1,5 +1,4 @@
 <?php
-
 App::import('Model','Teacher');
 App::import('Controller','Users');
 
@@ -8,14 +7,12 @@ class TeachersController extends AppController{
 	public $name = "Teachers";
 
 	public $helpers = array (
-
 			"Html",
 			"Session",
 			"Form",
 			"Paginator",
 			"Js" => array ("JQuery")
 	);
-
 
 	//pdf, doc, docx, ppt, pptx
 	const TEXT_SIZE = 5000000;
@@ -26,7 +23,6 @@ class TeachersController extends AppController{
 	//audio
 	const AUDIO_SIZE = 50000000;
 	//test file
-
 	const TEST_SIZE = 2000000;		
 
 	public function beforeFilter() {
@@ -263,13 +259,11 @@ class TeachersController extends AppController{
 						'tmp_name' => $_FILES['lessonFile'.$i]['tmp_name'],
 						'name' => $new_name
 						);
-
 				}
 			}
 
 			$testsPath = array();
 			$data['Test'] = array();
-
 			// テストファイルフォーマットチェック
 			for($i=0;$i<=$this->data['Course']['testFileNumber'];$i++){
 				if($this->data['Course']['testName'.$i]!="" && $_FILES['testFile'.$i]['name']!=""){
@@ -289,7 +283,6 @@ class TeachersController extends AppController{
 					//ファイル大きさチェック
 					if($_FILES['testFile'.$i]['size']>self::TEST_SIZE){
 						$this->Session->setFlash ( "テストの大きさが以外2Mb!" );
-
 						return;
 					}
 
@@ -302,9 +295,7 @@ class TeachersController extends AppController{
 
 			$data['Tag'] = array();
 			$tagNames = array();
-
 			//授業タグとって
-
 			for($i=0;$i<=$this->data['Course']['tagNumber'];$i++){
 				if($this->data['Course']['tag'.$i]!=""){
 					$data['Tag'][] = array(
@@ -315,13 +306,10 @@ class TeachersController extends AppController{
 			}
 
 			$this->loadModel('Course');
-
-
 			$this->loadModel('Tag');
 			$this->loadModel('Document');
 			$this->loadModel('Test');
 			$this->loadModel('CourseTag');
-
 			
 			//ログ
 			$this->writeLog(array(
@@ -356,33 +344,15 @@ class TeachersController extends AppController{
 				foreach ($existedTag as $cat){
 					for ($i=0;$i<count($data['Tag']);$i++){
 						if($cat['Tag']['tag_name']==$data['Tag'][$i]['tag_name']){
-
 							unset($data['Tag'][$i]);
 						}
 					}
 					$d = array(
-
 						'tag_id' => $cat['Tag']['id'],
-
 						'course_id' => $id
 					);
 					$data['CourseTag'][] = $d;
 				}
-
-
-				//get tag id just insert (link to a aftersave function in AppModel
-				$new_tag_ids = array();
-					
-				if($this->Tag->saveMany($data['Tag'])){
-					$new_tag_ids=$this->Tag->inserted_ids;
-				} else{
-					$this->Session->setFlash ( "There is a error when inserting to database" );
-					throw new Exception();
-				}
-				//debug($new_category_ids);
-
-				//insert CourseCategory
-
 //				debug($data['Course']);
 				
 				$this->Course->set($data['Course']);
@@ -405,7 +375,6 @@ class TeachersController extends AppController{
 				//debug($new_category_ids);
 
 				//CourseTag 追加
-
 				foreach ($new_tag_ids as $nci){
 					$d = array(
 						'tag_id' => $nci,
@@ -413,7 +382,6 @@ class TeachersController extends AppController{
 					);
 					$data['CourseTag'][] = $d;
 				}
-
 				if(count($data['CourseTag'])!=0){
 					if(!$this->CourseTag->saveMany($data['CourseTag'])){
 						$this->Session->setFlash ( "データベースに追加時、エラーが発生。" );
@@ -422,7 +390,6 @@ class TeachersController extends AppController{
 				}
 
 				//ドキュメントとテストファイルにアップデートID
-
 				for($i=0;$i<count($data['Document']);$i++){
 					$data['Document'][$i]['course_id'] = $id;
 				}
@@ -430,7 +397,6 @@ class TeachersController extends AppController{
 					$data['Test'][$i]['course_id'] = $id;
 				}
 				//			debug($data);
-
 				if(!$this->Document->saveMany($data['Document'])){
 					$this->Session->setFlash ( "データベースに追加時、エラーが発生。" );
 					throw new Exception();
@@ -481,12 +447,10 @@ class TeachersController extends AppController{
 				            'type' => 'エラー'
 						));
 						$this->Session->setFlash ( "テストファイルがアップロードできません。" );
-
 						for($j=0;$j<$i;$j++){
 							unlink(WWW_ROOT . $testsPath[$j]['name']);
 						}
 						throw new Exception();
-
 					}else{
 						//ログ
 						$this->writeLog(array(
@@ -541,20 +505,16 @@ class TeachersController extends AppController{
 		$this->loadModel('Course');
 		
 		//データベースクエリー
-
 		$order = 'Course.created_date DESC';
 		$fields = array (
 				'Course.*',
 				'User.username' 
-
 				);
-
 
 		$joins = array ();
 		$joins [] = array (
 			'table' => 'courses',
 			'foreignKey' => false,
-
 			'conditions' => array(
 				'Course.teacher_id = Teacher.id'
 			),
@@ -752,7 +712,7 @@ class TeachersController extends AppController{
 		));
 	}
 	
-    /*
+/*
 	 * プロファイル変化
 	 */
 	public function change_profile(){
@@ -1373,4 +1333,3 @@ class TeachersController extends AppController{
 	}
 }
 ?>
-
