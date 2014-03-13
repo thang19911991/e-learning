@@ -1,6 +1,5 @@
-<div>
+<div class="index">
 <h1>授業作成</h1>
-</div>
 <div class="error">
 	<?php 
 		echo $this->Session->Flash();
@@ -258,3 +257,20 @@ echo $this->Form->create('Course',array(
 		return true;
 	} 
 </script>
+</div>
+
+<div class="actions">
+	<ul>
+		<li>
+			<?php echo $this->Html->link( "ホームページ", array('controller' => 'teachers', 'action'=>'index')); ?>
+		</li>
+		<li>
+			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teachers', 'action'=>'view_list_course')); ?>
+		</li>
+		<li>
+		<?php if($current_user): ?>
+		<?php echo $this->Html->link( "ログアウト", array('controller' => 'teachers', 'action'=>'logout')); ?>
+		<?php endif; ?>
+		</li>
+	</ul>
+</div>

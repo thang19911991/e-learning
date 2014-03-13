@@ -8,6 +8,14 @@ class StudentDocumentReportsController extends  AppController {
 	}
 	
 	public function list_report(){
+		$this->writeLog(array(
+            'id' => 'AD_LOG_27_001',
+            'time' => time(),
+            'actor' => $this->Auth->user('id'),
+            'action' => 'List all document copyright report',
+            'content' => 'Admin '.$this->Auth->user('id').' view all document copyright report',
+            'type' => 'operation'
+        ));
 		$reports = $this->StudentDocumentReport->find('all');
 		$i = 0;
 		foreach ($reports as $report){
@@ -21,12 +29,29 @@ class StudentDocumentReportsController extends  AppController {
 //			var_dump($report);
 			$i++;
 		}
-		$this->set('courses', $courses);
-		$this->set('students', $user_student);
-		$this->set('reports', $this->StudentDocumentReport->find('all'));
+		
+		if(!empty($courses)){
+			$this->set('courses', $courses);
+		}
+		
+		if(!empty($students)){
+			$this->set('students', $user_student);
+		}
+		
+		if(!empty($reports)){
+			$this->set('reports', $this->StudentDocumentReport->find('all'));
+		}
 	}
 	
 	public function list_report_of_document($document_id = null){
+		$this->writeLog(array(
+            'id' => 'AD_LOG_31_001',
+            'time' => time(),
+            'actor' => $this->Auth->user('id'),
+            'action' => 'List all copyright report of document',
+            'content' => 'User '.$this->Auth->user('id').' list all copyright report of document: '.$document_id,
+            'type' => 'operation'
+        ));
 		if (!$document_id) {
 			throw new NotFoundException(__('Invalid document'));
 		}
@@ -57,6 +82,14 @@ class StudentDocumentReportsController extends  AppController {
 	}
 	
 	public function view_a_report($id = null){
+		$this->writeLog(array(
+            'id' => 'AD_LOG_32_001',
+            'time' => time(),
+            'actor' => $this->Auth->user('id'),
+            'action' => 'View detail of a document copyright report',
+            'content' => 'User '.$this->Auth->user('id').' view detail of a document copyright report, with Report: '.$id,
+            'type' => 'operation'
+        ));
 		if (!$id) {
 			throw new NotFoundException(__('Invalid report'));
 		}

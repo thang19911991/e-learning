@@ -251,13 +251,16 @@
 <div class="actions">
 	<ul>
 		<li>
-			<?php echo $this->Html->link( "コース編集",   array('controller' => 'teachers', 'action'=>'edit_course',$id)); ?>
-		</li>
-		<li>
 			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teachers', 'action'=>'view_list_course')); ?>
 		</li>
 		<li>
+			<?php echo $this->Html->link( "コース編集",   array('controller' => 'teachers', 'action'=>'edit_course',$id)); ?>
+		</li>
+		<li>
 			<?php echo $this->Html->link( "コース作成",   array('controller' => 'teachers', 'action'=>'create_new_course')); ?>
+		</li>
+		<li>
+			<?php echo $this->Html->link( "コースの学生管理",   array('controller' => 'teachers', 'action'=>'course_manage', $courses['Course']['id'])); ?>
 		</li>
 		<li>
 		<?php if($current_user): ?>

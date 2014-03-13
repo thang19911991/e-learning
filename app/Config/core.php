@@ -389,3 +389,6 @@ define('UPLOAD_PROFILE_URL', '/app/img/Avatar/');
 define("UPLOAD_DOCUMENT_URL", '/app/files/documents');
 
 //Configure::write('Session.timeout', 5);
+
+
+Configure::write('Routing.prefixes', array('admin'));

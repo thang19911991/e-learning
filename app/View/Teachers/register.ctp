@@ -41,12 +41,12 @@
 	echo $this->Form->input('credit_number',array('label' => 'Credit Card','required'=>'false', 'maxlength' => '28', 'style' => 'width:392px'));
 	echo $this->Form->input('information',array('label' => '自己PR','type' => 'textarea' ,'required'=>'false'));
 	echo $this->Form->input('checkbox',array('label' =>'ウェブサイトの規則を賛成しますか？', 'type' => 'checkbox', 'id' => 'check'));
-	echo $this->Form->button("Register", array('label' => false, 'type' => 'submit', 'id' => 'submit_button'));
+	echo $this->Form->button("登録", array('label' => false, 'type' => 'submit', 'id' => 'submit_button'));
 	echo $this->Form->end();
 ?>
 </div>
 <div class="actions">
 	<?php
-		echo $this->Html->link("ログイン",array('controller'=> 'teachers', 'action' => 'login'));
+		echo $this->Html->link("ログイン",array('controller'=> 'users', 'action' => 'login'));
 	?>
 </div>

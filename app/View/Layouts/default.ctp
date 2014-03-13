@@ -43,13 +43,6 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 </head>
 <body>
 <?php
-	if($this->Session->check("User.username")){
-		echo "username :". $this->Session->read("User.username");		
-	}else{
-		echo "chua dang nhap";
-	}
-?>
-<?php
 		//$allows = array('login', 'register', 'confirm_verify_code', 'home');
 		//if(!$this->Session->check('User') && !in_array($this->action, $allows)):
 ?>
@@ -74,6 +67,6 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 			?>
 		</div>
 	</div>
-	<?php echo $this->element('sql_dump'); ?>
+	<?php //echo $this->element('sql_dump'); ?>
 </body>
 </html>

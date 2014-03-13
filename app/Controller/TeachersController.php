@@ -28,6 +28,10 @@ class TeachersController extends AppController{
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->allow('register','login','index');
+		
+		if($this->Session->check("User.username") || $this->Session->check(parent::TempLock)){
+			$this->Auth->allow('confirm_verify_code');
+		}
 	}
 	
 	public function index(){
@@ -109,6 +113,26 @@ class TeachersController extends AppController{
 		return new CakeResponse(array('body' => $student_id.":".$course_id.":".$content));
 	}
 	
+	/*
+	 * 先生のプロファイル見る
+	 */
+	public function view_profile(){
+		if (($this->Auth->user ( 'id' ) == null)) {
+			$this->redirect ( array (
+					'controller' => 'users',
+					'action' => 'login' 
+					) );
+		}
+		$this->loadModel('User');
+		//プロファイル情報とって
+		$profile = $this->User->find('first',array(
+			'conditions' => array('User.id' => $this->Auth->user('id'))
+		));
+		
+		//		debug($profile);
+		$this->set("data",$profile);
+	}
+	
 	// コース管理
 	public function course_manage($id = null) {
 		$this->loadModel ( "Course" );
@@ -168,10 +192,7 @@ class TeachersController extends AppController{
 		));
 		//debug($teacher);
 		if ($this->request->is ( 'post' ) && !empty($this->data)) {
-			//debug( $this->request->data );
-			//var_dump ($_FILES);
 			$teacherID=$this->Auth->user('id');
-//			echo $teacherID;
 			$documentsPath = array();
 			$data = array();
 			$data['Course'] = $this->data['Course'];

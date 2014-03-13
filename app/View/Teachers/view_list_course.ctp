@@ -1,3 +1,4 @@
+<?php if(!empty($data)): ?>
 <div class="index">
 <h2>作成した授業リスト</h2>
 <br>
@@ -10,13 +11,15 @@
 </tr>
 <?php
 	$count = 0;
-	foreach ( $data as $course ) {
+	foreach ($data as $course ) {
 		?>
 <tr id=<?php echo "course".$count?>>
 	<td>
 	<?php 
 		$count++;
-		echo $course['Course']['course_name'];
+		echo $this->Html->link($course['Course']['course_name'], array (
+				'controller' => 'teachers',
+				'action' => 'view_a_course',$course['Course']['id'] ));
 	?>
 	</td>
 	<td>
@@ -47,3 +50,23 @@
 ?>
 </table>
 </div>
+
+<div class="actions">
+	<ul>
+		<li>
+			<?php echo $this->Html->link( "ホームページ", array('controller' => 'teachers', 'action'=>'index')); ?>
+		</li>
+				
+		<li>
+			<?php echo $this->Html->link( "コース作成",   array('controller' => 'teachers', 'action'=>'create_new_course')); ?>
+		</li>
+		<li>
+		<?php if($current_user): ?>
+		<?php echo $this->Html->link( "ログアウト", array('controller' => 'teachers', 'action'=>'logout')); ?>
+		<?php endif; ?>
+		</li>
+	</ul>
+</div>
+<?php else: ?>
+<?php echo "その先生がコースが何かありません"; ?>
+<?php endif; ?>

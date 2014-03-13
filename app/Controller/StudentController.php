@@ -624,6 +624,91 @@ class StudentController extends AppController {
 		) );
 	}
 	
+	//public function parse_tsv($id){
+	public function parse_tsv(){
+		/*load avatar*/
+		$this->loadModel('User');
+		$user = $this->User->find('first',array(
+			'conditions' => array('User.id'=> AuthComponent::user('id')),
+				'fields' => array('id','profile_img','password'),
+		));
+		$this->set(compact('user'));
+
+		/*parse tsv */
+		//		$this->loadModel('Test');
+		//		$test_name = $this->Test->find('first',array(
+		//						'conditions' => array(('Test.id' => $id)),
+		//						'fields' => array('path')
+		//		));
+
+		//$file_path = '/home/ngocthanh/workspace/e-learning/app/webroot/files/tests/'.$test_name['Test']['path'];
+		$file_path = ROOT.'/app/webroot/files/tests/test.tsv';
+		$file_content = array();
+		$questions = array();
+		$test = array();
+		$question_content = array();
+		$tsv_file = fopen($file_path, 'r');
+		while(!feof($tsv_file)){
+
+			array_push($file_content,(explode("\t",fgets($tsv_file))));
+
+		}//debug($file_content);die;
+		$test['title'] = $file_content[0][1];
+		$test['subtitle'] = $file_content[1][1];
+
+		array_splice($file_content, 0, 4);
+		$question = array();
+		$temp = array();
+		$count = 0;
+
+		foreach ($file_content as $key => $value) {
+			if($value[0] == ''){
+				array_push($question_content, $temp);
+				$temp = array();
+				continue;
+			}
+			array_push($temp, $value);
+		}
+		array_pop($question_content);
+		foreach ($question_content as $question_block){
+			$question = array();
+			$question['answers'] = array();
+			foreach ($question_block as $key => $block){
+				if($key == 0){
+					$question['question'] = $block[2];
+				} else if($key == sizeof($question_block)-1){
+					$question['point'] = (int)$block[3];
+					$correct = $block[2];
+					$question['correct'] = substr($correct, 2, 1);
+				} else {
+					array_push($question['answers'], $block[2]);
+				}
+
+			}
+			array_push($questions, $question);
+		}
+		$test['questions'] = $questions;
+		$this->set(compact('test'));
+		//echo '<pre>';
+		//var_dump($test);
+		//debug($questions);die;
+		//if(isset($this->request->data)){
+			//$data = $this->request->data;
+			//			foreach ($data as $key => $name){
+			//				if($data[])
+			//			}
+			//debug($data);
+			//$sum = 0;
+			//for($i = 0  ; $i <= count($data); $i++){
+			//	if($data[$i] == $test['correct']){
+			//		$sum += $test['point'];
+			//		echo $sum;
+			//	}
+			//}
+
+		//}
+	}
+	
 	public function std_logout() {
 		$this->Session->destroy ();
 		$this->Auth->logout ();

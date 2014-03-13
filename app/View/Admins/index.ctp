@@ -1,9 +1,10 @@
 
+
 <style>
 .title {
 	color: #ffffff;
-background-color: #555555;
-border: 1px solid #555555;
+	background-color: #555555;
+	border: 1px solid #555555;	
 }
 
 .action li {
@@ -24,8 +25,8 @@ list-style-type: none;
 
 table,th,td
 {
-
-	border:1px solid gray;
+	
+	border:1px solid white;
 	border-collapse:collapse
 }
 </style>
@@ -35,40 +36,40 @@ table,th,td
 <div class="users index">
 
 	<table>
+	<tr>
+		
+		<td colspan= "2"  class = 'attr title'>System Information	</td>
+		
+		
+	</tr>	
 	<col width="200">
   	<col width="400">
-	<tr class ='title'>
-		<th class = 'attr'>Attribute</th>
-		<th>Value</th>		
-	</tr>	
+	
 	
 	<tr>
-		<th>Document ID</th>
-		<th><?php echo $doc['Document']['id']?></th>		
+		<th>All members</th>
+		<th><?php echo sizeof($user)." members"?></th>		
 	</tr>
 	
 	<tr>
-		<th>Document name</th>
-		<th><?php echo $doc['Document']['name']?></th>		
+		<th>Online member</th>
+		<th><?php echo sizeof($online_user)." members"?></th>		
 	</tr>
 	<tr>
-		<th>Document Type</th>
-		<th><?php echo $doc['Document']['type']?></th>		
+		<th>Inactive member</th>
+		<th><?php echo sizeof($inactive_user)." members"?></th>
 	</tr>
 	
 	<tr>
-		<th>Course name</th>
-		<th><?php echo $this->Html->link($doc['Course']['course_name'],array('controller' => 'admins', 'action' =>'course_detail', 'id' => $doc['Course']['id']),array())?></th>		
+		<th>All courses</th>
+		<th><?php echo sizeof($course)." courses"?></th>		
 	</tr>
 	
 	<tr>
-		<th>Teacher Username</th>
-		<th><?php echo $this->Html->link($doc['User']['username'],array('controller' => 'admins', 'action' =>'user_profile', 'id' => $doc['User']['id']),array())?></th>		
+		<th>Inactive courses</th>
+		<th><?php echo sizeof($inactive_course)." courses"?></th>		
 	</tr>
-	<tr>
-		<th>Teacher full name</th>
-		<th><?php echo $doc['User']['full_name']?></th>		
-	</tr>
+	
 	
 	
 	

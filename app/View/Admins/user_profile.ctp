@@ -98,7 +98,7 @@ table,th,td
 		<th>Additional Infor</th>
 		<th><?php echo $user['Student']['additional_info']?></th>		
 	</tr>
-	<?php } else {?>
+	<?php } else if($user['User']['role'] == 'teacher') {?>
 	
 	<tr>
 		<th>Course(s)</th>

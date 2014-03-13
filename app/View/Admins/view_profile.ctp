@@ -1,3 +1,4 @@
+<?php if(!empty($ad)) : ?>
 <div class="users index">
 	<h2>Admin profile</h2>
 	<table>
@@ -36,9 +37,10 @@
 //				var_dump($ad);
 				echo $this->Html->link("Edit Profile",array('controller' => 'admins','action' => 'edit_profile'));
 				echo "\t" . $this->Html->link('Change Password', array('action'=>'change_password'));
-				echo "\t" . $this->Html->link('Change IP list', array('action'=>'change_ip'));
+				echo "\t" . $this->Html->link('Change IP list', array('action'=>'change_ip', $ad['User']['id']));
 			 ?>
 			 </p>
 		</tr>
 	</table>
 </div>
+<?php endif; ?>

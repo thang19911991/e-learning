@@ -141,6 +141,9 @@
 <div class="actions">
 	<ul>
 		<li>
+			<?php echo $this->Html->link( "ホームページ", array('controller' => 'teachers', 'action'=>'index')); ?>
+		</li>
+		<li>
 			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teachers', 'action'=>'view_list_course')); ?>
 		</li>
 		<li>

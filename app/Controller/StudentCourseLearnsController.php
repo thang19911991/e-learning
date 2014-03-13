@@ -9,6 +9,15 @@ class StudentCourseLearnsController extends  AppController {
 	}
 	
 	public function monthly_payment_student($student_id = null, $year = null, $month = null){
+		$this->writeLog(array(
+            'id' => 'AD_LOG_21_001',
+            'time' => time(),
+            'actor' => $this->Auth->user('id'),
+            'action' => 'View monthly payment of student',
+            'content' => 'Student '.$student_id.' View '.$year.'/'.$month.' payment',
+            'type' => 'operation'
+        ));
+        
 		$create_payment = false;
 		$payments = null;
 		$user_student = null;
@@ -21,14 +30,29 @@ class StudentCourseLearnsController extends  AppController {
 //		Check $year and $month
 //		NOTE: Should get $system_start_date from SystemParam table
 		if($year != 2013 && $year != 2014 && $year != 2015 && $year != 2016 && $year != 2017){
+			$this->writeLog(array(
+	            'id' => 'AD_LOG_21_002',
+	            'time' => time(),
+	            'actor' => $this->Auth->user('id'),
+	            'action' => 'View monthly payment of student',
+	            'content' => 'Student '.$student_id.' View '.$year.'/'.$month.' payment, invalid year: '.$year,
+	            'type' => 'error'
+	        ));
 			throw new NotFoundException(__("Bad request"));
 		}
 		if($month != 1 && $month != 2 && $month != 3 && $month != 4 && $month != 5 && 
 			$month != 6 && $month != 7 && $month != 8 && $month != 9 && $month != 10 && 
 			$month != 11 && $month != 12 ){
+			$this->writeLog(array(
+	            'id' => 'AD_LOG_21_002',
+	            'time' => time(),
+	            'actor' => $this->Auth->user('id'),
+	            'action' => 'View monthly payment of student',
+	            'content' => 'Student '.$student_id.' View '.$year.'/'.$month.' payment, invalid month: '.$month,
+	            'type' => 'error'
+	        ));
 				throw new NotFoundException(__("Bad request"));
 			}		
-		
 			
 		//Check $student_id is exists?
 		if($student_id == null){
@@ -79,6 +103,14 @@ class StudentCourseLearnsController extends  AppController {
 	}
 	
 public function monthly_payment_teacher($teacher_id = null, $year = null, $month = null){
+		$this->writeLog(array(
+            'id' => 'AD_LOG_22_001',
+            'time' => time(),
+            'actor' => $this->Auth->user('id'),
+            'action' => 'View monthly payment of teacher',
+            'content' => 'Student '.$teacher_id.' View '.$year.'/'.$month.' payment',
+            'type' => 'operation'
+        ));
 		$create_payment = false;
 		$payments = null;
 		$user_students = null;
@@ -157,6 +189,14 @@ public function monthly_payment_teacher($teacher_id = null, $year = null, $month
 	}
 	
 public function monthly_payment_system($year = null, $month = null){
+		$this->writeLog(array(
+            'id' => 'AD_LOG_23_001',
+            'time' => time(),
+            'actor' => $this->Auth->user('id'),
+            'action' => 'View monthly payment of system',
+            'content' => 'Admin: '.$this->Auth->user('id').' View '.$year.'/'.$month.' payment',
+            'type' => 'operation'
+        ));
 		$create_payment = false;
 		$payments = null;
 		$user_students = null;
@@ -174,7 +214,8 @@ public function monthly_payment_system($year = null, $month = null){
 			$month != 6 && $month != 7 && $month != 8 && $month != 9 && $month != 10 && 
 			$month != 11 && $month != 12 ){
 				throw new NotFoundException(__("Bad request"));
-			}		
+			}
+		
 		
 		$payments = $this->StudentCourseLearn->find('all', array('conditions' => array('buy_date LIKE' => "%$year-$month%")));
 //		debug($payments);
@@ -213,6 +254,14 @@ public function monthly_payment_system($year = null, $month = null){
 	}
 	
 	public  function view_payment_file_list($message = null){
+		$this->writeLog(array(
+            'id' => 'AD_LOG_24_001',
+            'time' => time(),
+            'actor' => $this->Auth->user('id'),
+            'action' => 'View monthly payment file　list',
+            'content' => 'View monthly payment file　list',
+            'type' => 'operation'
+        ));
 		App::uses('Folder', 'Utility');
 		App::uses('File', 'Utility');
 		$payment_folder_path = "files/payments";
@@ -235,6 +284,14 @@ public function monthly_payment_system($year = null, $month = null){
 	}
 	
 	public function create_payment($year = null, $month = null){
+		$this->writeLog(array(
+            'id' => 'AD_LOG_25_001',
+            'time' => time(),
+            'actor' => $this->Auth->user('id'),
+            'action' => 'Create monthly payment file',
+            'content' => 'Admin: '.$this->Auth->user('id').'Create '.$year.'/'.$month.' payment file',
+            'type' => 'operation'
+        ));
 		$current_user = $this->Auth->user();
 //		debug($current_user);
 //		die();
@@ -249,7 +306,7 @@ public function monthly_payment_system($year = null, $month = null){
 		}		
 		
 		if($this->_check_create_payment_option($year, $month) == false){
-			throw new NotFoundException(__("Bad request"));
+//			throw new NotFoundException(__("Bad request"));
 		}
 		
 		App::uses('Folder', 'Utility');
@@ -352,6 +409,14 @@ public function monthly_payment_system($year = null, $month = null){
 	}
 	
 	public function download_payment_file($file_ext = null, $file_name = null){
+		$this->writeLog(array(
+            'id' => 'AD_LOG_26_001',
+            'time' => time(),
+            'actor' => $this->Auth->user('id'),
+            'action' => 'Download monthly payment file',
+            'content' => 'Admin: '.$this->Auth->user('id').'download file: '.$file_name.'.'.$file_ext,
+            'type' => 'operation'
+        ));
 		return $this->_download_payment_file($file_ext, $file_name);
 //		return $this->response->file('index.php');
 	}

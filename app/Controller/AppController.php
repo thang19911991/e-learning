@@ -78,6 +78,7 @@ class AppController extends Controller {
 	    	}else if($user['role']=="teacher"){
 	    		if(in_array($this->action, array(
 	    			'ban_student',
+	    			'upload_new_test',
 	    			'change_password',
 	    			'change_profile',
 	    			'change_secret_question',
@@ -103,38 +104,8 @@ class AppController extends Controller {
 	    		}
 	    		$this->redirect(array('controller' => 'teachers', 'action' => 'index'));
 	    		return false;
-	    	}else if($user['role']=="admin"){
-	    		if(in_array($this->action, array(
-	    			'change_ip.ctp',
-	    			'change_password.ctp',
-	    			'course_detail.ctp',
-	    			'course_manager.ctp',
-	    			'create_admin.ctp',
-	    			'document_detail.ctp',
-	    			'edit_profile.ctp',
-	    			'edit_user_profile.ctp',
-	    			'index.ctp',
-	    			'restrict_area.ctp',
-	    			'student_manager.ctp',
-	    			'teacher_manager.ctp',
-	    			'user_profile.ctp',
-	    			'view_profile.ctp',
-	    			'create_payment.ctp',
-	    			'download_payment_file.ctp',
-	    			'monthly_payment_student.ctp',
-	    			'monthly_payment_system.ctp',
-	    			'monthly_payment_teacher.ctp',
-	    			'view_payment_file_list.ctp',
-	    			'list_report_of_course.ctp',
-	    			'list_report.ctp',
-	    			'view_a_report.ctp',
-	    			'list_report_of_document.ctp',
-	    			'logout'
-	    		))){
-	    			return true;
-	    		}
-	    		$this->redirect(array('controller' => 'admins', 'action' => 'index'));
-	    		return false;
+	    	}else{
+	    		$this->Auth->allow();
 	    	}
 	    }else{ // 普通のユーザ
 	    	$allows = array('login', 'register', 'logout', 'std_register');

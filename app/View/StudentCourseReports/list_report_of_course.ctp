@@ -1,6 +1,5 @@
-<?php
-//	echo '<pre>';
-//	var_dump($teacher_name) ;
+<?php 
+	if(!empty($reports)):
 ?>
 <div class='users index'>
 	<h2>List course copyright report</h2>
@@ -40,3 +39,4 @@
 		<?php //unset($post); ?>
 	</table>
 </div>
+<?php endif; ?>

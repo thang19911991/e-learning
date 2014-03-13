@@ -28,6 +28,12 @@ class Student extends  AppModel{
 			'verifycode_answer' => array('rule' => 'nullCheck')
 	);
 	
+	var $hasOne = array(
+        'User' => array(
+            'className' => 'User',
+            'foreignKey' => 'id'
+        )
+    );
 	/**
 	 *
 	 * Kiem tra tinh duy nhat cua username

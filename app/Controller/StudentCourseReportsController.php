@@ -8,6 +8,14 @@ class StudentCourseReportsController extends  AppController {
 	}
 	
 	public function list_report(){
+		$this->writeLog(array(
+            'id' => 'AD_LOG_27_001',
+            'time' => time(),
+            'actor' => $this->Auth->user('id'),
+            'action' => 'List all course copyright report',
+            'content' => 'Admin '.$this->Auth->user('id').' view all course copyright report',
+            'type' => 'operation'
+        ));
 		$reports = $this->StudentCourseReport->find('all');
 		$i = 0;
 		if(count($reports) == 0) {
@@ -29,6 +37,14 @@ class StudentCourseReportsController extends  AppController {
 	}
 	
 	public function list_report_of_course($course_id = null){
+		$this->writeLog(array(
+            'id' => 'AD_LOG_28_001',
+            'time' => time(),
+            'actor' => $this->Auth->user('id'),
+            'action' => 'List all copyright report of course',
+            'content' => 'User '.$this->Auth->user('id').' list all copyright report of course: '.$course_id,
+            'type' => 'operation'
+        ));
 		if (!$course_id) {
 			throw new NotFoundException(__('Invalid course'));
 		}
@@ -60,6 +76,14 @@ class StudentCourseReportsController extends  AppController {
 	}
 	
 	public function view_a_report($id = null){
+		$this->writeLog(array(
+            'id' => 'AD_LOG_29_001',
+            'time' => time(),
+            'actor' => $this->Auth->user('id'),
+            'action' => 'View detail of a course copyright report',
+            'content' => 'User '.$this->Auth->user('id').' view detail of a course copyright report, with Report: '.$id,
+            'type' => 'operation'
+        ));
 		if (!$id) {
 			throw new NotFoundException(__('Invalid report'));
 		}

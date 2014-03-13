@@ -77,7 +77,8 @@ table,th,td
 			<ul class = 'action'>
 				
 				<?php 
-				if($doc['Course']['status'] == 'inactive') 
+				
+				if($doc['Document']['status'] == 'inactive') 
 					echo "<li>". $this->Html->link( "Active", array('action'=>'active_document', 'controller' => 'admins','id' => $doc['Document']['id']),array(),"Are you sure to active this document")."</li>" ;
 				else echo "<li>". $this->Html->link( "Deactive", array('action'=>'deactive_document', 'controller' => 'admins','id' => $doc['Document']['id']),array(),"Are you sure to deactive this document")."</li>";
 					?>

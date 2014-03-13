@@ -29,6 +29,15 @@ class User extends AppModel{
 			'className' => 'Student',
 			'foreignKey' => 'user_id',
 			'dependent' => true
+		),
+		 'Admin' => array(
+	            'className' => 'Admin',    
+	            'dependent' => true       
+            ),
+		'Ip' => array(
+	            'className' => 'Ip',
+	            'foreignKey' => 'admin_id',    
+	            'dependent' => true      
 		)
 	);
 	
@@ -37,6 +46,10 @@ class User extends AppModel{
 			'notEmpty' => array(
 				'rule' => 'notEmpty',
 				'message' => 'ユーザ名をご入力してください',
+			),
+			'max_length' => array(
+				'rule' => array('maxLength', 256),
+				'message' => 'ユーザ名の最大長が256文字です。',
 			),
 			'unique' => array(
 					'rule' => 'isUnique',

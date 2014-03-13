@@ -1,4 +1,5 @@
-<div><h1>プロファイル</h1></div>
+<div class="index">
+<h2>プロファイル変化</h2>
 <div>
 <?php
 echo $this->Form->create('User',array(
@@ -86,4 +87,24 @@ echo $this->Form->create('User',array(
 		</td>
 	</tr>
 </table>
+</div>
+</div>
+
+<div class="actions">
+	<ul>
+		<li>
+			<?php echo $this->Html->link( "ホームページ", array('controller' => 'teachers', 'action'=>'index')); ?>
+		</li>
+		<li>
+			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teachers', 'action'=>'view_list_course')); ?>
+		</li>		
+		<li>
+			<?php echo $this->Html->link( "コース作成",   array('controller' => 'teachers', 'action'=>'create_new_course')); ?>
+		</li>
+		<li>
+		<?php if($current_user): ?>
+		<?php echo $this->Html->link( "ログアウト", array('controller' => 'teachers', 'action'=>'logout')); ?>
+		<?php endif; ?>
+		</li>
+	</ul>
 </div>

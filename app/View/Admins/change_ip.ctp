@@ -2,7 +2,7 @@
 	<h2>Admin change IP</h2>
 	<?php
 //		echo '<pre>';
-		debug($admin);
+//		debug($admin);
 //		die();
 		echo $this->Form->create('Ip');
 		echo '<p>' . 'User name: ' . $admin['User']['username'] . '</p>';
