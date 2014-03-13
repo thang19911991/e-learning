@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 
 
+<<<<<<< HEAD
+=======
+>>>>>>> 37192a76fd787fbcee578e672de2f6f6d70dc75a
 <div class="actions">
 <ul>
 <li><h3>Hello, Admin <?php echo $current_user['username']?></h3></li>
@@ -11,7 +15,9 @@
 <li></li>
 </ul>
 </div>
+<<<<<<< HEAD
 
+=======
 <style>
 .title {
 	color: #ffffff;
@@ -94,4 +100,6 @@ table,th,td
 
 
 
-
+>>>>>>> thang
+=======
+>>>>>>> 37192a76fd787fbcee578e672de2f6f6d70dc75a

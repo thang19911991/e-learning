@@ -2,7 +2,7 @@
 class Student extends  AppModel{
 	// tên của model
 	// nếu tên Model đặt tên khác thì cần phải ghi rõ tên bảng trong CSDL
-	public $name = "Student";
+	public $name = "students";
 	
 	public $belongsTo = array(
 		'User' => array(
@@ -28,12 +28,19 @@ class Student extends  AppModel{
 			'verifycode_answer' => array('rule' => 'nullCheck')
 	);
 	
-	var $hasOne = array(
+
+	var $belongsTo = array(
         'User' => array(
             'className' => 'User',
-            'foreignKey' => 'id'
+            'foreignKey' => 'user_id'
         )
     );
+	
+	
+	
+	
+	
+
 	/**
 	 *
 	 * Kiem tra tinh duy nhat cua username

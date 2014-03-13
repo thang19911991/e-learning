@@ -1,5 +1,7 @@
-
-
+<<<<<<< HEAD
+<?php if(!empty($ad)) : ?>
+=======
+>>>>>>> 37192a76fd787fbcee578e672de2f6f6d70dc75a
 <div class="users index">
 	<h2>Admin profile</h2>
 	<table>
@@ -38,15 +40,19 @@
 //				var_dump($ad);
 				echo $this->Html->link("Edit Profile",array('controller' => 'admins','action' => 'edit_profile'));
 				echo "\t" . $this->Html->link('Change Password', array('action'=>'change_password'));
-
+<<<<<<< HEAD
+				echo "\t" . $this->Html->link('Change IP list', array('action'=>'change_ip', $ad['User']['id']));
+=======
 				echo "\t" . $this->Html->link('Change IP list', array('action'=>'change_ip'));
-
+>>>>>>> 37192a76fd787fbcee578e672de2f6f6d70dc75a
 			 ?>
 			 </p>
 		</tr>
 	</table>
 </div>
-
+<<<<<<< HEAD
+<?php endif; ?>
+=======
 <div class="actions">
 <ul>
 <li><h3>Hello, Admin <?php echo $current_user['username']?></h3></li>
@@ -58,4 +64,4 @@
 <li></li>
 </ul>
 </div>
-
+>>>>>>> 37192a76fd787fbcee578e672de2f6f6d70dc75a

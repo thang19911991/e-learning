@@ -11,176 +11,118 @@ class User extends AppModel{
 	const STUDENT = "student";
 	const ADMIN = "admin";
 	
-	const ACTIVED = "actived";
-	const BANNED = "banned";
-	const INACTIVE = "inactive";
 
-	const ON_LOGIN_STATUS = "on";
-	const OFF_LOGIN_STATUS = "off";
-	const LOCK_LOGIN_STATUS = "lock";
-	
-	
-	public $hasOne = array(
-		'Teacher' => array(
-			'className' => 'Teacher',
-			'foreignKey' => 'user_id',
-			'dependent' => true
-		),
-		'Student' => array(
-			'className' => 'Student',
-			'foreignKey' => 'user_id',
-			'dependent' => true
-		),
-		 'Admin' => array(
-	            'className' => 'Admin',    
-	            'dependent' => true       
-            ),
-		'Ip' => array(
-	            'className' => 'Ip',
-	            'foreignKey' => 'admin_id',    
-	            'dependent' => true      
-		)
-	);
-	
-	public $validate = array(
+  public $validate = array(
         'username' => array(
-			'notEmpty' => array(
-				'rule' => 'notEmpty',
-				'message' => 'ユーザ名をご入力してください',
-			),
-			'max_length' => array(
-				'rule' => array('maxLength', 256),
-				'message' => 'ユーザ名の最大長が256文字です。',
-			),
-			'unique' => array(
-					'rule' => 'isUnique',
-					'message' => 'そのユーザ名が既存しました。他のユーザ名をご入力してください',
-			)
-		),		
-		'password' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				'message' => 'パスワードをご入力してください',
-			),
-			'min_length' => array(
-				'rule' => array('minLength', 6),
-				'message' => 'パスワードの最小長が６文字です。',
-			),
-			'max_length' => array(
-				'rule' => array('maxLength', 256),
-				'message' => 'パスワードの最大長が256文字です。',
-			)
-		),
-		're_password' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'),
-				'message' => '確認パスワードをご入力してください',
-			),
-			'min_length' => array(
-				'rule' => array('minLength', 6),
-				'message' => '確認パスワードの最小長が6文字です。',
-			),
-			'max_length' => array(
-				'rule' => array('maxLength', 256),
-				'message' => '確認パスワードの最大長が256文字です。',
-			),
-			'match_password' => array(
-				'rule' => 'matchPassword',
-				'message' => 'パスワードと確認パスワードが合っていない'
-			)
-		),
-		'full_name' => array(
-			'notEmpty' => array(
-				'rule' => 'notEmpty',
-				'message' => '名前をご入力してください',
-			)			
-		),
-		'email' => array(
-			'notEmpty' => array(
-				'rule' => 'notEmpty',
-				'message' => 'メールをご入力してください',
-			),			
-			'email_format' => array(
-				'rule' => 'email',
-				'message' => 'そのメールアドレスが正しくない。',
-			),
-			'min_length' => array(
-				'rule' => array('minLength', 6),
-				'message' => 'メールの最小長が６文字です。',
-			),
-			'max_length' => array(
-				'rule' => array('maxLength', 256),
-				'message' => 'メールの最大長が256文字です。',
-			)
-		),
-		'address' => array(
-			'notEmpty' => array(
-				'rule' => 'notEmpty',
-				'message' => 'アドレスをご入力してください',
-			)			
-		),
-		'phone' => array(
-			'notEmpty' => array(
-				'rule' => 'notEmpty',
-				'message' => '電話番号をご入力してください',
-			),
-			'format_phone' => array(
-				'rule' => array('phone', '/[0-9]+/', 'vn'),
-				'message' => 'その電話番号が正しくないです'
-			)
-		),
-		'verify_code' => array(
-			'notEmpty' => array(
-				'rule' => 'notEmpty',
-				'message' => 'セキュリティー質問をご入力してください'
-			),
-			'max_length' => array(
-				'rule' => array('maxLength', 256),
-				'message' => 'セキュリティー質問の最大長が256文字です。',
-			)
-			
-		),
-		'verify_code_answer' => array(
-			'notEmpty' => array(
-				'rule' => 'notEmpty',
-				'message' => 'セキュリティー答えをご入力してください'
-			),
-			'max_length' => array(
-				'rule' => array('maxLength', 256),
-				'message' => 'セキュリティー質問の最大長が256文字です。',
-			)
-		),
-		'credit_number' => array(
-			'notEmpty' => array(
-				'rule' => 'notEmpty',
-				'message' => 'クレジットカードをご入力してください'
-			),
-			'format_of_teacher' => array(
-				'rule' => '/^[0-9]{8}-[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/',
-				'message' => 'クレジットカードが正しくないです(正しいフォーマット：12345678-1111-2222-3333-4444)'
-			),
-			'format_of_student' => array(
-				'rule' => '/^[0-9]{4}-[0-9]{3}-[0-9]{1}-[0-9]{7}$/',
-				'message' => 'クレジットカードが正しくないです(正しいフォーマット：1111-222-3-4444444)'
-			)
-		),
-		'profile_img' => array(
-			'check_type' => array(
-				'rule' => array('extension', array('gif', 'jpeg', 'png', 'jpg')),
-				'message' => 'アップロードしたファイルのフォーマットが[*.jpg|*.gif|*.jpeg|*.png]です'
-			),
-			'check_size' => array(
-				'rule' => array('fileSize', '<=', '25MB'),
-				'message' => 'ファイルの最大サイズが25MBです。他のファイルをアップロードしてください'
-			)
-		),
-		'information' => array(
-			'notEmpty' => array(
-				'rule' => 'notEmpty',
-				'message' => '自己PRをご入力してください'
-			),
-		)
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'A username is required'
+            ),
+            'isUnique' => array(
+              'rule' => 'isUnique',
+              'message' => 'This Username has already been used.'
+            )
+        ),
+        'email' => 'email',
+        
+        'password' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'A password is required'
+            ),
+            'length' => array(
+                'rule'    => array('minLength', '3'),
+                'message' => 'Minimum 3 characters long'
+            ),
+                        
+        ),
+        'full_name' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'A full name is required'
+            ),
+            'length' => array(
+                'rule'    => array('minLength', '3'),
+                'message' => 'Minimum 3 characters long'
+            ),
+                        
+        ),
+        'birthday' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Birthday is required'
+            )
+                        
+        ),
+        
+        'address' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Address is required'
+            )
+                        
+        ),
+        
+        'phone' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Phone number is required'
+            ),
+            'number' => array(
+		   	    'rule' => 'numeric',       
+		       	'message' => 'Please enter valid phone number'
+    		),
+    		'min_length' => array(
+                'rule'    => array('maxLength', '12'),
+                'message' => 'Please enter valid phone number'
+            ),
+            'max_length' => array(
+                'rule'    => array('minLength', '10'),
+                'message' => 'Please enter valid phone number'
+            ),           
+                        
+        ),
+        
+        'credit_number' => array(
+            'required' => array(
+                'rule' => array('notEmpty'),
+                'message' => 'Credit number is required'
+            )
+                        
+        ),
+        'role' => array(
+            'valid' => array(
+                'rule' => array('inList', array('student', 'teacher','admin')),
+                'message' => 'Please enter a valid role',
+                'allowEmpty' => false
+            )
+        )
     );
+    public $hasOne = array( 
+            'Teacher' => array(
+            'className' => 'Teacher',   
+    		'dependent' => true        
+            ),
+            
+            'Admin' => array(
+            'className' => 'Admin',    
+            'dependent' => true       
+            ),
+            
+            'Student' => array(
+            'className' => 'Student',  
+            'dependent' => true         
+            ),
+            
+            'Ip' => array(
+            'className' => 'Ip',
+            'foreignKey' => 'admin_id',    
+            'dependent' => true      
+            )
+            
+        );
+        
+
     
     // kiem tra password va password_confirmation co match voi nhau khong
     public function matchPassword($data){
