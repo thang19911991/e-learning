@@ -4,6 +4,15 @@ class Student extends  AppModel{
 	// nếu tên Model đặt tên khác thì cần phải ghi rõ tên bảng trong CSDL
 	public $name = "Student";
 	
+	public $belongsTo = array(
+		'User' => array(
+			'className' => 'User',
+			'foreignKey' => 'user_id',
+			'fields' => array('id', 'username'),
+			'dependent' => true
+		)
+	);
+	
 	public $validate = array(
 			'username' => array(
 					// Kiểm tra bằng sử dụng hàm isUniqueUsername($check) đc định nghĩa ở bên dưới
@@ -19,10 +28,12 @@ class Student extends  AppModel{
 			'verifycode_answer' => array('rule' => 'nullCheck')
 	);
 	
-	
-	
-	
-	
+	var $hasOne = array(
+        'User' => array(
+            'className' => 'User',
+            'foreignKey' => 'id'
+        )
+    );
 	/**
 	 *
 	 * Kiem tra tinh duy nhat cua username

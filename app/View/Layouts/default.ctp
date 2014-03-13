@@ -21,15 +21,20 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 <!DOCTYPE html>
 <html>
 <head>
+	<meta http-equiv="refresh" content="3600;url=http://ngothang/e-learning/users/logout" />
+
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		<?php echo "E-Learning" ?>:
 		<?php echo $title_for_layout; ?>
 	</title>
 	<?php
 		echo $this->Html->meta('icon');
 		echo $this->Html->css('cake.generic');
-		echo $this->Html->script("jquery-1.7.2-min");
+		echo $this->Html->css('teacher');
+		echo $this->Html->css('jquery-ui');
+		echo $this->Html->script("jquery-1.10.2");
+		echo $this->Html->script("jquery-ui");
+		//echo $this->Html->script("teacher");
 		
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -37,14 +42,20 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	?>
 </head>
 <body>
+<?php
+		//$allows = array('login', 'register', 'confirm_verify_code', 'home');
+		//if(!$this->Session->check('User') && !in_array($this->action, $allows)):
+?>
+		<!-- <script type="text/javascript">
+			window.location = "<?php //echo $this->Html->url(array('controller' => 'users', 'action' => 'login')); ?>"
+		</script> -->
+<?php //endif; ?>		
 	<div id="container">
 		<div id="header">
 			<h1><?php //echo $this->Html->link($cakeDescription, 'http://cakephp.org'); ?></h1>
 		</div>
 		<div id="content">
-
 			<?php echo $this->Session->flash(); ?>
-
 			<?php echo $this->fetch('content'); ?>
 		</div>
 		<div id="footer">

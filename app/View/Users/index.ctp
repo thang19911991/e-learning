@@ -1,4 +1,3 @@
-<?php
-    echo 'Hello, '. $current_user['username']; 
-   
-?>
+<div class="index">
+<h2>Index</h2>
+</div>
