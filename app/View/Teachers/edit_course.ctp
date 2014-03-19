@@ -11,13 +11,13 @@
 <tr>
 	<th>コース名</th>
 	<td>
-		<?php echo $this->Form->input("course_name", array('label' => false,'value' => $courses['Course']['course_name'], 'required' => 'true')); ?>
+		<?php echo $this->Form->input("course_name", array('label' => false,'value' => $courses['Course']['course_name'], 'required' => 'false')); ?>
 	</td>
 </tr>
 <tr>
 	<th>概要</th>
 	<td>
-		<?php echo $this->Form->input("description", array('label' => false,'type' => 'textarea', 'value' => $courses['Course']['description'])); ?>
+		<?php echo $this->Form->input("description", array('label' => false,'type' => 'textarea', 'value' => $courses['Course']['description'], 'required' => 'false')); ?>
 	</td>
 </tr>
 <tr>

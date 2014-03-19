@@ -37,7 +37,7 @@ class AppController extends Controller {
 	const Login						= "Login";			// lưu số lần login sai
 	const USER_TEMP_NAME			= "UserTemp.username";	// username tam thời
 	
-	public $layout = 'default';
+	public $layout = 'test';
 	
 	public $components = array(
 		'Session',
@@ -51,6 +51,7 @@ class AppController extends Controller {
 	);
     
     public function isAuthorized($user) {
+    	
 	    $user = $this->Auth->user();
 	    
 	    if(isset($user) || !empty($user)){
@@ -66,6 +67,7 @@ class AppController extends Controller {
 	    			'std_search',
 	    			'std_test_result',
 	    			'std_try_course',
+	    			'std_detail_course',
 	    			'std_view_document',
 	    			'std_view_test',
 	    			'view_list_course',
@@ -108,12 +110,8 @@ class AppController extends Controller {
 	    		$this->Auth->allow();
 	    	}
 	    }else{ // 普通のユーザ
-	    	$allows = array('login', 'register', 'logout', 'std_register');
-	    	if(in_array($this->action, $allows)){
-	    		return true;
-	    	}
-	    	$this->redirect(array('controller' => 'homes', 'action' => 'index'));
-	    	return false;
+	    	//$this->redirect(array('controller' => 'home', 'action' => 'index'));
+	    	return true;
 	    }
 	    return true;
 	}

@@ -178,6 +178,10 @@ class User extends AppModel{
 				'rule' => 'notEmpty',
 				'message' => '自己PRをご入力してください'
 			),
+			'max_length' => array(
+				'rule' => array('maxLength', 256),
+				'message' => '自己PRの最大長が256文字です。',
+			),
 		)
     );
     

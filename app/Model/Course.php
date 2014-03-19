@@ -46,13 +46,17 @@ class Course extends  AppModel{
 		'course_name' => array(
 			'notEmpty' => array(
 				'rule' => array('notempty'),
-				'message' => 'Bạn phải nhập trường [コース名]',
-			)
+				'message' => 'コース名をご入力してください',
+			),
+			'max_length' => array(
+				'rule' => array('maxLength', 256),
+				'message' => 'コース名の最大長が256文字です。',
+			),
 		),
 		'description' => array(
 			'notEmpty' => array(
 				'rule' => array('notempty'),
-				'message' => 'Bạn phải nhập trường [概要]',
+				'message' => '概要をご入力してください',
 			)
 		)
 	);

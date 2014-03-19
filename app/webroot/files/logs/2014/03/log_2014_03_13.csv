@@ -1,0 +1,5 @@
+"id","time","actor","action","content","type"
+"LOG_001","1394710981","先生1","ログイン","先生 thang はログインできた","オペレーション"
+"AD_LOG_01_001","1394711001","","View list students user","Admin:  View list students user","operation"
+"AD_LOG_04_001","1394711003","","View profile of an user","Admin:  view an user profile","operation"
+"AD_LOG_07_001","1394711005","","Edit an user information","Admin:  edit an user has id: 12","operation"
