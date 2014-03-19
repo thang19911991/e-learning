@@ -1,5 +1,6 @@
 @CHARSET "UTF-8";
 
+/* TAG */
 #tag_list{
 	height: 20px;	
 }	
@@ -48,4 +49,29 @@
 	width: 200px;
 	height : 10px;
 	overflow: hidden;
+}
+
+
+/* Form Error */
+form .error-message {
+	-moz-border-radius: none;
+	-webkit-border-radius: none;
+	border-radius: none;
+	border: none;
+	background: none;
+	margin: 0;
+	padding-left: 4px;
+	padding-right: 0;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+form .error-message {
+	color: #9E2424;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	-ms-box-shadow: none;
+	-o-box-shadow: none;
+	box-shadow: none;
+	text-shadow: none;
 }

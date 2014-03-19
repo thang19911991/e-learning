@@ -10,7 +10,7 @@ class UsersController extends AppController{
 	}
 
 	function index(){
-
+		
 	}
 
 	function admin_login(){
@@ -69,8 +69,6 @@ class UsersController extends AppController{
 
 	// ユーザのログイン
 	public function login(){
-	
-		
 		$params = $this->getSystemParams();
 
 		if($params!=FALSE){
@@ -179,14 +177,14 @@ class UsersController extends AppController{
 									
 								$this->writeSessionWrongPasswordTime($wrong_password_time+1);
 								$wrong_password_time = $this->readSessionWrongPasswordTime();
-								echo "間違えたユーザ名、パスワード : ". $wrong_password_time. "回/". $params['WRONG_PASS_LIMIT'];
+								$this->Session->setFlash("間違えたユーザ名、パスワード : ". $wrong_password_time. "/". $params['WRONG_PASS_LIMIT'] . "回",'error');
 							}else{
 								$this->writeSessionLockTime(time());
 								$this->deleteSessionWrongPasswordTime();
 								$this->renderLockTime($params[SystemParam::TEMP_LOCK_TIME], $params['LOCK_TIME']);
 							}
 						}else{
-							echo "間違えたユーザ名、パスワード : 1回/5";
+							$this->Session->setFlash("間違えたユーザ名、パスワード : 1/5回",'error');
 							$this->writeSessionWrongPasswordTime(1);
 						}
 					}

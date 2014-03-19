@@ -83,6 +83,30 @@ echo $this->fetch('script');
 }
 
 
+/* Footer 
+-------------------------------------------------- */
+.footer {
+  margin-top: 50px;
+  text-align: center;
+  padding: 30px 0;  
+  border-top: 1px solid #e5e5e5;
+  background-color: #f5f5f5;
+}
+.footer p {
+  margin-bottom: 0;
+  color: #777;
+}
+.footer-links {
+  margin: 10px 0;
+}
+.footer-links li {
+  display: inline;
+  padding: 0 2px;
+}
+.footer-links li:first-child {
+  padding-left: 0;
+}
+
 </style>
 </head>
 <body>
@@ -97,7 +121,7 @@ echo $this->fetch('script');
 			<a href="#" class="navbar-brand">E-learning</a>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav navbar-left">
-					<li class="active"><a href="#">Home</a></li>
+					<li class="active"><a href="<?php echo $this->base.'/home/index'; ?>">Home</a></li>
 					<li><a href="#">Projects</a></li>
 					<li><a href="#">Services</a></li>
 					<li><a href="#">About</a></li>
@@ -170,14 +194,16 @@ echo $this->fetch('script');
 					</div><!-- END CAROUSEL AREA -->
 				</div>
 				
+				<div class="row">
 				<!-- CONTENT AREA -->
 				<div class="row content">
 					<?php echo $this->Session->flash(); ?>
 					<?php echo $this->fetch('content'); ?>
 				</div><!-- END CONTENT AREA -->
+				</div>
 			</div>
 		</div>
-	</div><!-- END BODY AREA -->	
+	</div><!-- END BODY AREA -->
 	
 	<!-- Placed at the end of the document so the pages load faster -->
 	<?php echo $this->Html->script('jquery.min'); ?>

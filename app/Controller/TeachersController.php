@@ -591,6 +591,8 @@ class TeachersController extends AppController{
 						$this->Session->write("User.id",$teacher['User']['id']);
 						$this->Session->write("User.role",$teacher['User']['role']);
 						$this->redirect(array('controller' => 'teachers', 'action' => 'index'));
+					}else{
+						$this->Session->setFlash("あなたが入力したセキュリティー答えは正しくない",'error');
 					}
 				}
 			}

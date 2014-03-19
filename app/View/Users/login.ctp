@@ -1,7 +1,7 @@
 <div class="row">
     <?php echo $this->Session->flash(); ?>
-    <div class="col-md-8 col-md-offset-2">  
-
+    <div class="col-md-8 col-md-offset-2">
+		
 	<?php echo $this->Form->create('User', array(
     'inputDefaults' => array(
         'div' => false,
@@ -9,7 +9,7 @@
         'wrapInput' => false,
         'class' => 'form-control'
     ),
-    'class' => 'well'  
+    'class' => 'well'
 	)); ?>
 
     <div class="form-group">
@@ -18,7 +18,7 @@
 	    'style' => 'width:180px;',
 	    'label' => 'ユーザー名',
 		'required' => false
-	)); ?>  
+	)); ?>
     </div>
     <div class="form-group">
 	<?php echo $this->Form->input('password', array(  
@@ -34,13 +34,4 @@
 	)); ?>
     <?php echo $this->Form->end(); ?>
     </div>  
-</div>
-
-<div class="actions">
-<ul>
-	<li><?php echo $this->Html->link("学生の登録",array('controller' => 'student','action' => 'std_register')); ?></li>
-</ul>
-<ul>
-	<li><?php echo $this->Html->link("先生の登録",array('controller' => 'teachers','action' => 'register')); ?></li>
-</ul>
 </div>

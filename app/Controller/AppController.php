@@ -37,7 +37,7 @@ class AppController extends Controller {
 	const Login						= "Login";			// lưu số lần login sai
 	const USER_TEMP_NAME			= "UserTemp.username";	// username tam thời
 	
-	public $layout = 'test';
+	public $layout = 'home_page';
 	
 	public $components = array(
 		'Session',
