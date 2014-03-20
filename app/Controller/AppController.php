@@ -117,6 +117,7 @@ class AppController extends Controller {
 	}
 	
 	public function beforeFilter(){
+		$this->Session->write('user', $this->Auth->user());
         $this->set('current_user', $this->Auth->user());
     }
 	

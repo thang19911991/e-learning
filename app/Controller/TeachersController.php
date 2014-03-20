@@ -2,7 +2,8 @@
 App::import('Model','Teacher');
 App::import('Controller','Users');
 
-class TeachersController extends AppController{	
+class TeachersController extends AppController{
+	public $layout = "teacher";
 	public $components = array ("RequestHandler");
 	public $name = "Teachers";
 

@@ -10,8 +10,6 @@ function uploaderFilename($name, $field, $data) {
 <?php
 
 class StudentController extends AppController {
-	public $layout = 'student';
-	
 	function beforeFilter() {
 		parent::beforeFilter();
 		$this->Auth->allow('std_register','login', 'index');
@@ -24,7 +22,6 @@ class StudentController extends AppController {
 			$this->loadModel ( 'User' );
 			$this->loadModel ( 'Student' );
 			$this->User->set ( $this->request->data );
-			// debug($this->User->validates());
 			if (! $this->User->validates ()) {
 				unset ( $this->request->data ['Submit'] );
 			} else {

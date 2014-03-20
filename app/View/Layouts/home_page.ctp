@@ -10,6 +10,7 @@
 echo $this->Html->css('bootstrap.min');
 echo $this->Html->css('teacher');
 
+echo $this->Html->script('jquery.min');
 echo $this->fetch('meta');
 echo $this->fetch('css');
 echo $this->fetch('script');
@@ -74,10 +75,10 @@ echo $this->fetch('script');
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a href="" class="navbar-brand">E-learning</a>
+			<a href="<?php echo $this->base.'/home'?>" class="navbar-brand">E-learning</a>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav navbar-left">
-					<li class="active"><a href="#">Home</a></li>
+					<li class="active"><a href="<?php echo $this->base.'/home'?>">Home</a></li>
 					<li><a href="#">Contact</a></li>
 					<li><a href="#">About</a></li>
 					<li><a href="#">Subject</a></li>
@@ -91,7 +92,8 @@ echo $this->fetch('script');
 							<li><a href="#">Action 5</a></li>
 						</ul>
 					</li>
-				</ul>				
+				</ul>
+				<?php if(empty($current_user)):?>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Register<b class="caret"></b></a>
@@ -102,6 +104,7 @@ echo $this->fetch('script');
 					</li>
 					<li><a href="<?php echo $this->base.'/users/login'; ?>">Sign Up</a></li>
 				</ul>
+				<?php endif; ?>
 				<form class="navbar-form navbar-right">
             		<input type="text" class="form-control" placeholder="Search...">
           		</form>
@@ -172,7 +175,6 @@ echo $this->fetch('script');
     </footer>
 	
 	<!-- Placed at the end of the document so the pages load faster -->
-	<?php echo $this->Html->script('jquery.min'); ?>
 	<?php echo $this->Html->script('bootstrap.min'); ?>
 	<?php //echo $this->element('sql_dump'); ?>
 </body>
