@@ -1178,6 +1178,7 @@ class TeachersController extends AppController{
 	
 	// 先生の登録
 	public function register(){
+		$this->layout = "home_page";
 		$this->set('title_for_layout', '先生の登録');
 		$this->loadModel('User');
 		$this->loadModel('Teacher');

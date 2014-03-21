@@ -17,6 +17,9 @@ echo $this->fetch('script');
 ?>
 
 <style type="text/css">
+#header{
+	margin-bottom: 20px;
+}
 
 .carousel-inner > .item > img, .carousel-inner > .item > a > img {
 	min-width:100%;
@@ -66,7 +69,7 @@ echo $this->fetch('script');
 </head>
 <body>
 	<!-- MENU AREA -->
-	<div class="navbar navbar-inverse">
+	<div class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<!-- data-target là để tham chiếu đến cái class = navbar-collapse -->
 			<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -78,7 +81,15 @@ echo $this->fetch('script');
 			<a href="<?php echo $this->base.'/home'?>" class="navbar-brand">E-learning</a>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav navbar-left">
-					<li class="active"><a href="<?php echo $this->base.'/home'?>">Home</a></li>
+					<li class="active">
+						<?php if(!empty($current_user) && $current_user['role']=="student"):?>
+						<a href="<?php echo $this->base.'/student/std_index'?>">ホームページ</a>
+						<?php endif; ?>
+						
+						<?php if(!empty($current_user) && $current_user['role']=="teacher"):?>
+						<a href="<?php echo $this->base.'/teachers/index'?>">ホームページ</a>
+						<?php endif; ?>
+					</li>
 					<li><a href="#">Contact</a></li>
 					<li><a href="#">About</a></li>
 					<li><a href="#">Subject</a></li>
@@ -96,13 +107,27 @@ echo $this->fetch('script');
 				<?php if(empty($current_user)):?>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Register<b class="caret"></b></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">登録<b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="<?php echo $this->base.'/student/std_register'; ?>">Student</a></li>
-							<li><a href="<?php echo $this->base.'/teachers/register'; ?>">Teacher</a></li>
+							<li><a href="<?php echo $this->base.'/student/std_register'; ?>">学生</a></li>
+							<li><a href="<?php echo $this->base.'/teachers/register'; ?>">先生</a></li>
 						</ul>
 					</li>
-					<li><a href="<?php echo $this->base.'/users/login'; ?>">Sign Up</a></li>
+					<li><a href="<?php echo $this->base.'/users/login'; ?>">ログイン</a></li>
+				</ul>
+				<?php else: ?>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $current_user['username']; ?><b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<?php if($current_user['role']=="student"):?>
+							<li><a href="<?php echo $this->base.'/student/std_profile'; ?>">アカウント情報</a></li>
+							<?php elseif($current_user['role']=="teacher"):?>
+							<li><a href="<?php echo $this->base.'/teachers/view_profile'; ?>">アカウント情報</a></li>
+							<?php endif; ?>
+							<li><a href="<?php echo $this->base.'/users/logout'; ?>">ログアウト</a></li>
+						</ul>
+					</li>
 				</ul>
 				<?php endif; ?>
 				<form class="navbar-form navbar-right">

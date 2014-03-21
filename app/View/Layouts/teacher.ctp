@@ -118,15 +118,49 @@ echo $this->fetch('script');
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a href="#" class="navbar-brand">E-learning</a>
+			<a href="<?php echo $this->base.'/home/index'?>" class="navbar-brand">E-learning</a>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav navbar-left">
-					<li class="active"><a href="<?php echo $this->base.'/home/index'; ?>">Home</a></li>
+					<li class="active">
+						<?php if(!empty($current_user) && $current_user['role']=="student"):?>
+						<a href="<?php echo $this->base.'/student/std_index'?>">ホームページ</a>
+						<?php endif; ?>
+						
+						<?php if(!empty($current_user) && $current_user['role']=="teacher"):?>
+						<a href="<?php echo $this->base.'/teachers/index'?>">ホームページ</a>
+						<?php endif; ?>
+					</li>
 					<li><a href="#">Projects</a></li>
 					<li><a href="#">Services</a></li>
 					<li><a href="#">About</a></li>
 					<li><a href="#">Contact</a></li>
 				</ul>
+				<?php if(empty($current_user)):?>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Register<b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="<?php echo $this->base.'/student/std_register'; ?>">Student</a></li>
+							<li><a href="<?php echo $this->base.'/teachers/register'; ?>">Teacher</a></li>
+						</ul>
+					</li>
+					<li><a href="<?php echo $this->base.'/users/login'; ?>">Sign Up</a></li>
+				</ul>
+				<?php else: ?>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $current_user['username']; ?><b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<?php if($current_user['role']==User::STUDENT):?>
+							<li><a href="<?php echo $this->base.'/student/std_profile'; ?>">アカウント情報</a></li>
+							<?php elseif($current_user['role']==User::TEACHER):?>
+							<li><a href="<?php echo $this->base.'/teachers/view_profile'; ?>">アカウント情報</a></li>
+							<?php endif; ?>
+							<li><a href="<?php echo $this->base.'/users/logout'; ?>">ログアウト</a></li>
+						</ul>
+					</li>
+				</ul>
+				<?php endif; ?>
 				<form class="navbar-form navbar-right">
 					<input class="form-control" type="text" placeholder="Search">
 				</form>

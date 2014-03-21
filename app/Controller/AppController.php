@@ -51,6 +51,9 @@ class AppController extends Controller {
 	);
     
     public function isAuthorized($user) {
+    	if($this->action=="logout"){
+    		return true;
+    	}
     	
 	    $user = $this->Auth->user();
 	    

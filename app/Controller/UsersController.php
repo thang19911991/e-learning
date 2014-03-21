@@ -275,11 +275,13 @@ class UsersController extends AppController{
 
 	// ログアウト
 	function logout(){
+		$this->Session->destroy();
+		/*
 		$this->Session->delete('User');
 		$this->Session->delete(parent::TempLock);
 		$this->Session->delete(parent::TempLock_time);
 		$this->Session->delete(parent::Login);
-		$this->Session->delete(parent::USER_TEMP_NAME);
+		$this->Session->delete(parent::USER_TEMP_NAME);*/
 		return $this->redirect(array('controller'=>'users', 'action'=>'login'));
 	}
 
