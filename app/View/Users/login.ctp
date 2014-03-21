@@ -33,5 +33,5 @@
 	    'class' => 'btn btn-primary'  
 	)); ?>
     <?php echo $this->Form->end(); ?>
-    </div>  
+    </div>
 </div>

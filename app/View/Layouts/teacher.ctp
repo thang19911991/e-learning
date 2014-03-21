@@ -8,6 +8,8 @@
 //echo $this->Html->css('cake.generic');
 //echo $this->Html->css('bootstrap-theme.min');
 echo $this->Html->css('bootstrap.min');
+echo $this->Html->css('teacher');
+echo $this->Html->script('jquery.min');
 
 echo $this->fetch('meta');
 echo $this->fetch('css');
@@ -184,7 +186,6 @@ echo $this->fetch('script');
 	</div><!-- END BODY AREA -->
 	
 	<!-- Placed at the end of the document so the pages load faster -->
-	<?php echo $this->Html->script('jquery.min'); ?>
 	<?php echo $this->Html->script('bootstrap.min'); ?>
 	<?php //echo $this->element('sql_dump'); ?>
 </body>

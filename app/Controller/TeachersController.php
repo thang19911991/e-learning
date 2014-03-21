@@ -715,70 +715,78 @@ class TeachersController extends AppController{
 		));
 	}
 	
-/*
+	/*
 	 * プロファイル変化
 	 */
-	public function change_profile(){
+	public function change_profile(){		
 		if (($this->Auth->user ( 'id' ) == null)) {
 			$this->redirect ( array (
-					'controller' => 'users',
-					'action' => 'login' 
-					) );
+						'controller' => 'users',
+						'action' => 'login' 
+					));
 		}
 		$this->loadModel('User');
+		$validator = $this->User->validator();
+		unset($validator['credit_number']['format_of_student']);
+		
 		//プロファイル情報とって
 		$profile = $this->User->find('first',array(
 			'conditions' => array('User.id' => $this->Auth->user('id'))
 		));
-		//		debug($profile);
-		$this->set("data",$profile);
 		
 		//リクエスト処理
 		if($this->request->is ('post') && !empty($this->data)){
-			//ログ
-			$this->writeLog(array(
-				'id' => 'LOG_006',
-	            'time' => time(),
-	            'actor' => $this->Auth->user('id'),
-	            'action' => 'プロファイル変化',
-	            'content' => '先生 '.$this->Auth->user('id').' は自分のプロファイル変化する',
-	            'type' => 'オペレーション'
-			));
-			
-			$tmp = $this->data;
-			$tmp['User']['id'] = $this->Auth->user ( 'id' );
-//			debug($tmp);
-			$dataSource = $this->User->getDataSource();
-			try{
-				$dataSource->begin();
-				//プロファイルセーブ
-				if(!$this->User->save($tmp)){
-					throw new Exception();
+			$this->User->set($this->request->data);
+			if($this->User->validates()){
+				//ログ
+				$this->writeLog(array(
+					'id' => 'LOG_006',
+		            'time' => time(),
+		            'actor' => $this->Auth->user('id'),
+		            'action' => 'プロファイル変化',
+		            'content' => '先生 '.$this->Auth->user('id').' は自分のプロファイル変化する',
+		            'type' => 'オペレーション'
+				));
+				
+				$tmp = $this->data;
+				$tmp['User']['id'] = $this->Auth->user ( 'id' );
+				$dataSource = $this->User->getDataSource();
+				try{
+					$dataSource->begin();
+					//プロファイルセーブ
+					if(!$this->User->save($tmp)){
+						throw new Exception();
+					}
+					$dataSource->commit();
+					//ログ
+					$this->writeLog(array(
+						'id' => 'LOG_007',
+			            'time' => time(),
+			            'actor' => 'システム',
+			            'action' => 'プロファイル変化',
+			            'content' => '先生 '.$this->Auth->user('id').' は自分のプロファイル変化できる',
+			            'type' => 'イベント'
+					));
+					$this->redirect(array('controller' => 'teachers','action' => 'view_profile'));
+				}catch(Exception $e){
+					$this->Session->setFlash ( "データベースエラー：セーブできません" );
+					//データベースロール
+					$dataSource->rollback();
+					//ログ
+					$this->writeLog(array(
+						'id' => 'LOG_008',
+			            'time' => time(),
+			            'actor' => 'システム',
+			            'action' => 'プロファイル変化',
+			            'content' => '先生 '.$this->Auth->user('id').' は自分のプロファイル変化できない',
+			            'type' => 'エラー'
+					));
 				}
-				$dataSource->commit();
-				//ログ
-				$this->writeLog(array(
-					'id' => 'LOG_007',
-		            'time' => time(),
-		            'actor' => 'システム',
-		            'action' => 'プロファイル変化',
-		            'content' => '先生 '.$this->Auth->user('id').' は自分のプロファイル変化できる',
-		            'type' => 'イベント'
-				));
-			}catch(Exception $e){
-				$this->Session->setFlash ( "データベースエラー：セーブできません" );
-				//データベースロール
-				$dataSource->rollback();
-				//ログ
-				$this->writeLog(array(
-					'id' => 'LOG_008',
-		            'time' => time(),
-		            'actor' => 'システム',
-		            'action' => 'プロファイル変化',
-		            'content' => '先生 '.$this->Auth->user('id').' は自分のプロファイル変化できない',
-		            'type' => 'エラー'
-				));
+			}else{
+				$this->set("data",$this->request->data);
 			}
+		}else{
+			$this->set("data",$profile);
 		}
 	}
 
@@ -805,12 +813,14 @@ class TeachersController extends AppController{
 //			var_dump($data);
 			//データベースセーブ
 			$dataSource = $this->User->getDataSource();
+			
 			try{
 				$dataSource->begin();
 				//パスワードセーブ
 				$this->User->save($data);
 				//データベースコミット
 				$dataSource->commit();
+				$this->redirect(array('controller' => 'teachers', 'action' => 'view_profile'));
 			}catch(Exception $e){
 				$this->Session->setFlash ( "データベースエラー：セーブできません" );
 				//データベースロール
