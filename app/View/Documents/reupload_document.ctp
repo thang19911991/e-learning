@@ -1,21 +1,22 @@
-<div>
-<h1>ドキュメント　レーアップロード
-</h1>
-</div>
-<?php 
-	echo $this->Form->create('Document',array(
+<style>
+.main {
+	margin-top: 50px;
+}
+</style>
+<div class="col-sm-6 col-sm-offset-2 col-md-6 col-md-offset-2 main">
+	<div class="row">
+		<span class="label label-danger" style="font-size: 21px;" >ドキュメントを再アップロード</span>
+		<?php echo $this->Form->create('Document',array(
 			'type'=>'file',
+			'class' => 'well',
 			'inputDefaults' => array (
+				'class' => 'form-control',
 				'label' => false,
 				'div' =>false
 				)
-			)
-		);
-?>
-<div>
-<table>
-	<tr>
-		<td>
+			));
+		?>
+		<div class="form-group">
 			<?php 
 				echo $this->Form->input("name", array(
 					'label' => 'ドキュメント名',
@@ -23,35 +24,31 @@
 					'value' => $data["Document"]["name"]
 				));
 			?>
-		</td>	
-	</tr>
-	<tr>
-		<td>
+		</div>
+		<div class="form-group">
 			<?php 
 				echo $this->Form->file("document_file", array(
 					'id' => 'documentFileId',
 					'name' => 'documentFile'
 				)); 
 			?>
-		</td>
-	</tr>
-	<tr>
-		<td>
+		</div>
+		<div class="form-group">
 			<?php 
 				echo $this->Form->checkbox("checkCopyright", array(
 					'value' => '0'
 				)); 
 				echo "アップロードファイルのCopyrightはOKか。<br><br>";
 			?>
-		</td>
-	</tr>
-	<tr>
-		<td>
+		</div>
 		<?php 
 			echo $this->Form->button("Clear",array(
-				'type' => 'reset'
+				'class' => 'btn btn-default',
+				'type' => 'reset',
+				'style' => 'margin-right:10px;'
 			));
 			echo $this->Form->button('Save',array(
+				'class' => 'btn btn-primary',
 				'controller' => 'documents', 
 				'action' => 'reupload_document',
 				'type' => 'submit',
@@ -59,9 +56,7 @@
 			));
 			echo $this->Form->end();
 		?>
-		</td>
-	</tr>
-</table>
+	</div>
 </div>
 
 <script type="text/javascript">

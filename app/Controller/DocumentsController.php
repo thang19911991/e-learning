@@ -1,17 +1,17 @@
 <?php
+App::import('Model','Teacher');
+App::import('Controller','Users');
 class DocumentsController extends AppController{
-	public function beforeFilter(){
-		parent::beforeFilter();
-	}
-	
-	var $helpers = array (
+	public $layout = "teacher";
+	public $helpers = array (
 			"Html",
 			"Session",
 			"Form",
 			"Paginator",
 			"Js" => array ("JQuery")
 	);
-	var $components = array ("Session", "RequestHandler", "Auth");
+	
+	public $components = array ("Session", "RequestHandler", "Auth");
 	
 	//pdf, doc, docx, ppt, pptx
 	const TEXT_SIZE = 5000000;
@@ -24,15 +24,19 @@ class DocumentsController extends AppController{
 	//test file
 	const TEST_SIZE = 2000000;
 	
-/*
+	public function beforeFilter(){
+		parent::beforeFilter();
+	}
+	
+	/*
 	 * 授業のドキュメントレーアップロード
 	 */
 	public function reupload_document($documentId){
 		if (($this->Auth->user ( 'id' ) == null)) {
 			$this->redirect ( array (
 					'controller' => 'users',
-					'action' => 'login' 
-					) );
+					'action' => 'login'
+			));
 		}
 		
 		$insertData=array();
@@ -43,14 +47,10 @@ class DocumentsController extends AppController{
 		));
 		//古いファイル
 		$oldFile = substr ( $document['Document']['path'], strrpos ( $document['Document']['path'], "/" ) + 1, strlen ( $document['Document']['path'] ) );
-//		echo $oldFile;
-//		debug($document);
 		$this->set("data",$document);
 
 		//リクエスト処理
 		if ($this->request->is ('post') && !empty($this->data)){
-//			debug($this->data);
-//			debug($_FILES);
 			//ファイルフォーマットチェック
 			if($this->data['Document']['name']!="" && $_FILES['documentFile']['name']!=""){
 				$array_ext = array (
@@ -154,8 +154,9 @@ class DocumentsController extends AppController{
 		            'content' => '先生 '.$this->Auth->user('id').' はドキュメントの　 '.$documentId.'にレーファイルをアップロードできる',
 		            'type' => 'イベント'
 				));
+				
+				return $this->redirect(array('controller' => 'teachers', 'action' => 'view_a_course', $documentId));
 			}catch(Exception $e){
-//				echo "<br>EXCEPTION<br>";
 				$this->Session->setFlash ( "エラー、アップロードできません" );
 				$dataSource->rollback();
 				//ログ
@@ -168,8 +169,6 @@ class DocumentsController extends AppController{
 		            'type' => 'エラー'
 				));
 			}
-		} else {
-			
 		}
 	}
 	

@@ -620,8 +620,8 @@ class TeachersController extends AppController{
 		));
 		
 		if(empty($courses)){
-			$this->Session->setFlash("ユーザIDが既存しない");
-			return $this->redirect(array('controller' => 'teachers', 'action' => 'view_a_course', $id));
+			$this->Session->setFlash("コースIDが既存しない");
+			//return $this->redirect(array('controller' => 'teachers', 'action' => 'view_a_course', $id));
 		}else{
 			$courses = $courses[0];
 			$this->set(compact("courses"));
@@ -1144,7 +1144,7 @@ class TeachersController extends AppController{
 		$this->set('course_id', $id);
 		$this->loadModel('Course');
 		$this->loadModel('Like');
-		$this->loadModel('CourseTag');				
+		$this->loadModel('CourseTag');
 		
 		// Courseテーブルからデータのquery
 		$this->Course->recursive = 2;
@@ -1156,7 +1156,7 @@ class TeachersController extends AppController{
 		
 		if(!$courses){
 			$this->Session->setFlash("コースIDが既存しない");
-			return $this->redirect(array('action' => 'show_courses'));
+			//return $this->redirect(array('action' => 'view_list_course'));
 		}
 		
 		$courses = $courses[0];

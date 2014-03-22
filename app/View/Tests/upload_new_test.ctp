@@ -1,56 +1,53 @@
-<div>
-<h1>新しいテストアップロード
-</h1>
-</div>
-<?php 
-	echo $this->Form->create('Test',array(
+<style>
+.main {
+	margin-top: 50px;
+}
+</style>
+<div class="col-sm-9 col-sm-offset-5 col-md-9 col-md-offset-2 main">
+	<div class="row">		
+		<span class="label label-danger" style="font-size: 21px;" >新テストアップロード</span>
+		<?php echo $this->Form->create('Test',array(
 			'type'=>'file',
+			'class' => 'well',
 			'inputDefaults' => array (
 				'label' => false,
-				'div' =>false
+				'div' =>false,
+				'class' => 'form-control'
 				)
-			)
-		);
-?>
-<div>
-<table>
-	<tr>
-		<td>
+			));
+		?>
+		<div class="form-group">
 			<?php 
 				echo $this->Form->input("name", array(
 					'label' => 'テスト名',
 					'size' => '10',
 				));
 			?>
-		</td>	
-	</tr>
-	<tr>
-		<td>
+		</div>
+		<div class="form-group">
 			<?php 
 				echo $this->Form->file("test_file", array(
 					'id' => 'testFileId',
 					'name' => 'testFile'
 				)); 
 			?>
-		</td>
-	</tr>
-	<tr>
-		<td>
+		</div>
+		<div class="form-group">
 			<?php 
 				echo $this->Form->checkbox("checkCopyright", array(
 					'value' => '0'
 				)); 
 				echo "アップロードファイルのCopyrightはOKか。<br><br>";
 			?>
-		</td>
-	</tr>
-	<tr>
-		<td>
+		</div>	
 		<?php 
 			echo $this->Form->button("Clear",array(
+				'class' => 'btn btn-default',
+				'style' => 'margin-right:5px;',
 				'type' => 'reset'
 			));
 			echo $this->Form->button('Save',array(
+				'class' => 'btn btn-primary',
 				'controller' => 'tests', 
 				'action' => 'upload_new_test',
 				'type' => 'submit',
@@ -58,11 +55,9 @@
 			));
 			echo $this->Form->end();
 		?>
-		</td>
-	</tr>
-</table>
+	</div>
 </div>
-
+	
 <script type="text/javascript">
 	function checkBeforeSubmit(){
 		//check copyright

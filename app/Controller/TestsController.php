@@ -1,6 +1,8 @@
 <?php
+App::import('Model','Teacher');
+App::import('Controller','Users');
 class TestsController extends AppController{
-	
+	public $layout = "teacher";
 	public function beforeFilter(){
 		parent::beforeFilter();
 	}

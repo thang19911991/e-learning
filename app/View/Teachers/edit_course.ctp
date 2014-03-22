@@ -5,8 +5,8 @@
 </style>
 <div class="col-sm-6 col-sm-offset-5 col-md-6 col-md-offset-2 main">
 	<div class="row">
-		<span class="label label-danger" style="font-size: 21px;" >授業情報変化</span>
 		<?php if(!empty($courses)): ?>
+		<span class="label label-danger" style="font-size: 21px;" >授業情報変化</span>
 		<?php $tags = array(); ?>
 		<?php foreach($courses['Tag'] as $t): ?>
 			<?php  $tags[] = $t['tag_name']; ?>
@@ -61,7 +61,7 @@
 		<?php echo $this->Form->end(); ?>
 		
 		<?php else: ?>
-		<?php echo "コースIDが既存しない"; ?>
+		<span class="label label-danger" style="font-size: 20px"><?php echo "そのコースIDが既存しない";?></span>
 		<?php endif; ?>
 	</div>
 </div>
@@ -157,4 +157,3 @@
 		}); // end autocomplete
 	});
 </script>
-
