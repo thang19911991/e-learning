@@ -152,13 +152,25 @@ class TeacherHelper extends AppHelper{
 						 	  	echo "<li><a href=\"" .$this->base.'/teachers/index'. "\">先生のページ</a></li>";
 						 	  	echo "<li><a href=\"". $this->base.'/teachers/view_profile'. "\">プロファイル情報</a></li>";
 						 	  	echo "<li><a href=\"". $this->base.'/teachers/view_list_course'. "\">コースリスト</a></li>";
-						 	  	echo "<li class=\"active\"><a>新ドテストアップロード</a></li>";
+						 	  	echo "<li class=\"active\"><a>新テストアップロード</a></li>";
 					            echo "<li><a href=\"". $this->base.'/teachers/create_new_course'. "\">授業作成</a></li>";
 					            echo "<li><a href=\"". $this->base.'/teachers/course_manage'. "\">コースの学生管理</a></li>";
 					            echo "<li><a href=\"". $this->base.'/users/logout' ."\">ログアウト</a></li>";
 					          echo "</ul>";
 						echo "</div>";
 						break;
+					case "reupload_test":
+						echo "<div class=\"col-sm-3 col-md-2 sidebar\">";
+						 	  echo "<ul class=\"nav nav-sidebar\">";
+						 	  	echo "<li><a href=\"" .$this->base.'/teachers/index'. "\">先生のページ</a></li>";
+						 	  	echo "<li><a href=\"". $this->base.'/teachers/view_profile'. "\">プロファイル情報</a></li>";
+						 	  	echo "<li><a href=\"". $this->base.'/teachers/view_list_course'. "\">コースリスト</a></li>";
+						 	  	echo "<li class=\"active\"><a>テスト再アップロード</a></li>";
+					            echo "<li><a href=\"". $this->base.'/teachers/create_new_course'. "\">授業作成</a></li>";
+					            echo "<li><a href=\"". $this->base.'/teachers/course_manage'. "\">コースの学生管理</a></li>";
+					            echo "<li><a href=\"". $this->base.'/users/logout' ."\">ログアウト</a></li>";
+					          echo "</ul>";
+						echo "</div>";
 						break;
 				}
 				break;

@@ -183,20 +183,15 @@ class TestsController extends AppController{
 		$test = $this->Test->find('first',array(
 			'conditions' => array('Test.id' => $testId)
 		));
-//		debug($test);
 		
 		$teacherID = $this->Auth->user('id');
 		
 		//古いファイル
 		$oldFile = substr ( $test['Test']['path'], strrpos ( $test['Test']['path'], "/" ) + 1, strlen ( $test['Test']['path'] ) );
-		echo $oldFile;
-//		debug($test);
 		$this->set("data",$test);
 
 		//リクエスト処理
 		if ($this->request->is ('post') && !empty($this->data)){
-//			debug($this->data);
-//			debug($_FILES);
 			if($this->data['Test']['name']!="" && $_FILES['testFile']['name']!=""){
 				// ファイル延長
 				$ext = strtolower ( trim ( substr ( $_FILES['testFile']['name'], strrpos ( $_FILES['testFile']['name'], "." ) + 1, strlen ( $_FILES['testFile']['name'] ) ) ) );
