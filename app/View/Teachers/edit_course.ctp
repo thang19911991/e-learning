@@ -1,46 +1,72 @@
-<div class="index">
-<h2>コース情報変化</h2>
-<?php if(!empty($courses)): ?>
-<?php $tags = array(); ?>
-<?php foreach($courses['Tag'] as $t): ?>
-	<?php  $tags[] = $t['tag_name']; ?>
-<?php endforeach;?>
-
-<?php echo $this->Form->create("Course", array('url' => array('controller' => 'teachers', 'action' => 'edit_course', $id))); ?>
-<table>
-<tr>
-	<th>コース名</th>
-	<td>
-		<?php echo $this->Form->input("course_name", array('label' => false,'value' => $courses['Course']['course_name'], 'required' => 'false')); ?>
-	</td>
-</tr>
-<tr>
-	<th>概要</th>
-	<td>
-		<?php echo $this->Form->input("description", array('label' => false,'type' => 'textarea', 'value' => $courses['Course']['description'], 'required' => 'false')); ?>
-	</td>
-</tr>
-<tr>
-	<th>タグ</th>
-	<td>
-		<div class="text_tag">
-			<?php foreach ($tags as $tag): ?>
-				<div class="tags"><?php echo $tag; ?><a class="delete"></a></div>
-			<?php endforeach; ?>
-			<input name="username" placeholder="type and enter" id="tag_list">
+<style>
+.main {
+	margin-top: 50px;
+}
+</style>
+<div class="col-sm-6 col-sm-offset-5 col-md-6 col-md-offset-2 main">
+	<div class="row">
+		<span class="label label-danger" style="font-size: 21px;" >授業情報変化</span>
+		<?php if(!empty($courses)): ?>
+		<?php $tags = array(); ?>
+		<?php foreach($courses['Tag'] as $t): ?>
+			<?php  $tags[] = $t['tag_name']; ?>
+		<?php endforeach;?>		
+		
+		<?php echo $this->Form->create("Course", array(
+			'url' => array('controller' => 'teachers', 'action' => 'edit_course', $id),
+			'class' => 'well',
+			'inputDefaults' => array(
+				'div' => false,
+				'label' => false,
+				'class' => 'form-control'
+			)
+		)); ?>
+		
+		<div class="form-group">
+			<label>コース名</label>
+			<?php echo $this->Form->input("course_name", array(
+				'value' => $courses['Course']['course_name'], 'required' => 'false'));
+			?>
 		</div>
-	</td>
-</tr>
-
-<tr>
-	<td></td>
-	<td>
-		<?php echo $this->Form->submit('Submit',array('label' => false, 'id' => 'btn_submit')); ?>
+		
+		<div class="form-group">
+			<label for="description">概要</label><br>
+			<?php echo $this->Form->textarea("description", array(
+					'class' => 'form-control',
+					'rows' => 10,
+					'cols' => 50,
+					'value' => $courses['Course']['description'], 
+					'required' => 'false'
+			));?>
+		</div>
+		
+		<div class="form-group">
+			<label>タグ</label>
+			<div class="text_tag">
+				<?php foreach ($tags as $tag): ?>
+					<div class="tags"><?php echo $tag; ?><a class="delete"></a></div>
+				<?php endforeach; ?>
+				<?php echo $this->Form->input("username", array(
+						'class' => 'form-control',
+						'placeholder' => 'type and enter',
+						'id' => 'tag_list'
+					));
+				?>
+			</div>
+		</div>
+		<?php echo $this->Form->submit('Submit',array(
+			'class' => 'btn btn-primary',
+			'label' => false, 
+			'id' => 'btn_submit')); ?>
 		<?php echo $this->Form->end(); ?>
-	</td>
-</tr>
-</table>
+		
+		<?php else: ?>
+		<?php echo "コースIDが既存しない"; ?>
+		<?php endif; ?>
+	</div>
 </div>
+
+
 <script type="text/javascript">	
 	$(function(){
 		var added_tags = [];
@@ -132,30 +158,3 @@
 	});
 </script>
 
-<?php else: ?>
-
-<?php echo "コースIDが既存しない"; ?>
-
-<?php endif; ?>
-
-<div class="actions">
-	<ul>
-		<li>
-			<?php echo $this->Html->link( "ホームページ", array('controller' => 'teachers', 'action'=>'index')); ?>
-		</li>
-		<li>
-			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teachers', 'action'=>'view_list_course')); ?>
-		</li>
-		<li>
-			<?php echo $this->Html->link( "コース作成",   array('controller' => 'teachers', 'action'=>'create_new_course')); ?>
-		</li>
-		<li>
-			<?php echo $this->Html->link( "コース管理",   array('controller' => 'teachers', 'action'=>'course_manage', $id)); ?>
-		</li>
-		<li>
-		<?php if($current_user): ?>
-		<?php echo $this->Html->link( "ログアウト", array('controller' => 'teachers', 'action'=>'logout')); ?>
-		<?php endif; ?>
-		</li>
-	</ul>
-</div>

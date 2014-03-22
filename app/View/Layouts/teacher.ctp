@@ -11,6 +11,9 @@ echo $this->Html->css('bootstrap.min');
 echo $this->Html->css('teacher');
 echo $this->Html->script('jquery.min');
 
+echo $this->Html->css('jquery-ui');
+echo $this->Html->script("jquery-ui");
+
 echo $this->fetch('meta');
 echo $this->fetch('css');
 echo $this->fetch('script');

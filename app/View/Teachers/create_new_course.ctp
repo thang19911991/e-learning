@@ -1,166 +1,164 @@
-<div class="index">
-<h1>授業作成</h1>
-<div class="error">
-	<?php 
-		echo $this->Session->Flash();
-	?>
-</div>
-<br>
-<?php
-echo $this->Form->create('Course',array(
-		'type'=>'file',
-		'inputDefaults' => array (
-			'label' => false,
-			'div' =>false
-)
-)
-);
-?>
-<table id="infoTable">
-	<tr>
-		<td>
-		<h3><label for="course_name">授業名 </label></h3>
-		</td>
-		<td><?php 
-		echo $this->Form->input("course_name");
-		?></td>
-	</tr>
-	<tr>
-		<td>
-		<h3><label for="description">概要 </label></h3>
-		</td>
-		<td><?php 
-		echo $this->Form->textarea("description", array(
-			'rows' => 10,
-			'cols' => 50
-		));
-		?></td>
-	</tr>
-	<tr>
-		<td>
-		<h3><label for="tag">タグ </label></h3>
-		</td>
-		<td><?php 
-		echo $this->Form->input("tag0",array());
-		echo $this->Form->button("More tag", array(
-				'class' => 'moreTag',
-				'type' => 'button',
-				'id' => 'mTag',
-				'onclick' => 'getMoreTag();'
-			));
-		echo $this->Form->input("tagNumber",array(
-				'id' => 'tagNumberId',
-				'type' => 'hidden',
-				'value' => 0
-			));	
-		?></td>
-	</tr>
-	
-</table>
-<h3>授業ファイル </h3>
-<table id="lessonTable">
-	<tr>
-		<td>
-			<?php
-				echo $this->Form->input("lessonName0",  array(
-					'label' => 'レーション名',
-					'size' => '10'
-				));
-			?>
-		</td>
-		<td>
-			<?php 
-				echo $this->Form->file("lesson", array(
-					'name' => 'lessonFile0',
-					'id' => 'lessonFileId0'
-				));
-				?>
-		</td>
-		<td>
-			<?php
-				echo $this->Form->button("More file", array(
-					'class' => 'lessonMoreFile',
-					'type' => 'button',
-					'id' => 'mfLesson',
-					'onclick' => 'getMoreLessonFile();'
+<style>
+.main {
+	margin-top: 50px;
+}
+</style>
+<div class="col-sm-6 col-sm-offset-5 col-md-6 col-md-offset-2 main">
+	<div class="row">
+		<?php echo $this->Session->flash(); ?>
+		<span class="label label-danger" style="font-size: 21px;" >授業作成</span>
+		<?php echo $this->Form->create('Course',array(
+			'type'=>'file',
+			'inputDefaults' => array (
+				'label' => false,
+				'div' =>false,
+				'class' => 'form-control'
+		),
+		'class' => 'well'
+		));?>
+		
+		<div id="infoTable">
+			<div class="form-group">
+			<?php echo $this->Form->input("course_name", array(
+				'label' => '授業名',
+			));?>
+			</div>
+			
+			<div class="form-group">
+			<label for="description">概要</label><br>
+			<?php echo $this->Form->textarea("description", array(
+					'class' => 'form-control',
+					'rows' => 10,
+					'cols' => 50
+			));?>
+			</div>
+			
+			<div class="form-group">
+				<div class="form-inline">
+				<label>タグ</label>
+				<?php echo $this->Form->button("More tag", array(
+						'class' => 'moreTag btn btn-primary',
+						'style' => 'margin-bottom:2px;float:right',
+						'type' => 'button',
+						'id' => 'mTag',
+						'onclick' => 'getMoreTag();'
+					));?>
+				<?php echo $this->Form->input("tagNumber",array(
+						'id' => 'tagNumberId',
+						'type' => 'hidden',
+						'value' => 0
+					));	?>
+				</div>
+				<?php echo $this->Form->input("tag0",array(
+					'class' => 'form-control',
+					'label' => false
+				));?>
+			</div>
+		</div>
+		
+		<h3>授業ファイル</h3>
+		<div id="lessonTable">
+			<div class="form-group">
+				<div class="form-inline">
+				<label>ドキュメント名</label>
+				<?php
+					echo $this->Form->button("More file", array(
+						'class' => 'lessonMoreFile btn btn-primary',
+						'style' => 'margin-bottom:2px;float:right',
+						'type' => 'button',
+						'id' => 'mfLesson',
+						'onclick' => 'getMoreLessonFile();'
+						));
+					echo $this->Form->input("lessonFileNumber",array(
+						'id' => 'lessonFileNumberId',
+						'type' => 'hidden',
+						'value' => 0
 					));
-				echo $this->Form->input("lessonFileNumber",array(
-					'id' => 'lessonFileNumberId',
-					'type' => 'hidden',
-					'value' => 0
-				));
-			?>
-		</td>
-	</tr>
-</table>
-<h3>テストファイル </h3>
-<table id="testTable">
-	<tr>
-		<td>
-			<?php
-				echo $this->Form->input("testName0",  array(
-					'label' => 'テスト名&nbsp&nbsp&nbsp&nbsp&nbsp',
-					'size' => '10'
-				));
-			?>
-		</td>
-		<td>
-			<?php 
-				echo $this->Form->file("test", array(
-					'name' => 'testFile0',
-					'id' => 'testFileId0'
-				));
 				?>
-		</td>		
-		<td>
-			<?php 
-				echo $this->Form->button("More file", array(
-					'class' => 'testMoreFile',
-					'type' => 'button',
-					'id' => 'mfTest',
-					'onclick' => 'getMoreTestFile();'
-				));
-				
-				echo $this->Form->input("testFileNumber",array(
-					'id' => 'testFileNumberId',
-					'type' => 'hidden',
-					'value' => 0
-				));
-		?>
-		</td>
-	</tr>
-</table>
+				</div>
+				<?php
+					echo $this->Form->input("lessonName0",  array(
+						'size' => '10'
+					));
+				?>
+				<?php
+					echo $this->Form->file("lesson", array(
+						'name' => 'lessonFile0',
+						'id' => 'lessonFileId0'
+					));
+				?>
+			</div>
+		</div>
+		
+		<h3>テストファイル </h3>
+		<div id="testTable">
+			<div class="form-group">
+				<div class="form-inline">
+				<label>テスト名</label>
+				<?php 
+					echo $this->Form->button("More file", array(
+						'class' => 'testMoreFile btn btn-primary',
+						'style' => 'margin-bottom:2px;float:right',
+						'type' => 'button',
+						'id' => 'mfTest',
+						'onclick' => 'getMoreTestFile();'
+					));
+					
+					echo $this->Form->input("testFileNumber",array(
+						'id' => 'testFileNumberId',
+						'type' => 'hidden',
+						'value' => 0
+					));
+				?>
+				</div>
+				<?php
+					echo $this->Form->input("testName0",  array(
+						'size' => '10'
+					));
+				?>
+				<?php
+					echo $this->Form->file("test", array(
+						'name' => 'testFile0',
+						'id' => 'testFileId0'
+					));
+				?>
+			</div>			
+		</div>
+		
+		<div class="form-group">
+		<?php echo $this->Form->checkbox("checkCopyright", array(
+				'value' => '0'
+		));
+		echo "アップロードファイルのCopyrightはOKか。"; ?>
+		</div>
+		
 		<?php
-		echo $this->Form->checkbox("checkCopyright", array(
-			'value' => '0'
-		)); 
-		echo "アップロードファイルのCopyrightはOKか。<br><br>";
 		echo $this->Form->button("Clear",array(
-			'type' => 'reset'
+				'style' => 'margin-right:10px;',
+				'class' => 'btn btn-default',
+				'type' => 'reset'
 		));
 		echo $this->Form->button('Create',array(
-			'controller' => 'teachers', 
-			'action' => 'create_new_course',
-			'onclick' => 'return checkFileName()'
+				'class' => 'btn btn-primary',
+				'controller' => 'teachers', 
+				'action' => 'create_new_course',
+				'onclick' => 'return checkFileName()'
 		));
 		echo $this->Form->end();
-			?>
-		
-			
+		?>
+		</div>
+</div>
+	
+	
 <script type="text/javascript">
 	var countLesson = 1, countTest=1, countTag=1;
 	function getMoreLessonFile(){
 		$("#lessonTable").append(
-				"<tr>"+
-				"<td>"+
-				"<label for='CourseLessonName"+countLesson+"'>"+
-				"レーション名</label>"+
-				"<input id='CourseLessonName"+countLesson+"' type='text' size='10' name='data[Course][lessonName"+countLesson+"]'>"+
-				"</td>"+
-				"<td>"+
+				"<label for='CourseLessonName"+countLesson+"'>ドキュメント名</label>"+
+				"<div class='form-group'>" +
+				"<input class='form-control' id='CourseLessonName"+countLesson+"' type='text' size='10' name='data[Course][lessonName"+countLesson+"]'>"+
 				"<input type='file' name='lessonFile"+countLesson+"' id='lessonFileId"+countLesson+"'>"+
-				"</td>"+
-				"</tr>"
+				"</div>"				
 				);
 		$("#lessonFileNumberId").val(countLesson);
 		countLesson++;
@@ -168,16 +166,11 @@ echo $this->Form->create('Course',array(
 	
 	function getMoreTestFile(){
 		$("#testTable").append(
-				"<tr>"+
-				"<td>"+
-				"<label for='CourseTestName"+countTest+"'>"+
-				"テスト名&nbsp&nbsp&nbsp&nbsp&nbsp</label>"+
-				"<input id='CourseTestName"+countTest+"' type='text' size='10' name='data[Course][testName"+countTest+"]'>"+
-				"</td>"+
-				"<td>"+
+				"<label for='CourseTestName"+countTest+"'>テスト名</label>"+
+				"<div class='form-group'>" +
+				"<input class='form-control' id='CourseTestName"+countTest+"' type='text' size='10' name='data[Course][testName"+countTest+"]'>"+
 				"<input type='file' name='testFile"+countTest+" id='lessonFileId"+countLesson+"''>"+
-				"</td>"+
-				"</tr>"
+				"</div>"
 				);
 		$("#testFileNumberId").val(countTest);
 		countTest++;
@@ -185,8 +178,9 @@ echo $this->Form->create('Course',array(
 
 	function getMoreTag(){
 		$("#infoTable").append(
-			"<tr><td></td>"+
-			"<td><input id='CourseTag"+countTag +"' type='text' name='data[Course][tag"+countTag+"]'></td>"
+			"<div class='form-group'>"+
+			"<input class='form-control' id='CourseTag"+countTag +"' type='text' name='data[Course][tag"+countTag+"]'>"+
+			"</div>"
 		);
 		$("#tagNumberId").val(countTag);
 		countTag++;
@@ -257,20 +251,3 @@ echo $this->Form->create('Course',array(
 		return true;
 	} 
 </script>
-</div>
-
-<div class="actions">
-	<ul>
-		<li>
-			<?php echo $this->Html->link( "ホームページ", array('controller' => 'teachers', 'action'=>'index')); ?>
-		</li>
-		<li>
-			<?php echo $this->Html->link( "コースリストを見る",   array('controller' => 'teachers', 'action'=>'view_list_course')); ?>
-		</li>
-		<li>
-		<?php if($current_user): ?>
-		<?php echo $this->Html->link( "ログアウト", array('controller' => 'teachers', 'action'=>'logout')); ?>
-		<?php endif; ?>
-		</li>
-	</ul>
-</div>
