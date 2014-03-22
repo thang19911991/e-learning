@@ -104,7 +104,7 @@
 			</td>
 			<td>
 				<a class="btn btn-primary" href="<?php echo $this->base.'/tests/reupload_test/'. $test['id']; ?>" class="test_name" id="<?php echo $test['id']; ?>">再アップロード</a>
-				<a  href="#" class="test_name btn btn-danger" id="<?php echo $test['id']; ?>">削除</a>
+				<a class="test_name btn btn-danger" id="<?php echo $test['id']; ?>">削除</a>
 			</td>
 		</tr>
 		<?php endforeach; ?>

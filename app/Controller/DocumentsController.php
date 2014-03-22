@@ -374,12 +374,4 @@ class DocumentsController extends AppController{
 			return new CakeResponse(array('body' => "not_ok"));
 		}
 	}
-	
-	public function upload_new_test(){
-		
-	}
-
-	public function reupload_test(){
-		
-	}
 }

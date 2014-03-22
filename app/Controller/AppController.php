@@ -103,7 +103,8 @@ class AppController extends Controller {
 	    			'edit_tag',
 	    			'key',
 	    			'update_tag_course',
-					'reupload_test',
+				'reupload_test',
+				'delete_test',
 	    			'logout'
 	    		))){
 	    			return true;

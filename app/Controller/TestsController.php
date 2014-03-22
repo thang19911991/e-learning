@@ -22,7 +22,7 @@ class TestsController extends AppController{
 	 * テストを削除
 	 * @param int $test_id
 	 */
-	public function delete_test(){
+	public function delete_test($test_id){
 		$this->autoRender = false;
 		
 		$test_id = $_POST['test_id'];
