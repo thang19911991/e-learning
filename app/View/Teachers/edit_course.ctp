@@ -47,9 +47,8 @@
 					<div class="tags"><?php echo $tag; ?><a class="delete"></a></div>
 				<?php endforeach; ?>
 				<?php echo $this->Form->input("username", array(
-						'class' => 'form-control',
+						'id' => 'tag_list',
 						'placeholder' => 'type and enter',
-						'id' => 'tag_list'
 					));
 				?>
 			</div>
@@ -76,6 +75,7 @@
 			var tags = [];
 			$(".tags").each(function(){
 				var text = $(this).text();
+				
 				// space white を削除
 				text = $.trim(text);
 				
@@ -123,6 +123,10 @@
 		/* 作成したタグを削除 */
 		$(document).on('click','.delete', function(){
 			var text = $(this).parent().text();
+			
+			/*splashを含む場合、エラーを回避するために、splashをもう一つ追加*/
+			text = text.replace("\\","\\\\");
+			
 			$('#TeacherTags > option[value=' + text + ']').remove();
 			deleted_tags.push(text);
 			$(this).parent().remove();
