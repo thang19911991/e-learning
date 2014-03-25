@@ -5,7 +5,7 @@
 </style>
 <div class="col-sm-6 col-sm-offset-5 col-md-6 col-md-offset-2 main">
 	<div class="row">
-		<?php echo $this->Session->flash(); ?>
+		<?php //echo $this->Session->flash(); ?>
 		<span class="label label-danger" style="font-size: 21px;" >授業作成</span>
 		<?php echo $this->Form->create('Course',array(
 			'type'=>'file',

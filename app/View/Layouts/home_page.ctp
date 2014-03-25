@@ -17,8 +17,8 @@ echo $this->fetch('script');
 ?>
 
 <style type="text/css">
-#header{
-	margin-bottom: 20px;
+.carousel {
+	margin-top: 60px;
 }
 
 .carousel-inner > .item > img, .carousel-inner > .item > a > img {
@@ -30,8 +30,8 @@ echo $this->fetch('script');
 	background-color: black;
 	text-align: center; 
 	color: white;
-	line-height: 300px; 
-	height: 292px; 
+	line-height: 300px;
+	/*height: 292px; */
 	font-size: 50px;
 }
 
