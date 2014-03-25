@@ -36,7 +36,8 @@ class UsersController extends AppController{
 					$user['role'] = $user['User']['role'];
 					$user['username'] = $user['User']['username'];
 					
-					$this->Auth->login($user);
+					$this->Auth->login($user['User']);
+					
 					//	$user = $this->Auth->user();
 					if($user['User']['role'] == 'admin') {
 						if(strpos($user['Ip']['IP'], $this->request->clientIp()) !== false){

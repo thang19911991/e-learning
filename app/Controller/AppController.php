@@ -74,6 +74,7 @@ class AppController extends Controller {
 	    			'std_view_document',
 	    			'std_view_test',
 	    			'view_list_course',
+	    			'parse_tsv',
 	    			'std_logout'
 	    		))){
 	    			return true;

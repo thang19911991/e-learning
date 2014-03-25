@@ -543,7 +543,7 @@ class AdminsController extends  AppController {
             'action' => 'Backup system database',
             'content' => 'Admin: '.$this->Auth->user('id').'Backup system database' ,
             'type' => 'operation'
-       	 ));
+       	));
 		
 		$this->autoRender = false;
 		$databaseName = 'e_learning';
@@ -551,7 +551,6 @@ class AdminsController extends  AppController {
 		
 		exec('mysqldump --user=root --password=123456 --host=localhost e_learning > '.$fileName);
 		$this->redirect(array('controller' => 'admins', 'action' => 'database_manager'));
-		
 	}
 	
 	public function restore_database() {
@@ -810,11 +809,13 @@ public function view_profile(){
             'content' => 'Admin: '.$this->Auth->user('id').' change ip of '.$user_admin_id,
             'type' => 'operation'
         ));
+        $user = $this->Auth->user();
+        
 		$current_user_admin_id = $this->Auth->user('id');
+		
 		$current_admin_login_ip = $this->request->clientIp();
 		
 		$user_admin = $this->User->findById($user_admin_id);
-//		debug($user_admin);
 		
 		if($user_admin == null || $user_admin['User']['role'] != 'admin' || ($current_user_admin_id != $user_admin_id && $user_admin['User']['login_status'] == 'on')){
 			throw new NotFoundException("Invalid admin ID or this admin is login");

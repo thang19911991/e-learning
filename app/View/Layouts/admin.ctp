@@ -54,17 +54,14 @@ $T01Description = "T01 E-learning: the best learning system";
 					<li><?php echo $this->Html->link( "Admin Profile",   array('controller' => 'admins', 'action'=>'view_profile')); ?></li>
 					<li><?php echo $this->Html->link( "Course Manager",   array('controller' => 'admins', 'action'=>'course_manager')); ?></li>
 					<li><?php echo $this->Html->link( "System Manager",   array('controller' => 'admins', 'action'=>'system_manager')); ?></li>
-					<li><?php //echo $this->Html->link( "Course Copyright report",   array('controller' => 'student_course_reports', 'action'=>'list_report')); ?></li>
-					<li><?php //echo $this->Html->link( "Document Copyright report",   array('controller' => 'student_document_reports', 'action'=>'list_report')); ?></li>
+					<li><?php echo $this->Html->link( "Course Copyright report",   array('controller' => 'student_course_reports', 'action'=>'list_report')); ?></li>
+					<li><?php echo $this->Html->link( "Document Copyright report",   array('controller' => 'student_document_reports', 'action'=>'list_report')); ?></li>
 					<li><?php echo $this->Html->link( "View payment",   array('controller' => 'student_course_learns', 'action'=>'view_payment_file_list')); ?></li>
 					<li><?php echo $this->Html->link( "Copyright report",   array('controller' => 'student_course_reports', 'action'=>'list_report')); ?></li>
 					<li><?php echo $this->Html->link( "Backup/Restore data", array('action'=>'database_manager', 'controller' => 'admins')); ?></li>
 					<li><?php echo $this->Html->link( "Logout", array('action'=>'logout', 'controller' => 'users')); ?></li>
-					
-					
 				</ul>
 			</div>
-			
 
 			<?php echo $this->fetch('content'); ?>
 		</div>

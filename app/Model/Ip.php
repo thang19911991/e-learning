@@ -4,7 +4,7 @@ class Ip extends AppModel{
 	// nếu tên Model đặt tên khác thì cần phải ghi rõ tên bảng trong CSDL	
 	public $name = "ips";
 	
-	/*
+	
 	public $validate = array(
 		'IP' => array(
             'required' => array(
@@ -15,7 +15,7 @@ class Ip extends AppModel{
 	        'rule'    => array('ip', 'IPv4'), // or 'IPv6' or 'both' (default)
 	        'message' => 'Please supply a valid IP address.'
 	    ),
-	));*/
+	));
                         
         
 	var $belongsTo = array(
