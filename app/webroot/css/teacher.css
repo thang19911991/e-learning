@@ -1,9 +1,13 @@
 @CHARSET "UTF-8";
 
 /* TAG */
+
+/* tagを入力するinput */
 #tag_list{
-	height: 20px;	
-}	
+	height: 30px;
+}
+
+/* tagを表すarea */
 .tags {
 	float: left;
 	margin-right: 2px;
@@ -41,13 +45,11 @@
 	right: 0;
 }
 
-.text_tag input:active {
-	border:0;
-}
+
 
 .text_tag input {
 	width: 200px;
-	height : 10px;
+	height : 40px;
 	overflow: hidden;
 }
 
