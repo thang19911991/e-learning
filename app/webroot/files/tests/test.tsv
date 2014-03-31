@@ -1,0 +1,36 @@
+TestTitle	tieng nhat it		
+TestSubTitle	giua ky		
+			
+#	ÉRÉÅÉìÉg		
+Q(1)	QS	cau hoi 1
+Q(1)	S(1)	dap an 1-1
+Q(1)	S(2)	dap an 1-2	
+Q(1)	S(3)	dap an 1-3	
+Q(1)	S(4)	dap an 1-4	
+Q(1)	S(5)	dap an 1-5	
+Q(1)	S(6)	dap an 1-6	
+Q(1)	KS	S(1)	10
+			
+Q(2)	QS	cau hoi so 2	
+Q(2)	S(1)	DAP AN 2-1	
+Q(2)	S(2)	DAP AN 2-2	
+Q(2)	S(3)	DAP AN 2-3	
+Q(2)	S(4)	DAP AN 2-4	
+Q(2)	S(5)	DAP AN 2-5	
+Q(2)	KS	S(4)	5
+			
+Q(3)	QS	CAU HOI 3	
+Q(3)	S(1)	DAP AN 3-1	
+Q(3)	S(2)	DAP AN 3-2	
+Q(3)	S(3)	DAP AN 3-3	
+Q(3)	KS	S(3)	5
+			
+Q(4)	QS	CAU HOI 4	
+Q(4)	S(1)	DAP AN 4-1	
+Q(4)	S(2)	DAP AN 4-2	
+Q(4)	S(3)	DAP AN 4-3
+Q(4)	S(4)	DAP AN 4-4	
+Q(4)	S(5)	DAP AN 4-5	
+Q(4)	KS	S(1)	20
+			
+End			
