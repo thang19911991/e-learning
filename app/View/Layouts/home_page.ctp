@@ -155,16 +155,16 @@ echo $this->fetch('script');
 					<!-- Carousel Items -->
 					<div class="carousel-inner">
 						<div class="item active">
-							<img src="/cake/img/EFK_slider_home_1.jpg" alt="post image">
+							<img src="<?php echo $this->base;?>/img/EFK_slider_home_1.jpg" alt="post image">
 						</div>
 			            <div class="item">
-							<img src="/cake/img/EFK_slider_home_2.jpg" alt="post image">
+							<img src="<?php echo $this->base;?>/img/EFK_slider_home_2.jpg" alt="post image">
 						</div>
 			            <div class="item">
-			            	<img src="/cake/img/EFK_slider_home_3.jpg" alt="post image">
+			            	<img src="<?php echo $this->base;?>/img/EFK_slider_home_3.jpg" alt="post image">
 						</div>
 						<div class="item">
-			            	<img src="/cake/img/EFK_slider_home_4.jpg" alt="post image">
+			            	<img src="<?php echo $this->base;?>/img/EFK_slider_home_4.jpg" alt="post image">
 						</div>
 					</div>
 					
