@@ -59,7 +59,7 @@ class AppController extends Controller {
 	    
 	    if(isset($user) || !empty($user)){
 	    	if($user['role']=="student"){
-	    		if(in_array($this->action, array(
+	    		if($this->params['controller']=='student' || in_array($this->action, array(
 	    			'std_change_pass',
 	    			'std_deactive',
 	    			'std_detail_course',
@@ -68,6 +68,7 @@ class AppController extends Controller {
 	    			'std_list_course',
 	    			'std_profile',
 	    			'std_search',
+	    			'std_buy',
 	    			'std_test_result',
 	    			'std_try_course',
 	    			'std_detail_course',
@@ -82,7 +83,7 @@ class AppController extends Controller {
 	    		$this->redirect(array('controller' => 'student', 'action' => 'std_index'));
 	    		return false;
 	    	}else if($user['role']=="teacher"){
-	    		if(in_array($this->action, array(
+	    		if($this->params['controller']=='teachers' || in_array($this->action, array(
 	    			'ban_student',
 	    			'upload_new_test',
 	    			'change_password',
@@ -104,8 +105,8 @@ class AppController extends Controller {
 	    			'edit_tag',
 	    			'key',
 	    			'update_tag_course',
-				'reupload_test',
-				'delete_test',
+					'reupload_test',
+					'delete_test',
 	    			'logout'
 	    		))){
 	    			return true;

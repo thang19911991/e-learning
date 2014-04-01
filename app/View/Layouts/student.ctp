@@ -62,7 +62,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 						echo '<li>'.$this->Html->link("パスワードを変更",array('action' => 'std_change_pass')).'</li>';
 						echo '<li>'.$this->Html->link("買ったコースリスト",array('action' => 'std_buy_course')).'</li>';
 						echo '<li>'.$this->Html->link("アカウントを脱退",array('action' => 'std_deactive')).'</li>';
-						echo '<li>'.$this->Html->link("ログアウト",array('action' => 'std_logout')).'</li>';
+						echo '<li>'.$this->Html->link("ログアウト",array('controller' => 'users', 'action' => 'logout')).'</li>';
 					?>
 				</ul>
 			</div>

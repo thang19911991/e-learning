@@ -92,7 +92,11 @@ class User extends AppModel{
 			'notEmpty' => array(
 				'rule' => 'notEmpty',
 				'message' => '名前をご入力してください',
-			)			
+			),
+			'max_length' => array(
+				'rule' => array('maxLength', 256),
+				'message' => '名前の最大長が256文字です。',
+			)
 		),
 		'email' => array(
 			'notEmpty' => array(

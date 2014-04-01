@@ -1246,17 +1246,17 @@ class TeachersController extends AppController{
 					$this->writeLog(array(
 						'id' => 'LOG_003',
 			            'time' => time(),
-						'actor' => '先生　'.$user['id'],
+						'actor' => '先生　'.$user['User']['id'],
 						'action' => '登録',
-						'content' => '先生 '.$user['id'].' が作成できた',
+						'content' => '先生 '.$user['User']['id'].' が作成できた',
 						'type' => 'オペレーション'
 					));
 					$this->writeLog(array(
 						'id' => 'LOG_004',
 			            'time' => time(),
-						'actor' => '先生　'.$user['id'],
+						'actor' => '先生　'.$user['User']['id'],
 						'action' => '登録',
-						'content' => 'usersデータベースに先生 '.$user['username'].' を追加した',
+						'content' => 'usersデータベースに先生 '.$user['User']['username'].' を追加した',
 						'type' => 'イベント'
 					));
 				}catch(Exception $e){
@@ -1281,8 +1281,6 @@ class TeachersController extends AppController{
 					$this->request->data['Teacher']['last_session_ip'] = $this->request->clientIp();					
 					
 					$this->User->Teacher->save($this->request->data);
-					
-					$this->Session->setFlash(__("成功な先生の登録"));
 					$this->redirect(array('controller' => 'users', 'action' => 'login'));
 				}else{
 					$this->Session->setFlash(__("先生登録をできません"));

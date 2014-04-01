@@ -17,6 +17,7 @@ class StudentController extends AppController{
 		//$this->Auth->allow('std_index');
 		//$this->Auth->allow('std_change_pass');
 	}
+	
 	function std_register(){
 		$this->layout = 'default';
 		$this->set('title_for_layout', '学生の登録ページ');
@@ -167,6 +168,7 @@ class StudentController extends AppController{
 
 	public function std_index(){
 		$this->set('title_for_layout', '学生のホームページ');
+		
 		//$this->loadModel('Students_courses_learn');
 		$this->loadModel('StudentCourseLearn');
 		$this->loadModel('Course');
