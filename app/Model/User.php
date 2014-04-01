@@ -172,10 +172,10 @@ class User extends AppModel{
 				'rule' => array('extension', array('gif', 'jpeg', 'png', 'jpg')),
 				'message' => 'アップロードしたファイルのフォーマットが[*.jpg|*.gif|*.jpeg|*.png]です'
 			),
-			'check_size' => array(
+			/*'check_size' => array(
 				'rule' => array('fileSize', '<=', '25MB'),
 				'message' => 'ファイルの最大サイズが25MBです。他のファイルをアップロードしてください'
-			)
+			)*/
 		),
 		'information' => array(
 			'notEmpty' => array(
