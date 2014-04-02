@@ -10,7 +10,7 @@ class User extends AppModel{
 	const STUDENT = "student";
 	const ADMIN = "admin";
 	
-	const ACTIVED = "actived";
+	const ACTIVED = "active";
 	const BANNED = "banned";
 	const INACTIVE = "inactive";
 
@@ -128,7 +128,7 @@ class User extends AppModel{
 				'message' => '電話番号をご入力してください',
 			),
 			'format_phone' => array(
-				'rule' => array('phone', '/[0-9]+/', 'vn'),
+				'rule' => '/^[0-9]+$/',
 				'message' => 'その電話番号が正しくないです'
 			)
 		),
@@ -141,7 +141,6 @@ class User extends AppModel{
 				'rule' => array('maxLength', 256),
 				'message' => 'セキュリティー質問の最大長が256文字です。',
 			)
-			
 		),
 		'verify_code_answer' => array(
 			'notEmpty' => array(
@@ -168,10 +167,10 @@ class User extends AppModel{
 			)
 		),
 		'profile_img' => array(
-			'check_type' => array(
+			/*'check_type' => array(
 				'rule' => array('extension', array('gif', 'jpeg', 'png', 'jpg')),
 				'message' => 'アップロードしたファイルのフォーマットが[*.jpg|*.gif|*.jpeg|*.png]です'
-			),
+			),*/
 			/*'check_size' => array(
 				'rule' => array('fileSize', '<=', '25MB'),
 				'message' => 'ファイルの最大サイズが25MBです。他のファイルをアップロードしてください'

@@ -1243,6 +1243,9 @@ class TeachersController extends AppController{
 				// 先生としてユーザを登録するのを実施
 				try{
 					$user = $this->User->save($data);
+					
+					var_dump($user);
+					
 					$this->writeLog(array(
 						'id' => 'LOG_003',
 			            'time' => time(),

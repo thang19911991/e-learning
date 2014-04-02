@@ -21,6 +21,10 @@ class StudentController extends AppController{
 	function std_register(){
 		$this->layout = 'default';
 		$this->set('title_for_layout', '学生の登録ページ');
+		
+		$validator = $this->User->validator();
+		unset($validator['credit_number']['format_of_teacher']);
+		
 		if (!empty($this->data)) {
 			$this->loadModel('User');
 			$this->loadModel('Student');

@@ -724,6 +724,9 @@ public function view_profile(){
             'content' => 'Admin: '.$this->Auth->user('id').' edit password',
             'type' => 'operation'
         ));
+        $validator = $this->User->validator();
+		unset($validator['credit_number']['format_of_student']);
+		
 		$username = $this->Auth->user('username');
 //		var_dump($username);
 		$ad = $this->User->find('first', array('conditions'=>array('username'=>$username)));
