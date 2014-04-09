@@ -16,9 +16,9 @@ class Teacher extends AppModel{
 		'User' => array(
 			'className' => 'User',
 			'foreignKey' => 'user_id',
-			'fields' => array('username'),
+			'fields' => array('username','id', 'login_status','active_status'),
 			'dependent' => true
-		)		
+		)
 	);
 	
 	public $validate = array(

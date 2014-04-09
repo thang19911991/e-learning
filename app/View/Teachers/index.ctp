@@ -2,36 +2,34 @@
 .main {
 	margin-top: 50px;
 }
+#header_index{
+	margin-bottom: 20px; 
+}
 </style>
+
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 	<div class="row">
-		<span class="label label-danger" style="font-size: 21px;" >先生としてユーザリスト</span>
-		<?php if(!empty($users)): ?>
-		<!-- table-responsive : để tương thích với màn hình bé hơn -->
-		<div class="table-responsive">
-		<table class="table table-hover table-bordered">
-			<tr>
-				<th>Id</th>
-				<th>ユーザ名</th>
-				<th>名前</th>
-				<th>誕生日</th>
-				<th>アドレス</th>
-				<th>レベル</th>
-			</tr>
-			<?php foreach($users as $user): ?>
-			<tr>
-				<td><?php echo $user["User"]["id"]; ?></td>
-				<td><?php echo $user["User"]["username"]; ?></td>
-				<td><?php echo $user["User"]["full_name"]; ?></td>
-				<td><?php echo $user["User"]["birthday"]; ?></td>
-				<td><?php echo $user["User"]["address"]; ?></td>
-				<td><?php echo $user["User"]["role"]; ?></td>
-			</tr>
-			<?php endforeach; ?>
-		</table>
-		<?php else:?>
-		<?php echo "先生としてユーザが何かありません"; ?>
-		<?php endif; ?>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-4">
+					<img class="img-circle" style="width: 112px; height: 112px" src="<?php echo $this->base.UPLOAD_PROFILE_URL.'/'.$current_user['profile_img'];?>">
+				</div>
+				<div class="col-md-8">
+					<h3><?php echo $current_user['full_name']; ?></h3>
+					<address>
+						<abbr title="Work email">メール:</abbr>
+						<a href="mailto:#"><?php echo $current_user['email']; ?></a><br>
+						
+						<abbr title="phone">電話番号:</abbr>
+						<?php echo $current_user['phone']; ?>
+					</address>
+				</div>
+			</div>
+			<div class="row" style="margin-top: 10px">
+			<fieldset>
+				<legend class="section">個人情報</legend>
+			</fieldset>
+			</div>
 		</div>
 	</div>
 </div>

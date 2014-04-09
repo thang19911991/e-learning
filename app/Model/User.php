@@ -130,7 +130,7 @@ class User extends AppModel{
 			'format_phone' => array(
 				'rule' => '/^[0-9]+$/',
 				'message' => 'その電話番号が正しくないです'
-			)
+			) 
 		),
 		'verify_code' => array(
 			'notEmpty' => array(

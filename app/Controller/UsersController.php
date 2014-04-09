@@ -70,6 +70,7 @@ class UsersController extends AppController{
 
 	// ユーザのログイン
 	public function login(){
+		echo AuthComponent::password("a123+123456+t01");
 		$params = $this->getSystemParams();
 
 		if($params!=FALSE){

@@ -5,8 +5,6 @@
 <title><?php echo $title_for_layout; ?>
 </title>
 <?php
-//echo $this->Html->css('cake.generic');
-//echo $this->Html->css('bootstrap-theme.min');
 echo $this->Html->css('bootstrap.min');
 echo $this->Html->css('teacher');
 echo $this->Html->script('jquery.min');
@@ -20,10 +18,31 @@ echo $this->fetch('script');
 ?>
 
 <style type="text/css">
+
+/* Custome color, size nav-bar, brand*/
+#menu{
+	background: white;
+	border-bottom: 1px solid #e1e6ef;
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+}
+
+.nav .navbar-brand{
+	background: #20a8d8;
+	text-align: center;
+	color: white;
+	border-bottom: 1px solid #1985ac;
+}
+
+.navbar-brand{
+	float: left;
+}
+
 /* nếu menu set là navbar-fixed-top thì thuộc tính margin-bottom sẽ không có ý nghĩa*/
 .carousel{
 	margin-top: 60px;
 }
+
 /*
  * Sidebar
  */
@@ -53,6 +72,9 @@ echo $this->fetch('script');
   margin-right: -21px; /* 20px padding + 1px border */
   margin-bottom: 20px;
   margin-left: -20px;
+}
+.nav-sidebar > li{
+	padding:10px;
 }
 .nav-sidebar > li > a {
   padding-right: 20px;
@@ -116,14 +138,14 @@ echo $this->fetch('script');
 </head>
 <body>
 	<!-- MENU AREA -->
-	<div class="nav navbar-inverse navbar-fixed-top" id="menu">
-		<div class="container">
+	<div class="nav navbar-default navbar-fixed-top" id="menu">
+		<div class="container navbar-header">
 			<button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a href="<?php echo $this->base.'/home/index'?>" class="navbar-brand">E-learning</a>
+			<a class="navbar-brand col-md-3" href="<?php echo $this->base.'/home/index'?>">E-learning</a>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav navbar-left">
 					<li class="active">
@@ -187,6 +209,7 @@ echo $this->fetch('script');
 			<!-- END CONTENT AREA -->
 		</div>
 	</div><!-- END BODY AREA -->
+
 	
 	<!-- Placed at the end of the document so the pages load faster -->
 	<?php echo $this->Html->script('bootstrap.min'); ?>

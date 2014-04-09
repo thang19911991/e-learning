@@ -140,7 +140,7 @@
 		
 		<!-- コースIDが既存しない場合 -->
 		<?php else: ?>
-		<span class="label label-danger" style="font-size: 20px"><?php echo "そのコースIDが既存しない";?></span>
+		<span class="label label-danger" style="font-size: 20px"><?php echo $error_msg;?></span>
 		<?php endif; ?>
 	</div>
 </div>

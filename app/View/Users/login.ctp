@@ -12,8 +12,8 @@
     'class' => 'well'
 	)); ?>
 
-    <div class="form-group">
-	<?php echo $this->Form->input('username', array(  
+    <div class="form-group">      
+	<?php echo $this->Form->input('username', array(
 	    'placeholder' => 'Username',
 	    'style' => 'width:180px;',
 	    'label' => 'ユーザー名',

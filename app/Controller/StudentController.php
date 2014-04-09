@@ -13,12 +13,10 @@ class StudentController extends AppController{
 	function beforeFilter(){
 		$this->Auth->allow('std_register');
 		$this->Auth->allow('std_login');
-		//$this->Auth->allow('std_change_pass');
-		//$this->Auth->allow('std_index');
-		//$this->Auth->allow('std_change_pass');
 	}
 	
 	function std_register(){
+		$this->loadModel("User");
 		$this->layout = 'default';
 		$this->set('title_for_layout', '学生の登録ページ');
 		
@@ -29,7 +27,6 @@ class StudentController extends AppController{
 			$this->loadModel('User');
 			$this->loadModel('Student');
 			$this->User->set($this->request->data);
-			//  debug($this->User->validates());
 			if (!$this->User->validates()) {
 				unset($this->request->data['Submit']);
 			}else	{
@@ -46,7 +43,7 @@ class StudentController extends AppController{
 				$data['User']['active_status'] = 'inactive';
 				$data['User']['role'] = 'student';
 				$data['Student']['addtional_info'] = ' ';
-				$data ['User'] ['password'] = AuthComponent::password ($this->Auth->user('username').'+'.$data ['User'] ['password']."+t01");
+				$data['User']['password'] = AuthComponent::password ($data['User']['username'].'+'.$data ['User']['password']."+t01");
 				$this->User->create();
 				$this->User->saveAll($data);
 				$this->Session->setFlash('君のユーザは登録しました。管理者は教科しなければならないので、お待ちしてください！');
